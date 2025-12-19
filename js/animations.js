@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initStatCounters();
   initMicroInteractions();
+  initMicroInteractions();
   setupFormAnimations();
-  
+  initTypingEffect();
+  initTiltEffect();
+
   // Initialize particles if the library is loaded
   if (typeof particlesJS !== 'undefined') {
     initParticleEffects();
@@ -24,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function initParallaxEffects() {
   const parallaxElements = document.querySelectorAll('.parallax-container');
-  
+
   if (parallaxElements.length === 0) return;
-  
+
   const parallaxObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -38,7 +41,7 @@ function initParallaxEffects() {
       }
     });
   }, { threshold: 0.1 });
-  
+
   parallaxElements.forEach(element => {
     parallaxObserver.observe(element);
   });
@@ -50,18 +53,18 @@ function initParallaxEffects() {
 function applyParallaxEffect(element) {
   const parallaxBg = element.querySelector('.parallax-bg');
   if (!parallaxBg) return;
-  
+
   const scrollPosition = window.pageYOffset;
   const elementTop = element.getBoundingClientRect().top + scrollPosition;
   const elementHeight = element.offsetHeight;
   const viewportHeight = window.innerHeight;
-  
+
   // Only apply effect when element is in viewport
   if (scrollPosition + viewportHeight > elementTop && scrollPosition < elementTop + elementHeight) {
     const distance = scrollPosition - elementTop;
     const speed = parseFloat(element.dataset.parallaxSpeed || 0.5);
     const yPos = distance * speed;
-    
+
     parallaxBg.style.transform = `translateY(${yPos}px)`;
   }
 }
@@ -72,9 +75,9 @@ function applyParallaxEffect(element) {
  */
 function initScrollAnimations() {
   const animatedElements = document.querySelectorAll('[data-scroll-animation]');
-  
+
   if (animatedElements.length === 0) return;
-  
+
   const scrollObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
@@ -82,17 +85,17 @@ function initScrollAnimations() {
         setTimeout(() => {
           entry.target.classList.add('visible');
         }, index * 150);
-        
+
         // Stop observing after animation is applied
         scrollObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.2 });
-  
+
   animatedElements.forEach(element => {
     scrollObserver.observe(element);
   });
-  
+
   // Also animate headings and subheadings
   const headings = document.querySelectorAll('.animated-heading, .animated-subheading');
   headings.forEach(heading => {
@@ -105,25 +108,25 @@ function initScrollAnimations() {
  */
 function initStatCounters() {
   const statItems = document.querySelectorAll('.stat-item');
-  
+
   if (statItems.length === 0) return;
-  
+
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        
+
         const counter = entry.target.querySelector('.counter');
         if (counter) {
           const targetValue = parseInt(entry.target.dataset.statValue || 0);
           animateCounter(counter, targetValue);
         }
-        
+
         statObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.7 });
-  
+
   statItems.forEach(item => {
     statObserver.observe(item);
   });
@@ -167,13 +170,13 @@ function initParticleEffects() {
       }
     });
   }
-  
+
   // Industry-specific particles
   const industrySection = document.querySelector('.industry-hero');
   if (industrySection) {
     const industryType = industrySection.dataset.industry;
     const particlesConfig = getIndustryParticleConfig(industryType);
-    
+
     particlesJS('industryParticles', particlesConfig);
   }
 }
@@ -215,7 +218,7 @@ function getIndustryParticleConfig(industryType) {
     }
     // Additional industry configurations can be added here
   };
-  
+
   // Return the specific config or a default one
   return configs[industryType] || configs.hospitality;
 }
@@ -241,20 +244,20 @@ function initMicroInteractions() {
 function setupFormAnimations() {
   const showFormBtn = document.getElementById('showFormBtn');
   const contactForm = document.getElementById('contactForm');
-  
+
   if (showFormBtn && contactForm) {
     showFormBtn.addEventListener('click', () => {
       const formContainer = document.getElementById('ctaForm');
-      
+
       if (formContainer) {
         // Animate button out
         showFormBtn.style.opacity = '0';
         showFormBtn.style.transform = 'translateY(-20px)';
-        
+
         setTimeout(() => {
           showFormBtn.style.display = 'none';
           formContainer.style.display = 'block';
-          
+
           // Animate form in
           setTimeout(() => {
             formContainer.style.opacity = '1';
@@ -263,21 +266,21 @@ function setupFormAnimations() {
         }, 300);
       }
     });
-    
+
     // Form submission animation
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const successMessage = document.getElementById('successMessage');
-      
+
       if (successMessage) {
         // Animate form out
         contactForm.style.opacity = '0';
         contactForm.style.transform = 'translateY(-20px)';
-        
+
         setTimeout(() => {
           contactForm.parentElement.style.display = 'none';
           successMessage.style.display = 'block';
-          
+
           // Initialize celebration particles if available
           if (typeof particlesJS !== 'undefined') {
             particlesJS('celebration-particles', {
@@ -298,7 +301,7 @@ function setupFormAnimations() {
               }
             });
           }
-          
+
           // Animate success message in
           setTimeout(() => {
             successMessage.style.opacity = '1';
@@ -308,4 +311,73 @@ function setupFormAnimations() {
       }
     });
   }
+}
+
+/**
+ * Typing Text Effect for Hero Section
+ */
+function initTypingEffect() {
+  const textElement = document.getElementById('typing-text');
+  if (!textElement || textElement.textContent.trim() === '') return;
+
+  const words = ['be seen', 'be found', 'grow', 'stand out', 'transform'];
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typeSpeed = 100;
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (isDeleting) {
+      textElement.textContent = currentWord.substring(0, charIndex - 1);
+      charIndex--;
+      typeSpeed = 50;
+    } else {
+      textElement.textContent = currentWord.substring(0, charIndex + 1);
+      charIndex++;
+      typeSpeed = 150;
+    }
+
+    if (!isDeleting && charIndex === currentWord.length) {
+      isDeleting = true;
+      typeSpeed = 2000; // Pause at end
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      typeSpeed = 500;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+
+  // Start the typing loop
+  textElement.textContent = '';
+  type();
+}
+
+/**
+ * 3D Tilt Effect for Service Cards
+ */
+function initTiltEffect() {
+  const cards = document.querySelectorAll('.modern-service-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const midX = rect.width / 2;
+      const midY = rect.height / 2;
+
+      // Calculate rotation based on cursor position
+      const rotateX = ((y - midY) / midY) * -10; // Max rotation 10deg
+      const rotateY = ((x - midX) / midX) * 10;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
+  });
 }
