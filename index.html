@@ -480,12 +480,32 @@
       </div>
     </div>
   </section>
-  <section id="Ex360" class="section-5">
-    <div class="w-embed w-iframe">
-      <div style="width: 100%; height: 80vh; position: relative; margin: 0; padding: 0;">
-        <iframe src="https://elsalto.yousee360.com"
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen="">
-        </iframe>
+  <!-- Virtual Tour Experience Section -->
+  <section id="Ex360" class="section virtual-tour-section">
+    <div class="container">
+      <div class="section-title-group centered">
+        <span class="section-tag">Experience</span>
+        <h2 class="apple-heading">See it in <span class="highlight">360°</span></h2>
+        <p class="section-subheading">Explore a sample virtual tour and discover the immersive quality we deliver.</p>
+      </div>
+
+      <div class="tour-container">
+        <div class="tour-frame">
+          <iframe src="https://elsalto.yousee360.com" title="Sample Virtual Tour - El Salto Costa Rica" loading="lazy"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <p class="tour-caption">
+          <i class="fas fa-info-circle"></i>
+          Click and drag to explore. Use mousewheel to zoom. Double-click for fullscreen.
+        </p>
+      </div>
+
+      <div class="tour-cta">
+        <a href="#Contact" class="btn-primary">Get Your Virtual Tour</a>
+        <a href="https://elsalto.yousee360.com" target="_blank" class="btn-hollow">
+          <i class="fas fa-expand-alt"></i> View Fullscreen
+        </a>
       </div>
     </div>
   </section>
@@ -661,7 +681,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2023 YouSee360. All rights reserved.</p>
+        <p>&copy; 2025 YouSee360. All rights reserved.</p>
         <div class="footer-links">
           <a href="privacy-policy.html">Privacy Policy</a>
           <a href="terms-of-service.html">Terms of Service</a>
@@ -721,14 +741,38 @@
       event.preventDefault();
     });
 
-    // Initialize checkbox styling
-    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
-      input.addEventListener('change', function () {
-        const customCheckbox = this.parentElement.querySelector('.w-checkbox-input');
-        if (this.checked) {
-          customCheckbox.classList.add('w--redirected-checked');
+    // Initialize checkbox/radio styling - Single-click fix
+    document.querySelectorAll('.cf-checkbox-field').forEach(label => {
+      label.style.cursor = 'pointer';
+
+      // Prevent the default label->input click behavior which causes double-toggle
+      label.addEventListener('click', function (e) {
+        // Stop propagation to prevent Webflow's handlers
+        e.stopPropagation();
+        e.preventDefault();
+
+        const input = this.querySelector('input[type="checkbox"], input[type="radio"]');
+        const customCheckbox = this.querySelector('.w-checkbox-input, .w-radio-input');
+
+        if (!input) return;
+
+        // For radios, uncheck all others in the same group first
+        if (input.type === 'radio') {
+          document.querySelectorAll('input[name="' + input.name + '"]').forEach(r => {
+            r.checked = false;
+            const cb = r.closest('.cf-checkbox-field')?.querySelector('.w-radio-input');
+            if (cb) cb.classList.remove('w--redirected-checked');
+          });
+          // Set this one as checked
+          input.checked = true;
         } else {
-          customCheckbox.classList.remove('w--redirected-checked');
+          // For checkboxes, toggle
+          input.checked = !input.checked;
+        }
+
+        // Update visual state
+        if (customCheckbox) {
+          customCheckbox.classList.toggle('w--redirected-checked', input.checked);
         }
       });
     });
@@ -932,17 +976,46 @@
         });
       }
 
-      // Fix for the JavaScript syntax error
-      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
-        input.addEventListener('change', function () {
-          const customCheckbox = this.parentElement.querySelector('.w-checkbox-input');
-          if (this.checked) {
-            customCheckbox.classList.add('w--redirected-checked');
-          } else {
-            customCheckbox.classList.remove('w--redirected-checked');
-          }
+      // === SCROLL ANIMATION OBSERVER ===
+      // Makes elements with data-scroll-animation visible when scrolled into view
+      const scrollElements = document.querySelectorAll('[data-scroll-animation]');
+      if (scrollElements.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+
+        scrollElements.forEach(el => observer.observe(el));
+      }
+
+      // === INDUSTRIES DROPDOWN TOGGLE ===
+      // Manual dropdown handler since Webflow JS may not be fully functional
+      const dropdown = document.querySelector('.w-dropdown');
+      const dropdownToggle = document.querySelector('.w-dropdown-toggle');
+      const dropdownList = document.querySelector('.w-dropdown-list');
+
+      if (dropdown && dropdownToggle && dropdownList) {
+        // Show dropdown on hover
+        dropdown.addEventListener('mouseenter', () => {
+          dropdownList.style.display = 'block';
+          dropdownList.style.opacity = '1';
         });
-      });
+
+        dropdown.addEventListener('mouseleave', () => {
+          dropdownList.style.display = 'none';
+        });
+
+        // Also toggle on click for mobile
+        dropdownToggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          const isOpen = dropdownList.style.display === 'block';
+          dropdownList.style.display = isOpen ? 'none' : 'block';
+          dropdownList.style.opacity = '1';
+        });
+      }
     });
 
     // Industry cards functionality
