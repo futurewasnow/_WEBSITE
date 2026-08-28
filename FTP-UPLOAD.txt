@@ -1,0 +1,315 @@
+YouSee360 - FTP upload checklist
+Generated against the last pre-deploy commit (2138656).
+
+ORDER MATTERS. Upload in this order so no page is ever live while
+pointing at a stylesheet that has not arrived yet:
+
+  STEP 1 - assets first:  css/  js/  images/  videos/  fonts/
+  STEP 2 - then the pages: all .html files
+  STEP 3 - then:           .htaccess  sitemap.xml  robots.txt  manifest.webmanifest
+  STEP 4 - then delete the files listed at the bottom
+
+WATCH OUT: .htaccess starts with a dot. Most FTP clients hide dotfiles
+by default - turn on "show hidden files" or it will not upload. Without
+it you lose the HTTPS redirect, the WebP serving, caching and security
+headers.
+
+WATCH OUT: the CSS filenames are content-hashed (css/bundle-<hash>.css).
+The new HTML points at new hashes. If you upload HTML without the new
+css/ files, every page loads unstyled.
+
+================================================================
+UPLOAD (236 files)
+================================================================
+
+-- (root)
+   .gitignore
+   .htaccess
+   360-tour-vs-matterport.html
+   401.html
+   404.html
+   _cachebust.py
+   _rebuild_bundles.py
+   about.html
+
+-- blog
+   blog/index.html
+   blog/posts/aerial-360-drone-costa-rica.html
+   blog/posts/augmented-reality-costa-rica-tourism.html
+   blog/posts/google-street-view-costa-rica-businesses.html
+   blog/posts/preparing-property-360-shoot.html
+   blog/posts/restaurants-investing-virtual-tours.html
+   blog/posts/virtual-tour-cost-costa-rica.html
+   blog/posts/virtual-tours-costa-rica-real-estate.html
+   blog/posts/virtual-tours-increase-hotel-bookings.html
+
+-- case-studies
+   case-studies/arboeden-eco-retreat.html
+   case-studies/casa-del-rio.html
+   case-studies/dragonfly-awakening.html
+   case-studies/el-genio.html
+   case-studies/junglo-resort-spa.html
+   case-studies/kenko-street-view.html
+
+-- (root)
+   contact.html
+   contact.php
+
+-- css
+   css/animations.css
+   css/aurora.css
+   css/blog.css
+   css/bundle-16186237.css
+   css/bundle-2d32f8fe.css
+   css/bundle-816782ed.css
+   css/bundle-91cd3d74.css
+   css/bundle-a5954ce2.css
+   css/bundle-a71341a7.css
+   css/bundle-d76d74a5.css
+   css/bundle-db82c6e7.css
+   css/bundle-df4f93a3.css
+   css/bundle-f976dd29.css
+   css/design-system.css
+   css/mobile.css
+   css/motion.css
+   css/nav-v2.css
+   css/navigation.css
+   css/page-modules.css
+   css/perf-fixes.css
+   css/refine.css
+   css/theme.css
+   css/v2-extras.css
+   css/wow.css
+   css/yousee360-66cc79.webflow.css
+
+-- es
+   es/blog/costo-tour-virtual-costa-rica.html
+   es/blog/google-street-view-negocios.html
+   es/blog/index.html
+   es/blog/tours-virtuales-bienes-raices.html
+   es/blog/tours-virtuales-reservas-hoteles.html
+   es/contacto.html
+   es/index.html
+   es/industrias/bienes-raices.html
+   es/industrias/centros-retiro.html
+   es/industrias/hoteles.html
+   es/industrias/museos.html
+   es/industrias/restaurantes.html
+   es/industrias/tours-aventura.html
+   es/nosotros.html
+   es/politica-privacidad.html
+   es/portafolio.html
+   es/precios.html
+   es/que-es-un-tour-virtual-360.html
+   es/servicios/drone-360.html
+   es/servicios/fotografia-360.html
+   es/servicios/google-streetview.html
+   es/servicios/realidad-aumentada.html
+   es/servicios/tours-virtuales.html
+   es/servicios/video-360.html
+   es/terminos-servicio.html
+   es/ubicaciones/guanacaste.html
+   es/ubicaciones/index.html
+   es/ubicaciones/la-fortuna-arenal.html
+   es/ubicaciones/san-jose.html
+
+-- fonts
+   fonts/outfit.ttf
+
+-- images
+   images/350-x-375-You-see-360-logo-white-for-black-bg-1.png
+   images/Artboard-21-copy-5-p-1080.webp
+   images/Artboard-21-copy-5-p-500.webp
+   images/Artboard-21-copy-5-p-800.webp
+   images/Artboard-21-copy-5.webp
+   images/Oz2ZQ2j8We8-p-500.webp
+   images/Oz2ZQ2j8We8.jpg
+   images/Oz2ZQ2j8We8.webp
+   images/demo-360.jpg
+   images/demo-360.webp
+   images/favicon.ico
+   images/favicon.png
+   images/favicon.webp
+   images/hero-360-arenal-4k.jpg
+   images/hero-360.jpg
+   images/interface_PEACE_intro-p-1080.webp
+   images/interface_PEACE_intro-p-1600.webp
+   images/interface_PEACE_intro-p-800.webp
+   images/interface_PEACE_intro.jpg
+   images/interface_PEACE_intro.webp
+   images/logo-airbnb.svg
+   images/logo-booking.svg
+   images/logo-cloudbeds.svg
+   images/logo-expedia.svg
+   images/logo-google.svg
+   images/logo-kuula.svg
+   images/logo-matterport.svg
+   images/logo-mews.svg
+   images/logo-placeholder-1.svg
+   images/logo-placeholder-2.svg
+   images/logo-placeholder-3.svg
+   images/logo-siteminder.svg
+   images/logo-tripadvisor.svg
+   images/logo-vrbo.svg
+   images/og-card.jpg
+   images/og-card.webp
+   images/tour-poster.jpg
+   images/tour-poster.webp
+   images/tours/_dragonfly_raw.jpg
+   images/tours/_kenko_raw.jpg
+   images/tours/arboeden-og.jpg
+   images/tours/arboeden-og.webp
+   images/tours/arboeden.jpg
+   images/tours/arboeden.webp
+   images/tours/arenal.jpg
+   images/tours/arenaloasis.jpg
+   images/tours/arenaloasis.webp
+   images/tours/casadelrio-og.jpg
+   images/tours/casadelrio-og.webp
+   images/tours/casadelrio-poster-1200.jpg
+   images/tours/casadelrio-poster-1200.webp
+   images/tours/casadelrio-poster-2400.jpg
+   images/tours/casadelrio-poster-2400.webp
+   images/tours/casadelrio.jpg
+   images/tours/casadelrio.webp
+   images/tours/dragonfly-og.jpg
+   images/tours/dragonfly-og.webp
+   images/tours/dragonfly.jpg
+   images/tours/dragonfly.webp
+   images/tours/elgenio-og.jpg
+   images/tours/elgenio-og.webp
+   images/tours/elgenio.jpg
+   images/tours/elgenio.webp
+   images/tours/elsalto-og.jpg
+   images/tours/elsalto-og.webp
+   images/tours/elsalto.jpg
+   images/tours/elsalto.webp
+   images/tours/junglo-og.jpg
+   images/tours/junglo-og.webp
+   images/tours/junglo.jpg
+   images/tours/junglo.webp
+   images/tours/kenko-og.jpg
+   images/tours/kenko-og.webp
+   images/tours/kenko-streetview.jpg
+   images/tours/kenko-streetview.webp
+   images/tours/kenko.jpg
+   images/tours/kenko.webp
+   images/virtual-tour-cover.jpg
+   images/virtual-tour-cover.webp
+   images/webclip.png
+   images/webclip.webp
+
+-- (root)
+   index.html
+
+-- industries
+   industries/adventure-tours.html
+   industries/butterfly-gardens.html
+   industries/corporate-spaces.html
+   industries/dome-structures.html
+   industries/educational.html
+   industries/event-venues.html
+   industries/farms.html
+   industries/hospitality.html
+   industries/hot-springs.html
+   industries/index.html
+   industries/museums.html
+   industries/national-parks.html
+   industries/real-estate.html
+   industries/restaurants.html
+   industries/retreat-centers.html
+   industries/therapy-spaces.html
+
+-- (root)
+   internal-quote.html
+   journey.html
+
+-- js
+   js/3d-effects.js
+   js/animations.js
+   js/aurora.js
+   js/contact-modal.js
+   js/future-ui.js
+   js/gsap.min.js
+   js/hero-particles.js
+   js/html2pdf.bundle.min.js
+   js/interactive-elements.js
+   js/live-tours.js
+   js/mobile.js
+   js/motion.js
+   js/particles.min.js
+   js/polish.js
+   js/portal-effect.js
+   js/premium-animations.js
+   js/pwa.js
+   js/sidenav.js
+   js/three-about.js
+   js/three-loader.js
+   js/three.min.js
+   js/v2-extras.js
+   js/vanilla-main.js
+   js/wow.js
+
+-- locations
+   locations/guanacaste.html
+   locations/index.html
+   locations/la-fortuna-arenal.html
+   locations/manuel-antonio.html
+   locations/monteverde.html
+   locations/nosara.html
+   locations/san-jose.html
+   locations/santa-teresa.html
+   locations/tamarindo.html
+
+-- (root)
+   manifest.webmanifest
+   portfolio.html
+   pricing.html
+   privacy-policy.html
+   robots.txt
+
+-- services
+   services/360-photography.html
+   services/360-videography.html
+   services/augmented-reality.html
+   services/drone-360-media.html
+   services/google-streetview.html
+   services/index.html
+   services/interactive-maps.html
+   services/interactive-virtual-tours.html
+   services/traditional-media.html
+   services/virtual-reality.html
+
+-- (root)
+   sitemap.xml
+   sw.js
+   terms-of-service.html
+   update_website.ps1
+
+-- videos
+   videos/website30mb-mobile.mp4
+   videos/website30mb-poster-00001.jpg
+
+-- (root)
+   virtual-tour-vs-video-walkthrough.html
+   what-is-a-360-virtual-tour.html
+
+================================================================
+DELETE FROM SERVER (13 files - old/unused assets)
+================================================================
+   images/360-degree-1.png
+   images/360-video.png
+   images/Aqua-and-Teal-Modern-Sophisticated-Spiral-Circle-Business-Consulting-Logo-Design.svg
+   images/Icon-2.svg
+   images/You-See-360-Logo-Black-Not-outlines.svg
+   images/YouSee360-Logo-White.svg
+   images/augmented-reality.png
+   images/google-maps.png
+   images/home.png
+   images/resort.png
+   images/technology-1.png
+   images/temperature.png
+   videos/website30mb.mp4
+
+Also delete any css/bundle-*.css on the server whose name is NOT in the
+upload list above - those are superseded bundles.
