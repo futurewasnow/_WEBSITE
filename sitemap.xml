@@ -2,6 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://yousee360.com/es/industrias/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yousee360.com/es/industrias/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/industries/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yousee360.com/industries/"/>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yousee360.com/es/servicios/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yousee360.com/es/servicios/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/services/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yousee360.com/services/"/>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yousee360.com/case-studies/</loc>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://yousee360.com/es/que-es-un-tour-virtual-360.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://yousee360.com/es/que-es-un-tour-virtual-360.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/what-is-a-360-virtual-tour.html"/>
