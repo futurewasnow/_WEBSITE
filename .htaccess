@@ -130,10 +130,13 @@ DirectoryIndex index.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   # The 360 tours are embedded from tour subdomains and ask for motion sensors
   # via allow="accelerometer; gyroscope; xr-spatial-tracking; fullscreen".
-  # Those features default to a self-only allowlist, so without explicit
-  # delegation the browser blocks them and the "move your phone to look
-  # around" gesture stops working inside every embedded tour.
-  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), accelerometer=(self \"https://tours.yousee360.com\" \"https://elsalto.yousee360.com\" \"https://arenaloasis.yousee360.com\"), gyroscope=(self \"https://tours.yousee360.com\" \"https://elsalto.yousee360.com\" \"https://arenaloasis.yousee360.com\"), magnetometer=(self \"https://tours.yousee360.com\" \"https://elsalto.yousee360.com\" \"https://arenaloasis.yousee360.com\"), xr-spatial-tracking=(self \"https://tours.yousee360.com\" \"https://elsalto.yousee360.com\" \"https://arenaloasis.yousee360.com\"), fullscreen=(self \"https://tours.yousee360.com\" \"https://elsalto.yousee360.com\" \"https://arenaloasis.yousee360.com\")"
+  # Those features default to a self-only allowlist, so without delegation the
+  # browser blocks them and the "move your phone to look around" gesture stops
+  # working inside every embedded tour.
+  # Uses * rather than a quoted origin list: LiteSpeed emits backslash-escaped
+  # quotes literally, which makes the whole header fail the structured-header
+  # parser and voids every restriction in it, including camera and microphone.
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), accelerometer=*, gyroscope=*, magnetometer=*, xr-spatial-tracking=*, fullscreen=*"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTPS} == 'on'"
 
   # Remove ETag (using Last-Modified instead via Expires)
