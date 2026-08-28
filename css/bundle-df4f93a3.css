@@ -2567,7 +2567,7 @@ p {
   backdrop-filter: blur(7px);
   outline-offset: 0px;
   -webkit-text-fill-color: inherit;
-  background-image: linear-gradient(#00000080, #00000080), url('../images/interface_PEACE_intro.jpg');
+  background-image: linear-gradient(#00000080, #00000080), url('../images/tours/elsalto.jpg');
   background-position: 0 0, 0 0;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;
@@ -2661,7 +2661,7 @@ p {
   text-align: center;
   -webkit-text-fill-color: inherit;
   background-color: #131010c2;
-  background-image: url('../images/interface_PEACE_intro.jpg');
+  background-image: url('../images/tours/elsalto.jpg');
   background-position: 0 0;
   background-size: cover;
   background-clip: border-box;
@@ -4755,7 +4755,7 @@ p {
 }
 
 .section-2 {
-  background-image: linear-gradient(#000, #000c 33%, #0009), url('../images/Oz2ZQ2j8We8.jpg');
+  background-image: linear-gradient(#000, #000c 33%, #0009), url('../images/tours/casadelrio.jpg');
   background-position: 0 0, 50% 100%;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;
@@ -8677,7 +8677,7 @@ p {
 
   .section.wwd {
     background-color: #0000;
-    background-image: linear-gradient(#00000080, #00000080), url('../images/interface_PEACE_intro.jpg');
+    background-image: linear-gradient(#00000080, #00000080), url('../images/tours/elsalto.jpg');
     background-position: 0 0, 50%;
     background-repeat: repeat, no-repeat;
     background-size: auto, cover;

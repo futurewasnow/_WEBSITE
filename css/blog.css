@@ -633,16 +633,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   color: var(--ys-text-dim);
   font-size: 0.9rem;
   margin-bottom: 30px;
 }
 
 .post-meta-top span {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
+}
+
+/* The eyebrow carries wide tracking; keep it from eating the whole row. */
+.post-meta-top .eyebrow {
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 700px) {
+  .post-meta-top {
+    gap: 10px 14px;
+    font-size: 0.8rem;
+    margin-bottom: 22px;
+  }
+  .post-meta-top .eyebrow {
+    letter-spacing: 0.08em;
+  }
 }
 
 .post-meta-top i {
@@ -782,8 +800,13 @@
   color: var(--ys-green);
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
   margin-bottom: 40px;
   transition: all 0.3s ease;
+}
+
+@media (max-width: 700px) {
+  .back-to-blog { margin-bottom: 24px; }
 }
 
 .back-to-blog:hover {
