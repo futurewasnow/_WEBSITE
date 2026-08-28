@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://yousee360.com/virtual-tour-vs-video-walkthrough.html</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yousee360.com/360-tour-vs-matterport.html</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yousee360.com/what-is-a-360-virtual-tour.html</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://yousee360.com/es/blog/google-street-view-negocios.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://yousee360.com/es/blog/google-street-view-negocios.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/blog/posts/google-street-view-costa-rica-businesses.html"/>
