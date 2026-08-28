@@ -1,0 +1,47 @@
+{
+  "name": "YouSee360 — 360° Virtual Tours Costa Rica",
+  "short_name": "YouSee360",
+  "description": "Premium 360° photography, videography, and immersive virtual tours for businesses across Costa Rica.",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#06070a",
+  "theme_color": "#00ff88",
+  "lang": "en",
+  "categories": ["business", "photo", "lifestyle"],
+  "icons": [
+    {
+      "src": "/images/350-x-375-You-see-360-logo-white-for-black-bg-1.png",
+      "sizes": "350x375",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/webclip.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Get a Free Quote",
+      "short_name": "Quote",
+      "description": "Request a free 360° tour consultation",
+      "url": "/contact.html#quote"
+    },
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "See our 360° tour case studies",
+      "url": "/portfolio.html"
+    },
+    {
+      "name": "WhatsApp",
+      "short_name": "Chat",
+      "description": "Chat with us on WhatsApp",
+      "url": "https://wa.me/50687971281"
+    }
+  ]
+}

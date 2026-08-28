@@ -1,0 +1,30 @@
+# robots.txt for YouSee360.com
+User-agent: *
+Allow: /
+
+# Specific sections explicitly allowed
+Allow: /services/
+Allow: /industries/
+Allow: /locations/
+Allow: /blog/
+Allow: /es/
+Allow: /portfolio.html
+Allow: /about.html
+Allow: /contact.html
+
+# Don't index utility pages or private resources
+# Tracking/estimator parameter variants are duplicates of the clean URL
+Disallow: /*?utm_source=
+Disallow: /*?*sqft=
+
+Disallow: /401.html
+Disallow: /internal-quote.html
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Crawl politeness
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://yousee360.com/sitemap.xml

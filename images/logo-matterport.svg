@@ -1,0 +1,14 @@
+<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="matterportGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF4081;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E91E63;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="none"/>
+  <!-- Matterport "M" icon simplified -->
+  <g transform="translate(20, 10)">
+    <path d="M0 40 L8 0 L20 28 L32 0 L40 40 L32 40 L28 20 L20 40 L12 20 L8 40 Z" fill="url(#matterportGrad)"/>
+  </g>
+  <text x="75" y="38" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" font-weight="bold">Matterport</text>
+</svg>

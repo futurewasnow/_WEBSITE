@@ -1,0 +1,1560 @@
+/* ============================================================
+   YOUSEE360 — AURORA (brand green + cyan)
+   Immersive Three.js stage + glassmorphism content overlays.
+   Loads AFTER all other CSS to take precedence.
+   ============================================================ */
+
+:root {
+  /* Brand palette — green + cyan only */
+  --aurora-bg:        #02060a;
+  --aurora-bg-deep:   #03090e;
+
+  --aurora-green:     #00ff88;
+  --aurora-green-2:   #2dffa6;
+  --aurora-cyan:      #22d3ee;
+  --aurora-cyan-2:    #01e4e4;
+  --aurora-teal:      #2dd4bf;
+
+  --aurora-glow-green: rgba(0, 255, 136, 0.55);
+  --aurora-glow-cyan:  rgba(34, 211, 238, 0.5);
+  --aurora-glow-teal:  rgba(45, 212, 191, 0.4);
+
+  --aurora-text:       #eaf7f0;
+  --aurora-text-muted: rgba(234, 247, 240, 0.62);
+  --aurora-text-dim:   rgba(234, 247, 240, 0.38);
+
+  --aurora-border:        rgba(255,255,255,0.08);
+  --aurora-border-strong: rgba(255,255,255,0.15);
+
+  --ease-aurora: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   THE AURORA CANVAS — fixed full-viewport Three.js stage
+   ============================================================ */
+.ys-aurora {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: -2;
+  pointer-events: none;
+  background: transparent;
+  display: block;
+}
+@media (hover: hover) and (pointer: fine) {
+  body.ys-aurora-interactive .ys-aurora {
+    pointer-events: auto;
+    cursor: grab;
+  }
+  body.ys-aurora-interactive.ys-aurora-dragging .ys-aurora {
+    cursor: grabbing;
+  }
+}
+.ys-aurora-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 30%, var(--aurora-glow-green) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 15%, var(--aurora-glow-cyan)  0%, transparent 55%),
+    radial-gradient(ellipse at 60% 80%, var(--aurora-glow-teal)  0%, transparent 55%),
+    radial-gradient(ellipse at 10% 90%, rgba(0, 255, 136, 0.25)     0%, transparent 60%),
+    var(--aurora-bg);
+  animation: aurora-shift-fallback 22s ease-in-out infinite alternate;
+}
+@keyframes aurora-shift-fallback {
+  0%   { filter: hue-rotate(-6deg) brightness(0.95) saturate(1.05); }
+  100% { filter: hue-rotate(8deg)  brightness(1.05) saturate(1.15); }
+}
+
+/* ============================================================
+   BODY — transparent dark so aurora shows behind content
+   ============================================================ */
+body.aurora-on {
+  background: var(--aurora-bg) !important;
+  color: var(--aurora-text);
+  position: relative;
+}
+/* Aurora canvas sits at z-index:-2, so normal content paints above it
+   without forcing position on children (which previously broke fixed
+   overlays like the mobile bar, FAB and contact modal — dropping them
+   into flow and creating large empty space below the footer). */
+
+body.aurora-on .navigation-bar { z-index: 99999 !important; }
+
+/* ============================================================
+   SECTION TRANSPARENCY — let aurora bleed through dark sections
+   ============================================================ */
+body.aurora-on .section,
+body.aurora-on section.section,
+body.aurora-on .ys-section,
+body.aurora-on main,
+body.aurora-on .ys-pricing,
+body.aurora-on .ys-testimonials,
+body.aurora-on .ys-trusted,
+body.aurora-on .ys-portfolio-teaser,
+body.aurora-on .ys-estimator,
+body.aurora-on .ys-related,
+body.aurora-on .ys-includes,
+body.aurora-on .ys-faq,
+body.aurora-on .case-studies-section,
+body.aurora-on .strategic-benefits,
+body.aurora-on .industry-applications,
+body.aurora-on .process-timeline,
+body.aurora-on .recommendations-section,
+body.aurora-on .stats-section {
+  background: transparent !important;
+  background-image: none !important;
+  position: relative;
+}
+
+body.aurora-on .section::before,
+body.aurora-on section.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(2,6,10,0.55) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================================
+   GLASSMORPHISM CARDS — green-tinted glass
+   ============================================================ */
+body.aurora-on .ds-card,
+body.aurora-on .bento-card,
+body.aurora-on .ys-package,
+body.aurora-on .ys-testimonial,
+body.aurora-on .ys-portfolio-tile,
+body.aurora-on .ys-includes-item,
+body.aurora-on .ys-faq-item,
+body.aurora-on .ys-related-card,
+body.aurora-on .ys-trust-badge,
+body.aurora-on .modern-service-card,
+body.aurora-on .glass-card,
+body.aurora-on .glass-panel,
+body.aurora-on .case-study-card,
+body.aurora-on .featured-tour-container {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    rgba(4, 10, 14, 0.55) !important;
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+body.aurora-on .ds-card:hover,
+body.aurora-on .bento-card:hover,
+body.aurora-on .ys-package:hover {
+  border-color: rgba(0, 255, 136, 0.4) !important;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 255, 136, 0.25),
+    0 0 60px -10px rgba(0, 255, 136, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Estimator + Contact glass card — deeper blur.
+   NOTE: only apply to elements that are actually styled as cards (they carry
+   their own padding + border-radius). Applying this to bare layout wrappers
+   such as .ys-footer-cta or .modal-form-section produced hard-edged green
+   rectangles hugging the content, because those have padding:0 / radius:0. */
+body.aurora-on .ys-estimator-card,
+body.aurora-on .ys-contact-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)),
+    rgba(3, 8, 12, 0.6) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid rgba(0, 255, 136, 0.2) !important;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 255, 136, 0.15) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ============================================================
+   NAV — refined glass over green aurora
+   ============================================================ */
+body.aurora-on .navigation-bar {
+  background: rgba(3, 8, 12, 0.55) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1) !important;
+}
+body.aurora-on .navigation-bar.scrolled {
+  background: rgba(2, 6, 10, 0.85) !important;
+}
+
+/* ============================================================
+   TYPOGRAPHY ACCENT — green→cyan gradient text
+   ============================================================ */
+body.aurora-on .highlight {
+  background: linear-gradient(120deg,
+    var(--aurora-green) 0%,
+    var(--aurora-green-2) 35%,
+    var(--aurora-cyan) 70%,
+    var(--aurora-green) 100%) !important;
+  background-size: 300% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  filter: drop-shadow(0 0 24px rgba(0, 255, 136, 0.55))
+          drop-shadow(0 0 48px rgba(34, 211, 238, 0.3));
+  animation: aurora-gradient-shift 9s ease-in-out infinite;
+  font-weight: 800;
+  text-shadow: none !important;
+}
+@keyframes aurora-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* ============================================================
+   SECTION TITLES — REDESIGNED FROM SCRATCH (authoritative)
+   Editorial aurora style: gradient accent lines flanking a tracked
+   label, a tight high-contrast heading with one gradient word, and a
+   calm muted subhead. Overrides all legacy chip/equalizer/border styles.
+   ============================================================ */
+
+/* --- Eyebrow label: line · LABEL · line (no box, no blink) --- */
+body.aurora-on .section-tag,
+body.aurora-on .eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  margin: 0 0 1.15rem !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  isolation: auto !important;
+  color: var(--aurora-green, #00ff88) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  text-shadow: 0 0 18px rgba(0, 255, 136, 0.45);
+}
+/* Flanking gradient lines (reuse the legacy pseudos, fully restyled) */
+body.aurora-on .section-tag::before,
+body.aurora-on .section-tag::after,
+body.aurora-on .eyebrow::before,
+body.aurora-on .eyebrow::after {
+  content: "" !important;
+  display: inline-block !important;
+  position: static !important;
+  inset: auto !important;
+  width: 26px !important;
+  height: 2px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 3px !important;
+  background: linear-gradient(90deg, var(--aurora-green, #00ff88), var(--aurora-cyan, #22d3ee)) !important;
+  background-size: auto !important;
+  -webkit-mask: none !important;
+          mask: none !important;
+  -webkit-mask-composite: add !important;
+          mask-composite: add !important;
+  animation: none !important;
+  filter: none !important;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.55) !important;
+  opacity: 0.9;
+}
+/* Left-aligned eyebrows (e.g. inside split bento cards): only a leading line */
+body.aurora-on .bento-card .section-tag { margin-bottom: 0.9rem !important; }
+body.aurora-on .bento-card .section-tag::after { display: none !important; }
+
+/* --- Section heading: tight, premium, single gradient highlight --- */
+body.aurora-on .section-title-group .apple-heading,
+body.aurora-on .section-title-group .sexy-heading,
+body.aurora-on .section-title-group h2,
+body.aurora-on .ys-section-header h2,
+body.aurora-on .ys-includes h2,
+body.aurora-on .ys-faq h2,
+body.aurora-on .ys-related h2,
+body.aurora-on .ys-pricing .header h2,
+body.aurora-on .ys-testimonials .header h2,
+body.aurora-on .success-stories h2,
+body.aurora-on .strategic-benefits h2,
+body.aurora-on .industry-applications h2,
+body.aurora-on .process-timeline h2 {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(1.85rem, 3.6vw, 2.78rem) !important; /* phi^2 = 44.5px */
+  font-weight: 800 !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.035em !important;
+  color: #ffffff !important;
+  margin: 0 0 1rem !important;
+  text-shadow: none !important;
+  text-wrap: balance;
+}
+
+/* --- Subheading: calm, readable, constrained --- */
+body.aurora-on .section-subheading,
+body.aurora-on .section-title-group p,
+body.aurora-on .ys-section-header p {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(1rem, 1.5vw, 1.15rem) !important;
+  line-height: 1.62 !important;
+  font-weight: 400 !important;
+  color: var(--aurora-text-muted) !important;
+  max-width: 600px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* --- Group spacing + centering --- */
+body.aurora-on .section-title-group {
+  margin-bottom: clamp(2.5rem, 6vw, 4rem) !important;
+}
+body.aurora-on .section-title-group.centered { text-align: center; }
+body.aurora-on .section-title-group.centered .section-tag { justify-content: center; }
+
+/* Mobile: tighten the eyebrow + heading */
+@media (max-width: 768px) {
+  body.aurora-on .section-tag {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.22em !important;
+    gap: 9px !important;
+  }
+  body.aurora-on .section-tag::before,
+  body.aurora-on .section-tag::after { width: 18px !important; }
+}
+
+/* ============================================================
+   BUTTONS — primary CTAs become green→cyan pills
+   ============================================================ */
+body.aurora-on .nav-cta,
+body.aurora-on .ds-btn-primary,
+body.aurora-on .pkg-btn.is-featured,
+body.aurora-on .pkg-btn,
+body.aurora-on .ys-form-submit,
+body.aurora-on .ys-estimator-next,
+body.aurora-on .ys-mob-bar a.btn-quote,
+body.aurora-on .ys-mobile-top-cta,
+body.aurora-on .ys-fab-trigger {
+  background:
+    linear-gradient(135deg, var(--aurora-green) 0%, var(--aurora-green-2) 55%, var(--aurora-cyan) 100%) !important;
+  color: #001a10 !important;
+  box-shadow:
+    0 12px 32px -8px rgba(0, 255, 136, 0.55),
+    0 0 32px -8px rgba(34, 211, 238, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
+}
+body.aurora-on .nav-cta:hover,
+body.aurora-on .ds-btn-primary:hover {
+  box-shadow:
+    0 18px 44px -8px rgba(0, 255, 136, 0.7),
+    0 0 48px -6px rgba(34, 211, 238, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ============================================================
+   HERO — homepage video hero gets aurora vignette tint
+   ============================================================ */
+body.aurora-on #Hero .hero-overlay {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.28) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(34, 211, 238, 0.22) 0%, transparent 50%),
+    radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%) !important;
+}
+
+/* Service / industry heroes — constellation bg gives way to aurora */
+body.aurora-on .hero-section[data-service],
+body.aurora-on .hero-section[data-industry],
+body.aurora-on .hero-section.bg-dark:not(#Hero) {
+  background: transparent !important;
+}
+
+/* ============================================================
+   AURORA HINT (desktop)
+   ============================================================ */
+.ys-aurora-hint {
+  position: fixed;
+  bottom: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(2, 6, 10, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: rgba(234, 247, 240, 0.8);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .8s var(--ease-aurora) .8s;
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  body.ys-aurora-interactive .ys-aurora-hint { display: block; opacity: 1; }
+  body.ys-aurora-hint-dismissed .ys-aurora-hint { opacity: 0; transition-delay: 0s; }
+}
+.ys-aurora-hint::before {
+  content: "✥ ";
+  color: var(--aurora-green);
+}
+
+/* ============================================================
+   FOOTER — collapse trailing space
+   ============================================================ */
+body.aurora-on .footer,
+body.aurora-on .ys-footer-v2 {
+  margin-bottom: 0 !important;
+  padding-bottom: 32px !important;
+}
+body.aurora-on .footer::after,
+body.aurora-on .ys-footer-v2::after {
+  content: none !important;
+}
+/* No bottom padding on desktop. Mobile gets its 88px from mobile.css. */
+body.aurora-on { padding-bottom: 0 !important; }
+@media (max-width: 768px) {
+  body.aurora-on { padding-bottom: 88px !important; }
+}
+
+/* ============================================================
+   LIVE 360 HERO (service + industry pages)
+   The page title sits over a real, draggable 360 panorama instead
+   of a dead starfield.
+   ============================================================ */
+body.aurora-on .ys-hero-live {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 88vh !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(120px, 16vh, 200px) clamp(20px, 4vw, 40px) clamp(60px, 9vh, 110px) !important;
+  background: #05070d !important;
+}
+.ys-hero-360-bg {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+}
+.ys-hero-360-bg .pnlm-container,
+.ys-hero-360-bg canvas { width: 100% !important; height: 100% !important; }
+/* Readability scrim over the pano */
+.ys-hero-live-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(5,7,13,0.25) 0%, rgba(5,7,13,0.78) 78%),
+    linear-gradient(180deg, rgba(5,7,13,0.55) 0%, transparent 28%, transparent 60%, rgba(5,7,13,0.85) 100%);
+}
+/* Title overlay — pointer-events off so drags reach the pano */
+body.aurora-on .ys-hero-live .container,
+body.aurora-on .ys-hero-live .container.centered {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  text-align: center;
+  max-width: 1000px;
+}
+body.aurora-on .ys-hero-live .container a,
+body.aurora-on .ys-hero-live .container button { pointer-events: auto; }
+/* Live badge pinned bottom-center */
+.ys-hero-badge {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(4,8,6,0.6);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: var(--aurora-green, #00ff88);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  animation: hero-eyebrow-in 1s var(--ease-aurora) both;
+}
+.ys-hero-badge::before {
+  content: "";
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--aurora-green, #00ff88);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.9);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+/* Industry stat counters over the pano — glassy chips */
+body.aurora-on .ys-hero-live .industry-stats {
+  margin-top: 1.6rem;
+  display: inline-flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+body.aurora-on .ys-hero-live .industry-stats .stat-item {
+  padding: 12px 22px;
+  border-radius: 21px;
+  background: rgba(4,8,12,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+}
+@media (max-width: 600px) {
+  body.aurora-on .ys-hero-live { min-height: 78vh !important; }
+}
+
+/* ============================================================
+   HOMEPAGE HERO — premium eyebrow, trust strip, buttons
+   ============================================================ */
+body.aurora-on #Hero .hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.4rem;
+}
+/* Eyebrow chip */
+body.aurora-on .hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: clamp(0.7rem, 1.4vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--aurora-text);
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.14), rgba(34,211,238,0.07)), rgba(4,6,12,0.5);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px -10px rgba(0, 255, 136, 0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+  animation: hero-eyebrow-in 0.9s var(--ease-aurora) both;
+}
+body.aurora-on .hero-eyebrow i { color: var(--aurora-green, #00ff88); }
+@keyframes hero-eyebrow-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: none; }
+}
+/* Hero heading: crisper, gradient highlight handled by .highlight rule */
+body.aurora-on #Hero .hero-heading {
+  font-size: clamp(2.6rem, 8.5vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  margin: 0;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.5);
+}
+body.aurora-on #Hero .hero-subheading {
+  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  color: var(--aurora-text-muted);
+  font-weight: 400;
+}
+/* Hero buttons — premium pills */
+body.aurora-on #Hero .hero-buttons { gap: 14px; margin-top: 0.4rem; }
+body.aurora-on #Hero .btn-primary {
+  padding: 16px 34px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee)) !important;
+  color: #04120c !important;
+  box-shadow: 0 16px 40px -12px rgba(0, 255, 136, 0.65), 0 0 40px -10px rgba(34,211,238,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: transform .35s var(--ease-aurora), box-shadow .35s ease;
+}
+body.aurora-on #Hero .btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 22px 54px -12px rgba(0, 255, 136, 0.8), 0 0 60px -8px rgba(34,211,238,0.6), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+body.aurora-on #Hero .btn-hollow {
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--aurora-text) !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  backdrop-filter: blur(10px);
+  transition: border-color .35s, background .35s, transform .35s var(--ease-aurora);
+}
+body.aurora-on #Hero .btn-hollow:hover {
+  border-color: rgba(0, 255, 136, 0.55) !important;
+  background: rgba(0, 255, 136, 0.08) !important;
+  transform: translateY(-3px);
+}
+/* Hero trust strip */
+body.aurora-on .hero-trust-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 0.8rem;
+  padding: 12px 22px;
+  border-radius: 21px;
+  background: rgba(4,6,12,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  font-size: clamp(0.72rem, 1.5vw, 0.85rem);
+  color: var(--aurora-text-muted);
+}
+body.aurora-on .hero-trust-strip span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+body.aurora-on .hero-trust-strip i { color: var(--aurora-green, #00ff88); }
+body.aurora-on .hero-trust-strip .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25); padding: 0; }
+@media (max-width: 600px) {
+  body.aurora-on .hero-trust-strip .dot { display: none; }
+  body.aurora-on .hero-trust-strip { gap: 8px 14px; padding: 10px 16px; }
+}
+
+/* ============================================================
+   FOOTER v2 — premium aurora treatment
+   ============================================================ */
+body.aurora-on .ys-footer-v2 {
+  position: relative;
+  background: linear-gradient(180deg, transparent, rgba(2,4,10,0.85) 35%, rgba(2,4,10,0.96)) !important;
+  border-top: 1px solid rgba(0, 255, 136, 0.18);
+  overflow: hidden;
+}
+/* Glowing top accent line */
+body.aurora-on .ys-footer-v2::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee), transparent);
+  opacity: 0.7;
+}
+/* Soft aurora bloom behind the footer CTA */
+body.aurora-on .ys-footer-v2::after {
+  content: "";
+  position: absolute;
+  top: -10%; left: 50%;
+  width: 70%; height: 60%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(0, 255, 136, 0.1), transparent 65%);
+  pointer-events: none;
+}
+body.aurora-on .ys-footer-cta { position: relative; z-index: 1; }
+body.aurora-on .ys-footer-cta h2 {
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+body.aurora-on .ys-footer-cta .eyebrow {
+  color: var(--aurora-green, #00ff88);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+/* Footer logo lockup */
+body.aurora-on .ys-footer-brand .logo-stack {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+body.aurora-on .ys-footer-brand .logo-stack img {
+  width: 40px; height: auto;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.4));
+}
+body.aurora-on .ys-footer-brand .logo-stack span {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+body.aurora-on .ys-footer-brand .tagline {
+  color: var(--aurora-text-muted);
+  line-height: 1.6;
+  max-width: 320px;
+}
+/* Footer column titles */
+body.aurora-on .footer-col-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aurora-text);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+body.aurora-on .footer-col-title::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 28px; height: 2px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
+}
+/* Footer links */
+body.aurora-on .ys-footer-col a:not(.ys-footer-social a) {
+  color: var(--aurora-text-muted);
+  transition: color .25s, padding-left .25s var(--ease-aurora);
+  display: inline-block;
+}
+body.aurora-on .ys-footer-col > a:hover {
+  color: var(--aurora-green, #00ff88);
+  padding-left: 6px;
+}
+body.aurora-on .ys-footer-contact-item i { color: var(--aurora-green, #00ff88); }
+/* Social icons — glass circles with glow on hover */
+body.aurora-on .ys-footer-social { display: flex; gap: 10px; margin-top: 1.1rem; }
+body.aurora-on .ys-footer-social a {
+  width: 40px; height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--aurora-text-muted);
+  transition: all .3s var(--ease-aurora);
+}
+body.aurora-on .ys-footer-social a:hover {
+  color: #04120c;
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -8px rgba(0, 255, 136, 0.6);
+}
+/* Footer bottom bar */
+body.aurora-on .ys-footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative; z-index: 1;
+}
+body.aurora-on .ys-footer-legal a {
+  color: var(--aurora-text-muted);
+  transition: color .25s;
+}
+body.aurora-on .ys-footer-legal a:hover { color: var(--aurora-green, #00ff88); }
+
+/* ============================================================
+   PREMIUM SECTION CARDS + HEADERS (global)
+   Elevates every .bento-card / heading across service + industry
+   pages to a high-tech luxury standard.
+   ============================================================ */
+
+/* --- Section headings: tighter, larger, with breathing room --- */
+body.aurora-on .apple-heading,
+body.aurora-on .sexy-heading {
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+body.aurora-on .section-title-group {
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+body.aurora-on .section-title-group .section-subheading,
+body.aurora-on .section-subheading {
+  color: var(--aurora-text-muted);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Bento cards: premium glass with top accent + lift --- */
+body.aurora-on .bento-card {
+  position: relative;
+  border-radius: 21px !important;
+  padding: clamp(1.5rem, 3vw, 2.25rem) !important;
+  overflow: hidden;
+  transition: transform .5s var(--ease-aurora),
+              border-color .4s ease,
+              box-shadow .4s ease !important;
+}
+/* Hairline gradient accent along the top edge */
+body.aurora-on .bento-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--aurora-green, #00ff88), var(--aurora-cyan, #22d3ee), transparent);
+  opacity: 0;
+  transform: translateY(-1px);
+  transition: opacity .45s ease;
+}
+body.aurora-on .bento-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 255, 136, 0.4) !important;
+  box-shadow:
+    0 36px 70px -28px rgba(0, 0, 0, 0.65),
+    0 0 60px -16px rgba(0, 255, 136, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+body.aurora-on .bento-card:hover::after { opacity: 1; }
+
+/* Links that are cards: kill underline, keep glass */
+body.aurora-on a.bento-card { text-decoration: none; color: inherit; }
+
+/* --- Icon wrappers: gradient orb with glow --- */
+body.aurora-on .bento-icon-wrapper {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 58px !important; height: 58px !important;
+  flex: 0 0 58px !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  border-radius: 21px !important;
+  background:
+    linear-gradient(135deg, rgba(0, 255, 136, 0.22), rgba(34, 211, 238, 0.12)) !important;
+  border: 1px solid rgba(0, 255, 136, 0.28);
+  color: var(--aurora-green, #00ff88) !important;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow:
+    0 12px 28px -12px rgba(0, 255, 136, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform .45s var(--ease-aurora), box-shadow .45s ease;
+}
+body.aurora-on .bento-card:hover .bento-icon-wrapper {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow:
+    0 16px 34px -10px rgba(0, 255, 136, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+body.aurora-on .bento-icon-wrapper i { color: var(--aurora-green, #00ff88) !important; }
+
+/* --- Card typography hierarchy --- */
+body.aurora-on .bento-title,
+body.aurora-on .bento-card h3 {
+  font-size: 1.35rem !important;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--aurora-text) !important;
+  margin-bottom: 0.6rem !important;
+  line-height: 1.2;
+}
+body.aurora-on .bento-description,
+body.aurora-on .bento-card p {
+  color: var(--aurora-text-muted) !important;
+  line-height: 1.65;
+  font-size: 1rem;
+}
+
+/* --- Big stat numbers (where present) --- */
+body.aurora-on .bento-stat {
+  font-size: clamp(2.5rem, 6vw, 3.75rem) !important;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--aurora-green, #00ff88), var(--aurora-cyan, #22d3ee));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgba(0, 255, 136, 0.35));
+}
+
+/* --- Process timeline + strategic benefits + success stories rhythm --- */
+body.aurora-on .strategic-benefits,
+body.aurora-on .success-stories,
+body.aurora-on .industry-applications,
+body.aurora-on .process-timeline {
+  padding-top: clamp(3rem, 7vw, 5.5rem);
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* Quote / testimonial cards: refined italic + accent bar */
+body.aurora-on .success-stories .bento-card .bento-description[style*="italic"],
+body.aurora-on .bento-card .bento-description[style*="italic"] {
+  position: relative;
+  font-size: 1.05rem !important;
+  color: var(--aurora-text) !important;
+  padding-left: 1rem;
+}
+body.aurora-on .success-stories .bento-card .bento-description[style*="italic"]::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--aurora-green, #00ff88), var(--aurora-cyan, #22d3ee));
+}
+
+/* Industry/Service hero: larger, more cinematic heading */
+body.aurora-on .industry-hero .apple-heading,
+body.aurora-on .hero-section[data-service] .apple-heading,
+body.aurora-on .portfolio-hero .apple-heading {
+  font-size: clamp(2.5rem, 6.6vw, 4.5rem) !important;   /* phi^3 = 72px */
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+/* --- Blog cards: aurora glass + premium hover --- */
+body.aurora-on .blog-card-premium {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015)),
+    rgba(10, 8, 28, 0.5) !important;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 21px !important;
+  overflow: hidden;
+  transition: transform .5s var(--ease-aurora), border-color .4s, box-shadow .4s !important;
+}
+body.aurora-on .blog-card-premium:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 255, 136, 0.4) !important;
+  box-shadow: 0 36px 70px -28px rgba(0,0,0,0.65), 0 0 60px -16px rgba(0, 255, 136, 0.3) !important;
+}
+body.aurora-on .card-category-tag {
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee)) !important;
+  color: #04120c !important;
+}
+
+/* --- About founder + mission: premium glass --- */
+body.aurora-on .founder-container,
+body.aurora-on .mission-container {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)),
+    rgba(8, 6, 22, 0.5) !important;
+  backdrop-filter: blur(22px) saturate(165%);
+  -webkit-backdrop-filter: blur(22px) saturate(165%);
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 21px !important;
+}
+body.aurora-on .founder-image-placeholder {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.25), rgba(34,211,238,0.12)) !important;
+  border: 1px solid rgba(0, 255, 136, 0.3) !important;
+}
+body.aurora-on .founder-initials {
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* ============================================================
+   LIVE MINI-360 TOUR CARDS (portfolio)
+   ============================================================ */
+body.aurora-on .portfolio-card {
+  border-radius: 21px !important;
+  overflow: hidden;
+  perspective: 1100px;
+}
+.portfolio-card-media {
+  position: relative;
+  overflow: hidden;
+}
+/* --- Felix & Paul-style reactive 3D tilt --- */
+.portfolio-card-media.ys-tilt {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+/* --- Poster (the "first image") shown before the live tour loads --- */
+.portfolio-card-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transform: scale(1.14) translate(var(--par-x, 0), var(--par-y, 0));
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.82) saturate(1.05);
+}
+/* Subtle vignette + brand wash over the poster for depth + legibility */
+.portfolio-card-tour-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 30%, transparent 40%, rgba(2,6,10,0.55) 100%),
+    linear-gradient(180deg, rgba(0, 255, 136, 0.06), transparent 40%, rgba(2,6,10,0.45) 100%);
+}
+/* Keep the spinner above the poster while loading */
+.portfolio-card-tour-preview::after { z-index: 3; }
+/* Animated loading shimmer shown until the live iframe paints */
+.portfolio-card-tour-preview {
+  position: absolute !important;
+  inset: 0;
+  background: #05070d !important;
+}
+.portfolio-card-tour-preview.is-behind { z-index: 0; }
+/* No spinner — the real poster shows immediately; tour loads on tap */
+.portfolio-card-tour-preview::after { content: none !important; display: none !important; }
+.portfolio-card-play { display: none !important; }
+
+/* Play affordance so the card reads as interactive */
+.ys-tour-playbtn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 12, 8, 0.45);
+  border: 1.5px solid rgba(0, 255, 136, 0.6);
+  color: var(--aurora-green, #00ff88);
+  font-size: 1.2rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 30px -6px rgba(0, 255, 136, 0.5);
+  pointer-events: none;
+  transition: transform .3s var(--ease-aurora, cubic-bezier(0.16,1,0.3,1)), background .3s;
+}
+.ys-tour-playbtn i { margin-left: 3px; }
+.portfolio-card:hover .ys-tour-playbtn {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(0, 255, 136, 0.2);
+}
+
+/* Featured tour: live iframe replaces facade */
+.featured-tour-facade.is-hidden { opacity: 0 !important; pointer-events: none !important; }
+.featured-tour-frame.is-loaded { display: block !important; }
+.featured-tour-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.portfolio-card-iframe-container {
+  position: absolute !important;
+  inset: 0;
+  z-index: 1;
+  background: #000;
+  opacity: 0;
+  transition: opacity .6s var(--ease-aurora, cubic-bezier(0.16,1,0.3,1));
+}
+.portfolio-card-iframe-container.is-loaded { opacity: 1; }
+.portfolio-card-iframe-container iframe {
+  width: 100%; height: 100%; border: 0; display: block;
+}
+
+/* Live badge */
+.ys-tour-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(2, 8, 6, 0.7);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: var(--aurora-green, #00ff88);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+.ys-tour-badge::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--aurora-green, #00ff88);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.9);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+/* Drag hint — fades out once the user interacts */
+.ys-tour-drag-hint {
+  position: absolute;
+  bottom: 14px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(2, 8, 6, 0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.7rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity .5s ease;
+}
+
+/* Corner expand → fullscreen lightbox */
+.ys-tour-expand {
+  position: absolute;
+  top: 12px; right: 12px;
+  z-index: 4;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(2, 8, 6, 0.65);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: var(--aurora-green, #00ff88);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background .25s, transform .25s, box-shadow .25s;
+}
+.ys-tour-expand:hover {
+  background: rgba(0, 255, 136, 0.18);
+  transform: scale(1.08);
+  box-shadow: 0 0 22px -6px rgba(0, 255, 136, 0.6);
+}
+
+/* Premium card content treatment */
+body.aurora-on .portfolio-card-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+body.aurora-on .portfolio-card-tag {
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee)) !important;
+  color: #04120c !important;
+  box-shadow: 0 6px 18px -8px rgba(0, 255, 136, 0.6);
+}
+body.aurora-on .portfolio-card-tag.adventure-tag {
+  background: linear-gradient(135deg, #2dd4bf, #22d3ee) !important;
+}
+body.aurora-on .portfolio-card-tag.retreat-tag {
+  background: linear-gradient(135deg, #22d3ee, #00ff88) !important;
+}
+
+/* ============================================================
+   VERSATILITY CASE STUDY — 360 video vs 2D animated
+   ============================================================ */
+.ys-versatility-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.ys-video-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015)), rgba(10,8,28,0.5);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 21px;
+  overflow: hidden;
+  transition: transform .5s var(--ease-aurora), border-color .4s, box-shadow .4s;
+}
+.ys-video-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 255, 136, 0.4);
+  box-shadow: 0 36px 70px -28px rgba(0,0,0,0.6), 0 0 60px -16px rgba(0, 255, 136, 0.3);
+}
+.ys-video-embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  background: #05070d;
+  overflow: hidden;
+}
+.ys-video-embed img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1s var(--ease-aurora), filter .4s;
+  filter: brightness(0.85);
+}
+.ys-video-card:hover .ys-video-embed img { transform: scale(1.06); filter: brightness(1); }
+.ys-video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; }
+.ys-video-play {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px; height: 70px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
+  color: #04120c; font-size: 1.4rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 32px -8px rgba(0, 255, 136, 0.6);
+  transition: transform .3s var(--ease-aurora);
+  z-index: 3;
+}
+.ys-video-play i.fa-play { margin-left: 4px; }
+.ys-video-card:hover .ys-video-play { transform: translate(-50%, -50%) scale(1.1); }
+.ys-video-embed.is-playing .ys-video-play,
+.ys-video-embed.is-playing img { display: none; }
+.ys-video-meta { padding: clamp(18px, 2.5vw, 26px); }
+.ys-video-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--aurora-green, #00ff88); margin-bottom: 0.6rem;
+}
+.ys-video-title { font-size: 1.3rem; font-weight: 700; color: #fff; margin: 0 0 0.5rem; letter-spacing: -0.02em; }
+.ys-video-desc { color: var(--aurora-text-muted, rgba(236,240,255,0.62)); line-height: 1.6; margin: 0; font-size: 0.98rem; }
+.ys-video-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 0.5rem; font-weight: 600; white-space: nowrap;
+  color: var(--aurora-cyan, #22d3ee); text-decoration: none;
+  border-bottom: 1px solid rgba(34,211,238,0.35); transition: color .25s, border-color .25s;
+}
+.ys-video-link:hover { color: var(--aurora-green, #00ff88); border-color: rgba(0, 255, 136, 0.6); }
+.ys-video-link i { font-size: 0.78em; }
+.ys-versatility-note {
+  text-align: center; margin: clamp(24px, 4vw, 40px) auto 0; max-width: 680px;
+  color: var(--aurora-text-muted, rgba(236,240,255,0.62)); font-size: 0.95rem;
+}
+.ys-versatility-note i { color: var(--aurora-green, #00ff88); margin-right: 6px; }
+@media (max-width: 768px) {
+  .ys-versatility-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SIDE RAIL — desktop section progress indicator
+   ============================================================ */
+.ys-sidenav {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 8px;
+  border-radius: 999px;
+  background: rgba(2, 6, 10, 0.45);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(0, 255, 136, 0.12);
+  box-shadow:
+    0 16px 40px -16px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 1025px) {
+  .ys-sidenav { display: flex; }
+}
+.ys-sidenav-dot {
+  position: relative;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.ys-sidenav-dot-inner {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background .35s var(--ease-aurora),
+              transform .35s var(--ease-aurora),
+              box-shadow .35s var(--ease-aurora);
+}
+.ys-sidenav-dot:hover .ys-sidenav-dot-inner {
+  background: rgba(0, 255, 136, 0.6);
+  transform: scale(1.4);
+}
+.ys-sidenav-dot.is-active .ys-sidenav-dot-inner {
+  background: var(--aurora-green);
+  transform: scale(1.55);
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.7),
+              0 0 28px rgba(34, 211, 238, 0.4);
+}
+.ys-sidenav-tip {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(2, 6, 10, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  color: var(--aurora-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s var(--ease-aurora);
+}
+.ys-sidenav-dot:hover .ys-sidenav-tip,
+.ys-sidenav-dot.is-active .ys-sidenav-tip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ============================================================
+   LIVE INLINE 360 VIEWER on homepage
+   ============================================================ */
+.ys-live-tour-host {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 40px);
+}
+.ys-live-tour {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  border-radius: 21px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 136, 0.22);
+  background: #000;
+  box-shadow:
+    0 40px 100px -30px rgba(0, 255, 136, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 0 80px -20px rgba(34, 211, 238, 0.25);
+  cursor: grab;
+}
+.ys-live-tour:active { cursor: grabbing; }
+.ys-live-tour [data-pannellum] {
+  position: absolute;
+  inset: 0;
+}
+
+/* --- Tap-to-load facade for the real embedded client tour --- */
+.ys-live-tour-facade {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+.ys-live-tour-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform .8s var(--ease-aurora, cubic-bezier(0.16,1,0.3,1)), filter .5s ease;
+}
+.ys-live-tour-facade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2,6,10,0.35) 0%, rgba(2,6,10,0) 38%, rgba(2,6,10,0.78) 100%);
+  pointer-events: none;
+}
+.ys-live-tour-facade:hover .ys-live-tour-poster,
+.ys-live-tour-facade:focus-visible .ys-live-tour-poster { transform: scale(1.06); }
+.ys-live-tour-facade:focus-visible {
+  outline: 2px solid var(--aurora-green, #00ff88);
+  outline-offset: -4px;
+}
+.ys-live-tour-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--aurora-green, #00ff88);
+  font-size: 1.5rem;
+  background: rgba(2, 6, 10, 0.6);
+  border: 1px solid rgba(0, 255, 136, 0.45);
+  box-shadow: 0 0 40px -6px rgba(0, 255, 136, 0.55);
+  transition: transform .3s var(--ease-aurora, cubic-bezier(0.16,1,0.3,1)), background .3s;
+}
+.ys-live-tour-play i { margin-left: 5px; }
+.ys-live-tour-facade:hover .ys-live-tour-play,
+.ys-live-tour-facade:focus-visible .ys-live-tour-play {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(0, 255, 136, 0.18);
+}
+.ys-live-tour-meta {
+  position: absolute;
+  left: 22px;
+  bottom: 20px;
+  right: 78px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+.ys-live-tour-name {
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.ys-live-tour-sub {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+.ys-live-tour-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.ys-live-tour-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+/* Once the real tour is mounted, retire the facade and the tap hint. */
+.ys-live-tour.is-loaded .ys-live-tour-facade {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.ys-live-tour.is-loaded .ys-live-tour-hint { opacity: 0; }
+.ys-live-tour.is-loaded .ys-live-tour-overlay { background: none; }
+.ys-live-tour-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  z-index: 5;
+  background: linear-gradient(180deg, rgba(0,0,0,0.55), transparent);
+  pointer-events: none;
+}
+.ys-live-tour-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(2, 6, 10, 0.65);
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  color: var(--aurora-green);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+.ys-live-tour-badge::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--aurora-green);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.8);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+@keyframes live-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.45); opacity: 0.45; }
+}
+.ys-live-tour-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(2, 6, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  transition: opacity .6s ease;
+}
+.ys-live-tour.has-interacted .ys-live-tour-hint { opacity: 0; }
+.ys-live-tour-expand {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(2, 6, 10, 0.7);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: var(--aurora-green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  backdrop-filter: blur(12px);
+  text-decoration: none;
+  transition: background .25s, transform .25s, box-shadow .25s;
+}
+.ys-live-tour-expand:hover {
+  background: rgba(0, 255, 136, 0.15);
+  transform: scale(1.06);
+  box-shadow: 0 0 24px -6px rgba(0, 255, 136, 0.5);
+}
+/* Mobile tuning */
+@media (max-width: 768px) {
+  .ys-live-tour { aspect-ratio: 4 / 5; min-height: 380px; border-radius: 21px; }
+  .ys-live-tour-overlay { padding: 14px 16px; }
+  .ys-live-tour-hint { font-size: 0.6875rem; padding: 5px 11px; }
+  .ys-live-tour-badge { font-size: 0.625rem; letter-spacing: 0.18em; padding: 5px 11px; }
+  .ys-live-tour-play { width: 68px; height: 68px; font-size: 1.25rem; }
+  .ys-live-tour-meta { left: 16px; right: 16px; bottom: 72px; }
+  .ys-live-tour-name { font-size: 0.9375rem; }
+  .ys-live-tour-sub { font-size: 0.75rem; }
+}
+/* Hide the legacy facade/frame if any leftovers from old build remain in cached HTML */
+.tour-facade, .tour-frame { display: none !important; }
+
+/* ============================================================
+   FALLBACKS / REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .ys-aurora { display: none; }
+  .ys-aurora-fallback { display: block !important; }
+  body.aurora-on .highlight { animation: none; }
+}
+
+/* No-WebGL fallback */
+body.aurora-no-webgl .ys-aurora { display: none; }
+body.aurora-no-webgl .ys-aurora-fallback { display: block; }
+
+/* ============================================================
+   MOBILE TUNING
+   ============================================================ */
+@media (max-width: 768px) {
+  body.aurora-on .ds-card,
+  body.aurora-on .bento-card,
+  body.aurora-on .ys-package,
+  body.aurora-on .ys-testimonial,
+  body.aurora-on .modern-service-card {
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+  }
+}
+
+/* ============================================================
+   CONTENT-SECTION CONTAINER FIX
+   The global `.w-container { display:flex; justify-content:space-between }`
+   in theme.css was meant for the NAVBAR only, but it leaks onto every
+   content section's `.w-container`, laying the section title group BESIDE
+   the content (and squeezing grids like the services slider into a tiny
+   right-hand column). Force content-section containers to stack as blocks.
+   Scoped to `.section > .w-container` so the navbar is never affected.
+   ============================================================ */
+body.aurora-on .section > .w-container {
+  display: block !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  height: auto !important;
+}

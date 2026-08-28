@@ -1,0 +1,304 @@
+/* ============================================================
+   YOUSEE360 — WOW LAYER
+   Coolest-ever effects: mesh bg, magnetic CTAs, 3D tilt, hero
+   text reveal, counters, spotlight cursor, page transitions.
+   Loaded last in the cascade.
+   ============================================================ */
+
+/* ============================================================
+   1. ANIMATED MESH GRADIENT BACKGROUND (body)
+   ============================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(at 22% 18%, rgba(0,255,136,0.16) 0px, transparent 38%),
+    radial-gradient(at 78% 32%, rgba(1,228,228,0.10) 0px, transparent 42%),
+    radial-gradient(at 30% 78%, rgba(255,61,166,0.06) 0px, transparent 40%),
+    radial-gradient(at 88% 90%, rgba(0,255,136,0.07) 0px, transparent 42%);
+  filter: blur(40px);
+  opacity: 0.65;
+  animation: ys-mesh-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(6,7,10,0.4) 0%, rgba(6,7,10,0.92) 100%);
+}
+@keyframes ys-mesh-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-3%, 2%, 0) scale(1.05); }
+  100% { transform: translate3d(2%, -2%, 0) scale(1.02); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+/* Only show on dark sections (which is everywhere) */
+.ys-error-page,
+.utility-page-wrap {
+  isolation: isolate; /* keep error pages from sitting under the mesh */
+}
+
+/* ============================================================
+   2. MAGNETIC CTA — buttons drift toward cursor (desktop)
+   JS sets --mag-x / --mag-y, CSS animates.
+   ============================================================ */
+.ys-magnetic {
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.ys-magnetic.is-near {
+  transform: translate(var(--mag-x, 0), var(--mag-y, 0));
+}
+@media (hover: none) {
+  .ys-magnetic { transform: none !important; }
+}
+
+/* ============================================================
+   3. 3D CARD TILT — perspective + cursor-following depth
+   ============================================================ */
+.ys-tilt {
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(0deg) rotateY(0deg);
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.ys-tilt > * { transform: translateZ(20px); transform-style: preserve-3d; }
+.ys-tilt .icon-wrap,
+.ys-tilt .service-icon-circle,
+.ys-tilt .bento-icon-wrapper,
+.ys-tilt .value-icon { transform: translateZ(40px); }
+@media (hover: none), (max-width: 980px) {
+  .ys-tilt { transform: none !important; }
+  .ys-tilt > * { transform: none !important; }
+}
+
+/* ============================================================
+   4. HERO TEXT REVEAL — letter-by-letter mask
+   ============================================================ */
+.ys-reveal-text {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.ys-reveal-text > .ys-letter,
+.ys-reveal-text > .ys-word {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: ys-reveal-up .9s cubic-bezier(0.16,1,0.3,1) forwards;
+  animation-delay: calc(var(--i, 0) * 30ms);
+  white-space: pre;
+}
+@keyframes ys-reveal-up {
+  to { transform: translateY(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ys-reveal-text > .ys-letter,
+  .ys-reveal-text > .ys-word { transform: none; opacity: 1; animation: none; }
+}
+
+/* ============================================================
+   5. SPOTLIGHT CURSOR — radial light follows pointer
+   Subtle ambient illumination of the section under the cursor.
+   ============================================================ */
+.ys-spotlight {
+  position: fixed;
+  top: 0; left: 0;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0,255,136,0.10) 0%,
+    rgba(0,255,136,0.04) 30%,
+    transparent 65%);
+  transform: translate(-50%, -50%) translate3d(0,0,0);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity .4s ease;
+  will-change: transform, opacity;
+}
+.ys-spotlight.is-visible { opacity: 1; }
+@media (hover: none), (max-width: 980px) { .ys-spotlight { display: none; } }
+
+/* ============================================================
+   6. CINEMATIC PAGE TRANSITION
+   ============================================================ */
+.ys-page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: linear-gradient(135deg, #00ff88 0%, #2dffa6 50%, #01e4e4 100%);
+  transform: translateY(100%);
+  pointer-events: none;
+  will-change: transform;
+}
+.ys-page-transition.is-entering {
+  transform: translateY(0);
+  transition: transform .55s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ys-page-transition.is-leaving {
+  transform: translateY(-100%);
+  transition: transform .55s cubic-bezier(0.65, 0, 0.35, 1) .05s;
+}
+.ys-page-transition .ys-loader-mark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(0,26,16,0.15);
+  border: 2px solid rgba(0,26,16,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #001a10;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.05em;
+  animation: ys-spin 1s linear infinite;
+}
+@keyframes ys-spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+/* ============================================================
+   7. ANIMATED COUNTERS
+   ============================================================ */
+.ys-counter {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 1ch;
+}
+
+/* ============================================================
+   8. SHIMMER LINK — green underline animates under links
+   ============================================================ */
+.ys-shimmer {
+  position: relative;
+  display: inline-block;
+}
+.ys-shimmer::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: -3px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--ys-green, #00ff88), transparent);
+  transition: right .4s cubic-bezier(0.16,1,0.3,1);
+}
+.ys-shimmer:hover::after { right: 0; }
+
+/* ============================================================
+   9. NOISY GLITCH on key headings (opt-in via .glitch)
+   ============================================================ */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.glitch:hover::before {
+  color: var(--ys-cyan, #01e4e4);
+  transform: translate(-2px, 0);
+  animation: ys-glitch-1 .35s ease;
+  opacity: 0.85;
+}
+.glitch:hover::after {
+  color: var(--ys-accent-pink, #ff3da6);
+  transform: translate(2px, 0);
+  animation: ys-glitch-2 .35s ease;
+  opacity: 0.85;
+}
+@keyframes ys-glitch-1 {
+  0%,100% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(10% 0 70% 0); }
+  40% { clip-path: inset(50% 0 25% 0); }
+  60% { clip-path: inset(75% 0 5% 0); }
+  80% { clip-path: inset(20% 0 60% 0); }
+}
+@keyframes ys-glitch-2 {
+  0%,100% { clip-path: inset(0 0 0 0); }
+  25% { clip-path: inset(60% 0 15% 0); }
+  50% { clip-path: inset(15% 0 70% 0); }
+  75% { clip-path: inset(40% 0 30% 0); }
+}
+
+/* ============================================================
+   10. SECTION ENTRY — staggered fade-up by index
+   ============================================================ */
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(28px);
+}
+[data-stagger].is-in > * {
+  opacity: 1;
+  transform: none;
+  transition: opacity .8s cubic-bezier(0.16,1,0.3,1),
+              transform .8s cubic-bezier(0.16,1,0.3,1);
+}
+[data-stagger].is-in > *:nth-child(1) { transition-delay: 0s; }
+[data-stagger].is-in > *:nth-child(2) { transition-delay: .08s; }
+[data-stagger].is-in > *:nth-child(3) { transition-delay: .16s; }
+[data-stagger].is-in > *:nth-child(4) { transition-delay: .24s; }
+[data-stagger].is-in > *:nth-child(5) { transition-delay: .32s; }
+[data-stagger].is-in > *:nth-child(6) { transition-delay: .40s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-stagger] > * { opacity: 1 !important; transform: none !important; }
+}
+
+/* ============================================================
+   11. SCROLL BORDER ACCENT — green line draws on as you scroll
+   ============================================================ */
+.ys-side-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(0,255,136,0) 0%, rgba(0,255,136,0.4) 50%, rgba(0,255,136,0) 100%);
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.ys-side-rail.is-visible { opacity: 1; }
+@media (max-width: 980px) { .ys-side-rail { display: none; } }
+
+/* ============================================================
+   12. CTA AURORA — green aura around primary CTAs
+   ============================================================ */
+.ds-btn-primary,
+.nav-cta,
+.pkg-btn:not(.ghost) {
+  position: relative;
+  isolation: isolate;
+}
+.ds-btn-primary::before,
+.nav-cta::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(135deg, rgba(0,255,136,0.6), rgba(45,255,166,0.6), rgba(1,228,228,0.4));
+  border-radius: inherit;
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.ds-btn-primary:hover::before,
+.nav-cta:hover::before { opacity: 0.85; }

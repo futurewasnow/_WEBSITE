@@ -93,7 +93,7 @@
 /* Fix Checkbox Interaction */
 .w-checkbox-input--inputType-custom {
   border: 1px solid #ccc;
-  border-radius: 2px;
+  border-radius: 3px;
   width: 12px;
   height: 12px;
   pointer-events: none;
@@ -209,7 +209,7 @@ p {
   letter-spacing: 2px;
   text-transform: uppercase;
   background-color: #24c0d8;
-  border-radius: 4px;
+  border-radius: 5px;
   margin-left: 10px;
   margin-right: 10px;
   padding: 12px 30px;
@@ -252,7 +252,7 @@ p {
   border: 0px solid var(--medium-sea-green);
   color: #fff;
   background-color: #22b2c900;
-  border-radius: 20px;
+  border-radius: 21px;
   margin-top: 0;
   transition: all .3s ease-in-out;
   transform: scale(.8);
@@ -542,7 +542,7 @@ p {
   letter-spacing: 2px;
   text-transform: uppercase;
   border: 1px solid #fff;
-  border-radius: 4px;
+  border-radius: 5px;
   margin-left: 10px;
   margin-right: 10px;
   padding: 10px 30px;
@@ -775,7 +775,7 @@ p {
   word-break: normal;
   -webkit-text-fill-color: inherit;
   object-fit: fill;
-  background-image: url('../images/YouSee360-Logo-White.svg');
+  background-image: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-attachment: scroll;
@@ -1121,7 +1121,7 @@ p {
 
 .f-pricing-card-outline {
   border: 1px solid var(--flowui-component-library--grey-300);
-  border-radius: 16px;
+  border-radius: 21px;
   flex-direction: column;
   justify-content: center;
   height: 100%;
@@ -1256,7 +1256,7 @@ p {
 .fn-navbar-link-list {
   text-align: left;
   background-color: #0f1213;
-  border-radius: 12px;
+  border-radius: 13px;
   flex-direction: column;
   align-items: flex-start;
   padding-top: 12px;
@@ -1410,7 +1410,7 @@ p {
 .cf-features-section-3-icon-wrap {
   background-color: #b16cea;
   background-image: linear-gradient(150deg, #b16cea 20%, #ff5e69 60%, #ff8a56 80%, #ffa84b);
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -1434,7 +1434,7 @@ p {
 .cf-features-section-2-icon-wrap {
   background-color: #b16cea;
   background-image: linear-gradient(150deg, var(--dark-khaki) 20%, var(--medium-sea-green) 60%, var(--steel-blue-2) 80%, var(--steel-blue));
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -1497,7 +1497,7 @@ p {
   text-align: center;
   letter-spacing: 0;
   background-color: #000;
-  border-radius: 12px;
+  border-radius: 13px;
   padding: 20px 40px;
   font-family: Montserrat, sans-serif;
   font-size: 18px;
@@ -1603,7 +1603,7 @@ p {
 
 .cf-pricing-box {
   border: 1px solid #e5e5e5;
-  border-radius: 16px;
+  border-radius: 21px;
   flex-direction: column;
   align-items: stretch;
   width: 31%;
@@ -1639,7 +1639,7 @@ p {
   color: #007e60;
   letter-spacing: .3px;
   background-color: #f0f9f5;
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: center;
   align-items: center;
   padding: 20px 40px;
@@ -1721,7 +1721,7 @@ p {
 .cf-toggle-contain {
   cursor: pointer;
   background-color: #000;
-  border-radius: 20px;
+  border-radius: 21px;
   align-items: center;
   width: 70px;
   height: 34px;
@@ -2375,7 +2375,7 @@ p {
 }
 
 .cf-contact-form-field.message {
-  border-radius: 24px;
+  border-radius: 21px;
   height: 160px;
   margin-right: 0;
 }
@@ -2903,7 +2903,7 @@ p {
   color: #1d1f1e;
   text-align: center;
   background-color: #df0;
-  border-radius: 24px;
+  border-radius: 21px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -2993,7 +2993,7 @@ p {
 .fn-features-card-with-image {
   color: #ecf0ef;
   background-color: #0f1213;
-  border-radius: 12px;
+  border-radius: 13px;
   flex-direction: column;
   align-items: flex-start;
   padding: 0;
@@ -3060,7 +3060,7 @@ p {
 
 .cf-services-image {
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: 21px;
 }
 
 .cf-services-right-contain {
@@ -3154,7 +3154,7 @@ p {
 
 .cf-services-icon {
   object-fit: contain;
-  border-radius: 18px;
+  border-radius: 21px;
   margin-bottom: 32px;
 }
 
@@ -3164,7 +3164,7 @@ p {
 }
 
 .cf-services-icon._1 {
-  border-radius: 18px;
+  border-radius: 21px;
   margin-bottom: 32px;
   box-shadow: 0 14px 80px #fc6b5c40;
 }
@@ -3355,7 +3355,7 @@ p {
 
 .f-feature-card-filled {
   background-color: var(--flowui-component-library--gray-100);
-  border-radius: 12px;
+  border-radius: 13px;
   padding: 32px;
 }
 
@@ -3463,7 +3463,7 @@ p {
 .cf-home-tab-link {
   color: #fff;
   background-color: #0000;
-  border-radius: 36px;
+  border-radius: 34px;
   padding: 18px 40px 16px;
   font-family: Montserrat, sans-serif;
   font-size: 18px;
@@ -3479,7 +3479,7 @@ p {
 .cf-home-tab-link.w--current {
   background-color: var(--conversion-flow-library--medium-purple);
   color: #fff;
-  border-radius: 36px;
+  border-radius: 34px;
   padding: 18px 40px 16px;
   font-size: 18px;
   font-weight: 700;
@@ -3494,7 +3494,7 @@ p {
 }
 
 .cf-tabs-content-contain {
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: space-between;
   align-items: stretch;
   min-height: 689px;
@@ -3656,7 +3656,7 @@ p {
 }
 
 .cf-tabs-content {
-  border-radius: 12px;
+  border-radius: 13px;
 }
 
 .cf-tabs-right-tab {
@@ -3746,7 +3746,7 @@ p {
 .cf-features-section-2-icon-wrap-2 {
   background-color: #b16cea;
   background-image: linear-gradient(150deg, var(--dark-khaki), var(--uc-green360) 30%, var(--medium-sea-green) 80%, var(--light-sea-green-2));
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -3802,7 +3802,7 @@ p {
 .cf-service-image {
   background-color: #b5ffcb;
   background-image: none;
-  border-radius: 16px;
+  border-radius: 21px;
 }
 
 .cf-service-icon-2 {
@@ -3840,7 +3840,7 @@ p {
 .cf-features-section-3-icon-wrap-2 {
   background-color: #b16cea;
   background-image: linear-gradient(150deg, #b16cea 20%, #ff5e69 60%, #ff8a56 80%, #ffa84b);
-  border-radius: 12px;
+  border-radius: 13px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -4021,7 +4021,7 @@ p {
 
 .cf-navigation-drop-container {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 13px;
   flex-direction: column;
   width: 90%;
   margin-left: auto;
@@ -4047,7 +4047,7 @@ p {
   color: #f0f9f5;
   letter-spacing: .4px;
   background-color: #000;
-  border-radius: 12px;
+  border-radius: 13px;
   padding: 16px 36px;
   font-family: Montserrat, sans-serif;
   font-size: 18px;
@@ -4469,7 +4469,7 @@ p {
   outline-offset: 0px;
   color: #fff;
   background-color: #24c0d82e;
-  border-radius: 7px;
+  border-radius: 8px;
   outline: 3px solid #000;
   padding: 1rem 2rem;
 }
@@ -4536,7 +4536,7 @@ p {
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   color: #24c0d8;
-  border-radius: 20px;
+  border-radius: 21px;
   width: 1rem;
   height: 1rem;
   padding: 0;
@@ -4786,7 +4786,7 @@ p {
 
   .fn-nav-line-3 {
     background-color: #19224c;
-    border-radius: 4px;
+    border-radius: 5px;
     width: 16px;
     height: 2px;
     margin-top: 2px;
@@ -4801,7 +4801,7 @@ p {
 
   .fn-nav-line-2 {
     background-color: #19224c;
-    border-radius: 4px;
+    border-radius: 5px;
     width: 16px;
     height: 2px;
     margin-top: 2px;
@@ -4816,7 +4816,7 @@ p {
 
   .fn-nav-line-1 {
     background-color: #19224c;
-    border-radius: 4px;
+    border-radius: 5px;
     width: 16px;
     height: 2px;
     margin-top: 2px;
@@ -4915,7 +4915,7 @@ p {
     grid-column-gap: 40px;
     grid-row-gap: 40px;
     background-color: #0f1213;
-    border-radius: 16px;
+    border-radius: 21px;
     flex-direction: column;
     justify-content: flex-start;
     padding: 0 0 24px;
@@ -4948,7 +4948,7 @@ p {
 
   .fn-nav-line-4 {
     background-color: #19224c;
-    border-radius: 4px;
+    border-radius: 5px;
     width: 16px;
     height: 2px;
     margin-top: 2px;
@@ -4963,7 +4963,7 @@ p {
 
   .fn-nav-line-5 {
     background-color: #19224c;
-    border-radius: 4px;
+    border-radius: 5px;
     width: 16px;
     height: 2px;
     margin-top: 2px;

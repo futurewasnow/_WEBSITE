@@ -1,0 +1,199 @@
+/* ============================================================
+   YOUSEE360 — SCROLL PERFORMANCE FIXES
+   Loaded LAST. Strips expensive paint triggers off elements that
+   don't benefit from them, so native scrolling stays smooth.
+   ============================================================ */
+
+/* 1. Kill backdrop-filter on static cards/panels — they sit on a
+      solid dark bg so the blur is pure cost with no visual benefit.
+      Keep blur only on the nav and dropdown which actually overlap content. */
+.ds-card,
+.bento-card,
+.value-card,
+.ys-package,
+.ys-testimonial,
+.ys-portfolio-tile,
+.ys-contact-card,
+.glass-panel,
+.featured-tour-container,
+.utility-page-content,
+.ys-trust,
+.ys-trust-badge,
+.contact-item,
+.faq-item,
+.accordion-item {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 2. The custom-cursor CSS used mix-blend-mode: difference, which
+      promotes layers and causes paint storms even when the cursor is
+      hidden. Force it off site-wide. */
+.ys-cursor-dot,
+.ys-cursor-ring {
+  mix-blend-mode: normal !important;
+}
+
+/* 3. Limit will-change to the elements that animate. Indiscriminate
+      will-change on transitions makes the GPU hold layers forever. */
+.ds-card, .bento-card, .value-card, .ys-package,
+.ys-testimonial, .ys-portfolio-tile, .nav-cta,
+.portfolio-card, .ys-trust-badge, .ds-btn {
+  will-change: auto;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .ys-portfolio-tile:hover, .nav-cta:hover,
+.portfolio-card:hover, .ds-btn:hover {
+  will-change: transform;
+}
+
+/* 4. Off-screen sections skip layout/paint until near viewport. */
+section, .ys-section, .ds-section,
+.ys-portfolio-teaser, .ys-testimonials, .ys-pricing,
+.values-section, .mission-section, .founder-section,
+.process-timeline, .industry-applications, .strategic-benefits {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* Don't apply to hero — first paint matters there */
+.hero-section, section.hero-section,
+.about-hero, .portfolio-hero,
+section[id="Hero"], #Hero {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+/* 5. Disable expensive card cursor-tracking glow on mid/low-power
+      devices and during scroll. */
+@media (max-width: 1024px), (pointer: coarse) {
+  .ds-card::before, .bento-card::before { display: none !important; }
+}
+
+/* 6. Tone down hover transition that animates box-shadow on big cards
+      (shadow re-blur during scroll = janky on weaker GPUs). */
+.ds-card, .bento-card, .value-card,
+.ys-package, .portfolio-card {
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1),
+              border-color .3s ease !important;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .portfolio-card:hover {
+  box-shadow: none !important;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .portfolio-card:hover,
+.ys-portfolio-tile:hover {
+  transform: translateY(-3px);
+}
+
+/* 7. Pannellum + tour iframes — promote to their own layer so they
+      don't repaint with surrounding content. */
+.ys-360-hero, .featured-tour-container, [data-pannellum] {
+  transform: translateZ(0);
+}
+
+/* 8. The marquee animation — confine to its own layer */
+.ys-marquee-track {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 9. Body / html — let the browser scroll natively */
+html { scroll-behavior: auto !important; }
+body { overflow-x: hidden; }
+
+/* 10. Reveal animations — shorten transition + don't animate filters */
+[data-reveal] {
+  transition: opacity .5s ease-out, transform .5s ease-out !important;
+}
+
+/* ============================================================
+   HOMEPAGE SERVICES — replace clipping slider with clean grid
+   ============================================================ */
+.modern-services-slider-container {
+  overflow: visible !important;
+  padding: var(--s-5, 48px) clamp(20px, 4vw, 40px) !important;
+  max-width: 1200px !important;
+}
+.modern-services-slider {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--s-3, 24px) !important;
+  transform: none !important;
+  cursor: default !important;
+  overflow: visible !important;
+}
+.modern-slide {
+  flex: none !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+.modern-service-card {
+  height: 100% !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)), #0f1219 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: var(--radius-lg, 24px) !important;
+  padding: var(--s-5, 40px) var(--s-4, 28px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  text-align: center;
+  text-decoration: none !important;
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1), border-color .3s !important;
+  box-shadow: none !important;
+}
+.modern-service-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,255,136,0.3) !important;
+  box-shadow: none !important;
+}
+.service-icon-circle {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 13px !important;
+  background: linear-gradient(135deg, rgba(0,255,136,0.18), rgba(1,228,228,0.08)) !important;
+  border: 1px solid rgba(0,255,136,0.22);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s-3, 20px) !important;
+  color: var(--ys-green, #00ff88) !important;
+  font-size: 1.25rem !important;
+}
+.service-title {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  text-transform: none !important;
+  margin: 0 0 10px !important;
+  color: #fff !important;
+  line-height: 1.25 !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+.service-title strong { color: var(--ys-green, #00ff88); font-weight: 800; }
+.service-description {
+  font-size: 0.9375rem !important;
+  color: rgba(255,255,255,0.65) !important;
+  line-height: 1.55 !important;
+  margin: 0 !important;
+  flex: 1;
+}
+
+/* Hide the slider controls (no longer needed) */
+.slider-navigation,
+.modern-services-slider-container .slider-button,
+.modern-services-slider-container .slider-pagination {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .modern-services-slider { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px) {
+  .modern-services-slider { grid-template-columns: 1fr !important; }
+  .modern-service-card { padding: 32px 24px !important; }
+}

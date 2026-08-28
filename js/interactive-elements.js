@@ -9,7 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   init3DCards();
   initInteractiveTimeline();
   initIndustryGrid();
+  initIndustryGrid();
+  // initContactFormCheckboxes() removed to avoid conflict with inline script in index.html
 });
+
+// Contact Form Checkbox functionality moved to inline script in index.html to avoid conflicts
 
 /**
  * Page Transitions using Barba.js
@@ -154,109 +158,6 @@ function initIndustryGrid() {
   });
 }
 
-/**
- * Before/After Image Comparison
- * Creates interactive before/after image sliders
- */
-function initBeforeAfterComparison() {
-  const comparisons = document.querySelectorAll('.before-after-container');
-
-  comparisons.forEach(container => {
-    const slider = container.querySelector('.comparison-slider');
-    const beforeImage = container.querySelector('.before-image');
-
-    if (slider && beforeImage) {
-      // Set initial position
-      slider.style.left = '50%';
-      beforeImage.style.width = '50%';
-
-      // Make the slider draggable
-      let isDragging = false;
-
-      slider.addEventListener('mousedown', () => {
-        isDragging = true;
-      });
-
-      window.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-
-      container.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const containerWidth = container.offsetWidth;
-
-        // Calculate percentage position
-        let position = (x / containerWidth) * 100;
-        position = Math.max(0, Math.min(100, position));
-
-        // Update slider and image position
-        slider.style.left = `${position}%`;
-        beforeImage.style.width = `${position}%`;
-      });
-    }
-  });
-}
-
-/**
- * Testimonial Carousel
- * Creates an interactive 3D carousel for testimonials
- */
-function initTestimonialCarousel() {
-  const carousel = document.querySelector('.testimonial-carousel');
-  if (!carousel) return;
-
-  const items = carousel.querySelectorAll('.testimonial-item');
-  const totalItems = items.length;
-  let currentIndex = 0;
-
-  // Set initial positions
-  updateCarousel();
-
-  // Add navigation buttons
-  const prevBtn = carousel.querySelector('.carousel-prev');
-  const nextBtn = carousel.querySelector('.carousel-next');
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-      updateCarousel();
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % totalItems;
-      updateCarousel();
-    });
-  }
-
-  function updateCarousel() {
-    items.forEach((item, index) => {
-      // Calculate the position relative to current index
-      const position = (index - currentIndex + totalItems) % totalItems;
-
-      // Apply 3D transform based on position
-      if (position === 0) {
-        // Current item (center)
-        item.style.transform = 'translateX(0) scale(1)';
-        item.style.opacity = '1';
-        item.style.zIndex = '3';
-      } else if (position === 1 || position === totalItems - 1) {
-        // Items to the sides
-        const direction = position === 1 ? 1 : -1;
-        item.style.transform = `translateX(${direction * 50}%) scale(0.8)`;
-        item.style.opacity = '0.7';
-        item.style.zIndex = '2';
-      } else {
-        // Hidden items
-        const direction = position <= totalItems / 2 ? 1 : -1;
-        item.style.transform = `translateX(${direction * 100}%) scale(0.6)`;
-        item.style.opacity = '0';
-        item.style.zIndex = '1';
-      }
-    });
-  }
-}
+// NOTE: initBeforeAfterComparison and initTestimonialCarousel functions were removed
+// as they were unused. If needed in the future, they can be re-implemented when
+// the corresponding HTML elements (.before-after-container, .testimonial-carousel) are added.

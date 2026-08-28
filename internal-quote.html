@@ -1,0 +1,1757 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://yousee360.com/internal-quote.html" />
+  <meta property="og:url" content="https://yousee360.com/internal-quote.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://yousee360.com/images/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://yousee360.com/images/og-card.jpg">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="geo.region" content="CR-A">
+  <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
+  <meta name="geo.position" content="10.4678;-84.6433">
+  <meta name="ICBM" content="10.4678, -84.6433">
+    <meta name="description" content="Internal quoting tool for YouSee360 staff. Not a public page.">
+  <title>Quote Engine V6 | YouSee360</title>
+
+    <!-- Dependencies -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <script src="js/html2pdf.bundle.min.js?v=20260814u" defer></script>
+
+    <style>
+        /* --- RESET & CORE --- */
+        * {
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050508;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(1, 228, 228, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(189, 0, 255, 0.08), transparent 40%);
+            color: #ecf0f1;
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- VARS --- */
+        :root {
+            --cyan: #01e4e4;
+            --green: #00ff66;
+            --purple: #bd00ff;
+            --glass-bg: rgba(20, 20, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-muted: #95a5a6;
+        }
+
+        /* --- UTILS --- */
+        .hidden {
+            display: none !important;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- AUTH OVERLAY --- */
+        #auth-layer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 99999;
+            flex-direction: column;
+        }
+
+        .pin-pad {
+            background: rgba(30, 30, 40, 0.6);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            height: 12px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #444;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        .keys {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .key {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .key:active {
+            background: var(--cyan);
+            color: #000;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        #app-layer {
+            display: grid;
+            grid-template-columns: 80px 420px 1fr;
+            height: 100vh;
+            width: 100vw;
+            opacity: 0;
+            transition: opacity 0.5s;
+            /* Fade in on unlock */
+        }
+
+        #app-layer.active {
+            opacity: 1;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+        }
+
+        .nav-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            color: #666;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-icon:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-icon.active {
+            color: var(--cyan);
+            background: rgba(1, 228, 228, 0.1);
+            box-shadow: 0 0 15px rgba(1, 228, 228, 0.05);
+        }
+
+        /* CONFIG PANEL */
+        .config-panel {
+            background: var(--glass-bg);
+            border-right: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .panel-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .tab {
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .tab:hover {
+            border-color: #555;
+            color: #fff;
+        }
+
+        .tab.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        .config-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            scrollbar-width: thin;
+            scrollbar-color: #444 transparent;
+        }
+
+        /* INPUTS */
+        .inp-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .inp {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            pointer-events: auto !important;
+        }
+
+        .inp:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(1, 228, 228, 0.1);
+        }
+
+        /* SMART SUGGESTION BOX */
+        .wise-box {
+            background: linear-gradient(135deg, rgba(1, 228, 228, 0.1), rgba(189, 0, 255, 0.1));
+            border: 1px solid var(--purple);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            color: #fff;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .wise-icon {
+            font-size: 1.2rem;
+            color: var(--cyan);
+            margin-top: 2px;
+        }
+
+        .wise-content strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--cyan);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* DROPDOWN FIX - High Contrast */
+        select.inp {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+
+        select.inp option {
+            background-color: #0b0b0f;
+            color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        /* SERVICE CARDS */
+        .svc-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .svc-head {
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            font-size: 0.95rem;
+            pointer-events: auto;
+        }
+
+        .svc-head:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .svc-head i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .svc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+        }
+
+        .svc-card.active {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .svc-card.active .svc-body {
+            max-height: 800px;
+            padding: 20px;
+            opacity: 1;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* SLIDERS */
+        input[type=range] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            margin: 15px 0;
+            cursor: pointer;
+            pointer-events: auto !important;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: var(--cyan);
+            margin-top: -6px;
+            box-shadow: 0 0 10px rgba(1, 228, 228, 0.5);
+            transition: 0.2s;
+        }
+
+        input[type=range]:hover::-webkit-slider-thumb {
+            transform: scale(1.1);
+        }
+
+        .range-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .val-display {
+            color: var(--cyan);
+            font-weight: 700;
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        /* CHECKBOX */
+        .chk-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .chk-wrap input {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            accent-color: var(--cyan);
+            cursor: pointer;
+        }
+
+        /* NUMERIC INPUTS */
+        .range-group {
+            margin-bottom: 20px;
+        }
+
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .num-inp {
+            background: #222;
+            border: 1px solid #444;
+            color: var(--cyan);
+            padding: 4px 8px;
+            border-radius: 6px;
+            width: 70px;
+            text-align: right;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+        }
+
+        .num-inp:focus {
+            border-color: var(--cyan);
+            background: #111;
+        }
+
+        .chk-wrap span {
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        /* PREVIEW AREA */
+        .preview-area {
+            background: #08080a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow: auto;
+        }
+
+        #doc-preview {
+            background: #fff;
+            width: 100%;
+            max-width: 850px;
+            min-height: 1000px;
+            color: #111;
+            padding: 60px;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        /* DOC STYLES */
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            border-bottom: 4px solid #111;
+            padding-bottom: 30px;
+        }
+
+        .doc-logo text {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .doc-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin: 0;
+        }
+
+        .doc-subtitle {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .meta-item {
+            border-left: 3px solid #eee;
+            padding-left: 15px;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .meta-val {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .line-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .line-table th {
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #888;
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .line-table td {
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .item-main {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .item-sub {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totals-table {
+            min-width: 300px;
+        }
+
+        .totals-table td {
+            padding: 8px 0;
+            text-align: right;
+        }
+
+        .total-row-main {
+            font-size: 1.8rem;
+            font-weight: 800;
+            border-top: 3px solid #111;
+            padding-top: 20px !important;
+        }
+
+        /* PDF PAGE BREAK RULES - Prevent awkward cuts */
+        .doc-header {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .meta-grid {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .line-table tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .line-table thead {
+            display: table-header-group;
+        }
+
+        .totals-section {
+            page-break-inside: avoid;
+            break-inside: avoid;
+            page-break-before: avoid;
+        }
+
+        #doc-preview>div:last-child {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* FAB */
+        .fab-pdf {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fff;
+            color: #000;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+
+        .fab-pdf:hover {
+            transform: scale(1.1);
+            background: var(--cyan);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1100px) {
+            #app-layer {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .preview-area {
+                display: none;
+            }
+
+            /* Mobile: Only config */
+            .fab-pdf {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* RATE EDITOR MODAL */
+        #rate-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        #rate-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .rate-panel {
+            background: #111;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .rate-head {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rate-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .rate-item label {
+            display: block;
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .rate-item input {
+            width: 100%;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .rate-foot {
+            padding: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: #333;
+            color: #fff;
+        }
+
+        .btn-save {
+            background: var(--cyan);
+            color: #000;
+        }
+    </style>
+  <link href="css/bundle-a71341a7.css?v=a71341a7" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <h1 class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">YouSee360 Internal Quote Engine</h1>
+
+    <!-- AUTH -->
+    <div id="auth-layer" class="flex-center">
+        <div class="pin-pad">
+            <div
+                style="margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan);">
+                System Locked</div>
+            <div class="dots" id="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="keys" id="keys"></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app-layer">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="nav-icon active"><i class="fas fa-calculator"></i></div>
+            <div class="nav-icon" title="Reset" onclick="resetApp()"><i class="fas fa-undo"></i></div>
+            <div class="nav-icon" title="Edit Rates" onclick="openRateEditor()"><i class="fas fa-cog"></i></div>
+        </div>
+
+        <!-- CONFIG -->
+        <div class="config-panel">
+            <div class="panel-header">
+                <div class="panel-title">QUOTE CONFIGURATION</div>
+                <div style="position:relative;">
+                    <select aria-label="Preset Sel" id="preset-sel" class="inp"
+                        style="width: 140px; margin: 0; padding: 6px 12px; font-size: 0.8rem; height: auto;"
+                        onchange="applyPreset()">
+                        <option value="">Load Preset...</option>
+                        <option value="hotel">Hotel Package</option>
+                        <option value="realestate">Real Estate</option>
+                        <option value="restaurant">Restaurant / Bar</option>
+                        <option value="luxury">Luxury Business</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('media')">MEDIA</button>
+                <button class="tab" onclick="switchTab('digital')">DIGITAL</button>
+                <button class="tab" onclick="switchTab('ops')">LOGISTICS</button>
+            </div>
+
+            <div class="config-scroll">
+                <!-- CLIENT INFO -->
+                <!-- QUOTE METADATA -->
+                <div
+                    style="margin-bottom: 30px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div
+                        style="font-size:0.75rem; color:var(--cyan); margin-bottom:10px; font-weight:700; letter-spacing:1px;">
+                        PROJECT DETAILS</div>
+
+                    <label class="inp-label">Prepared For (Client)</label>
+                    <input aria-label="Client Name / Company" type="text" id="c-name" class="inp" placeholder="Client Name / Company" oninput="render()">
+
+                    <label class="inp-label">Project Title</label>
+                    <input aria-label="e.g. Virtual Tour Renovation" type="text" id="p-title" class="inp" placeholder="e.g. Virtual Tour Renovation"
+                        oninput="render()">
+
+                    <label class="inp-label">Industry / Type</label>
+                    <select aria-label="C Ind" id="c-ind" class="inp" onchange="render()">
+                        <option value="1.0">Standard Business</option>
+                        <option value="1.2">Hospitality / Hotel</option>
+                        <option value="0.9">Real Estate (Volume)</option>
+                        <option value="1.15">Adventure / Tourism</option>
+                        <option value="1.3">Industrial / Corporate</option>
+                        <option value="1.1">Restaurant / Venue</option>
+                    </select>
+
+                    <label class="inp-label">Valid Until</label>
+                    <input aria-label="P Date Exp" type="date" id="p-date-exp" class="inp" onchange="render()">
+
+                    <label class="inp-label">Introductory Note</label>
+                    <textarea aria-label="Optional personal message" id="p-note" class="inp" rows="3" placeholder="Optional personal message..."
+                        style="resize:vertical;" oninput="render()"></textarea>
+
+                    <!-- Wise Suggestion Panel -->
+                    <div id="wise-panel" class="wise-box hidden" style="margin-top:10px; margin-bottom:0;">
+                        <i class="fas fa-lightbulb wise-icon"></i>
+                        <div class="wise-content" id="wise-text">
+                            <strong>Wise Suggestion</strong>
+                            <span>Consider adding social reels for better reach.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: MEDIA -->
+                <div id="tab-media" class="tab-content">
+                    <!-- Tour -->
+                    <div class="svc-card active" id="card-tour">
+                        <div class="svc-head" onclick="toggleCard('card-tour')">
+                            <span><i class="fas fa-street-view" style="color:var(--cyan)"></i> VIRTUAL TOUR</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Panoramas</span>
+                                    <input aria-label="N Tour" type="number" id="n-tour" class="num-inp" min="0" max="100" value="0"
+                                        oninput="sync('n-tour', 'r-tour')">
+                                </div>
+                                <input aria-label="R Tour" type="range" id="r-tour" min="0" max="100" value="0"
+                                    oninput="sync('r-tour', 'n-tour')">
+                            </div>
+
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Info Points / Hotspots</span>
+                                    <input aria-label="N Info" type="number" id="n-info" class="num-inp" min="0" max="50" value="0"
+                                        oninput="sync('n-info', 'r-info')">
+                                </div>
+                                <input aria-label="R Info" type="range" id="r-info" min="0" max="50" value="0"
+                                    oninput="sync('r-info', 'n-info')">
+                            </div>
+
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Doll" type="checkbox" id="chk-doll" onchange="render()">
+                                <span>3D Dollhouse / Schematic - $150</span>
+                            </label>
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Plan" type="checkbox" id="chk-plan" onchange="render()">
+                                <span>2D Floor Plan - $100</span>
+                            </label>
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Ui" type="checkbox" id="chk-ui" onchange="render()">
+                                <span>Custom Menu / UI Overlay - $300</span>
+                            </label>
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Host" type="checkbox" id="chk-host" onchange="render()">
+                                <span>Hosting (1 Year) - $150</span>
+                            </label>
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Gsv" type="checkbox" id="chk-gsv" onchange="render()">
+                                <span>Google Street View Upload - $250</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Video -->
+                    <div class="svc-card" id="card-vid">
+                        <div class="svc-head" onclick="toggleCard('card-vid')">
+                            <span><i class="fas fa-video" style="color:var(--green)"></i> Video Content</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>360° Video (Minutes)</span>
+                                    <input aria-label="N Vid" type="number" id="n-vid" class="num-inp" min="0" max="20" value="0"
+                                        oninput="sync('n-vid', 'r-vid')">
+                                </div>
+                                <input aria-label="R Vid" type="range" id="r-vid" min="0" max="20" value="0"
+                                    oninput="sync('r-vid', 'n-vid')">
+                            </div>
+
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Social Media Reels (Vertical)</span>
+                                    <input aria-label="N Reels" type="number" id="n-reels" class="num-inp" min="0" max="10" value="0"
+                                        oninput="sync('n-reels', 'r-reels')">
+                                </div>
+                                <input aria-label="R Reels" type="range" id="r-reels" min="0" max="10" value="0"
+                                    oninput="sync('r-reels', 'n-reels')">
+                            </div>
+
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Pro Voiceover (Mins)</span>
+                                    <input aria-label="N Vo" type="number" id="n-vo" class="num-inp" min="0" max="10" value="0"
+                                        oninput="sync('n-vo', 'r-vo')">
+                                </div>
+                                <input aria-label="R Vo" type="range" id="r-vo" min="0" max="10" value="0" oninput="sync('r-vo', 'n-vo')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drone Photo -->
+                    <div class="svc-card" id="card-drone-p">
+                        <div class="svc-head" onclick="toggleCard('card-drone-p')">
+                            <span><i class="fas fa-camera" style="color:violet"></i> AERIAL PHOTO</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Images</span>
+                                    <input aria-label="N Drone P" type="number" id="n-drone-p" class="num-inp" min="0" max="20" value="0"
+                                        oninput="sync('n-drone-p', 'r-drone-p')">
+                                </div>
+                                <input aria-label="R Drone P" type="range" id="r-drone-p" min="0" max="20" value="0"
+                                    oninput="sync('r-drone-p', 'n-drone-p')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drone Video -->
+                    <div class="svc-card" id="card-drone-v">
+                        <div class="svc-head" onclick="toggleCard('card-drone-v')">
+                            <span><i class="fas fa-helicopter" style="color:violet"></i> AERIAL VIDEO</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Flight Ops / Locations</span>
+                                    <input aria-label="N Drone V" type="number" id="n-drone-v" class="num-inp" min="0" max="10" value="0"
+                                        oninput="sync('n-drone-v', 'r-drone-v')">
+                                </div>
+                                <input aria-label="R Drone V" type="range" id="r-drone-v" min="0" max="10" value="0"
+                                    oninput="sync('r-drone-v', 'n-drone-v')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HDR -->
+                    <div class="svc-card" id="card-hdr">
+                        <div class="svc-head" onclick="toggleCard('card-hdr')">
+                            <span><i class="fas fa-camera" style="color:orange"></i> HDR Photo</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Still Images</span>
+                                    <input aria-label="N Hdr" type="number" id="n-hdr" class="num-inp" min="0" max="100" value="0"
+                                        oninput="sync('n-hdr', 'r-hdr')">
+                                </div>
+                                <input aria-label="R Hdr" type="range" id="r-hdr" min="0" max="100" value="0"
+                                    oninput="sync('r-hdr', 'n-hdr')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: DIGITAL -->
+                <div id="tab-digital" class="tab-content hidden">
+                    <div class="svc-card active">
+                        <div class="svc-head"><span><i class="fas fa-globe"></i> Digital Presence</span></div>
+                        <div class="svc-body" style="max-height:800px; opacity:1;">
+                            <label class="inp-label">Website Development</label>
+                            <select aria-label="Sel Web" id="sel-web" class="inp" onchange="render()">
+                                <option value="0">None</option>
+                                <option value="1800">Landing Page ($1,800)</option>
+                                <option value="5000">Corporate Site ($5,000)</option>
+                                <option value="8000">E-Commerce ($8,000)</option>
+                                <option value="18000">Custom Web App ($18,000+)</option>
+                            </select>
+
+                            <label class="inp-label" style="margin-top:10px;">Mobile Application</label>
+                            <select aria-label="Sel App" id="sel-app" class="inp" onchange="render()">
+                                <option value="0">None</option>
+                                <option value="4000">PWA (Progressive Web App)</option>
+                                <option value="12000">Venue Companion App</option>
+                                <option value="20000">Native iOS/Android App</option>
+                            </select>
+
+                            <label class="chk-wrap" style="margin-top:20px;">
+                                <input aria-label="Chk Gbp" type="checkbox" id="chk-gbp" onchange="render()">
+                                <span>Google Business Profile Optimization ($400)</span>
+                            </label>
+
+                            <label class="chk-wrap">
+                                <input aria-label="Chk Logo" type="checkbox" id="chk-logo" onchange="render()">
+                                <span>Logo / Branding Kit ($500)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="svc-card" id="card-ota">
+                        <div class="svc-head" onclick="toggleCard('card-ota')">
+                            <span><i class="fas fa-sync"></i> OTA & Channels</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="svc-body">
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Room Types</span>
+                                    <input aria-label="N Ota R" type="number" id="n-ota-r" class="num-inp" min="0" max="30" value="0"
+                                        oninput="sync('n-ota-r', 'r-ota-r')">
+                                </div>
+                                <input aria-label="R Ota R" type="range" id="r-ota-r" min="0" max="30" value="0"
+                                    oninput="sync('r-ota-r', 'n-ota-r')">
+                            </div>
+                            <div class="range-group">
+                                <div class="range-header">
+                                    <span>Channels</span>
+                                    <input aria-label="N Ota C" type="number" id="n-ota-c" class="num-inp" min="0" max="10" value="0"
+                                        oninput="sync('n-ota-c', 'r-ota-c')">
+                                </div>
+                                <input aria-label="R Ota C" type="range" id="r-ota-c" min="0" max="10" value="0"
+                                    oninput="sync('r-ota-c', 'n-ota-c')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: LOGISTICS -->
+                <div id="tab-ops" class="tab-content hidden">
+                    <div
+                        style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:20px;">
+                        <label class="inp-label">Travel / Logistics Cost ($)</label>
+                        <input aria-label="Inp Travel" type="number" id="inp-travel" class="inp" value="0" oninput="render()">
+                    </div>
+
+                    <div
+                        style="background:rgba(255,0,0,0.05); padding:20px; border-radius:12px; border:1px solid rgba(255,0,0,0.2);">
+                        <label class="inp-label" style="color:#ff6b6b;">Discount / Adjustment (%)</label>
+                        <input aria-label="Inp Disc" type="number" id="inp-disc" class="inp" value="0" oninput="render()">
+                    </div>
+
+                    <label class="chk-wrap"
+                        style="margin-top:20px; background:rgba(255, 165, 0, 0.1); padding:10px; border-radius:8px;">
+                        <input aria-label="Chk Rush" type="checkbox" id="chk-rush" onchange="render()">
+                        <span style="color:orange; font-weight:600;">RUSH DELIVERY (48hr) - +25%</span>
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="preview-area">
+            <div id="doc-preview">
+                <div class="doc-header">
+                    <div>
+                        <div class="doc-title">ESTIMATE</div>
+                        <div class="doc-subtitle" id="out-p-title">Project Proposal</div>
+                    </div>
+                    <div style="text-align:right; display:flex; align-items:center; gap:15px;">
+                        <div>
+                            <h4 style="margin:0; text-transform:uppercase; letter-spacing:1px;">YouSee360</h4>
+                            <div style="color:#666; font-size:0.9rem; line-height:1.4; margin-top:5px;">
+                                Digital Innovation Studio<br>
+                                La Fortuna, Costa Rica<br>
+                                info@yousee360.com
+                            </div>
+                        </div>
+                        <img width="350" height="376" fetchpriority="high" decoding="async" src="images/350-x-375-You-see-360-logo-white-for-black-bg-1.png" alt="YouSee360 Logo"
+                            style="height:60px; width:auto; filter: invert(1); opacity:0.9;" loading="eager">
+                    </div>
+                </div>
+
+                <!-- Intro Note Display -->
+                <div id="out-intro-box"
+                    style="margin-bottom: 40px; font-style: italic; color: #555; border-left: 3px solid var(--cyan); padding-left: 15px; display:none;">
+                    <span id="out-note"></span>
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Prepared For</div>
+                        <div class="meta-val" id="out-client-name">Guest</div>
+                        <div style="font-size:0.9rem; color:#666;" id="out-ind">Standard Business</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Details</div>
+                        <div style="font-size:0.9rem;">Date: <span id="out-date"
+                                style="color:#000; font-weight:600;">-</span></div>
+                        <div style="font-size:0.9rem;">Valid Until: <span id="out-date-exp"
+                                style="color:#000; font-weight:600;">-</span></div>
+                        <div style="font-size:0.9rem;">Timeline: <span id="out-time"
+                                style="color:#000; font-weight:600;">-</span></div>
+                    </div>
+                </div>
+
+                <table class="line-table">
+                    <thead>
+                        <tr>
+                            <th width="50%">Description</th>
+                            <th width="15%" style="text-align:right">Qty</th>
+                            <th width="15%" style="text-align:right">Rate</th>
+                            <th width="20%" style="text-align:right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="line-items">
+                        <!-- Items Go Here -->
+                    </tbody>
+                </table>
+
+                <div class="totals-section">
+                    <table class="totals-table">
+                        <tr>
+                            <td style="color:#666;">Subtotal</td>
+                            <td style="font-weight:600;" id="out-sub">$0</td>
+                        </tr>
+                        <tr id="row-rush" class="hidden">
+                            <td style="color:orange;">Expedited (48hr)</td>
+                            <td style="color:orange;" id="out-rush">+$0</td>
+                        </tr>
+                        <tr id="row-disc" class="hidden">
+                            <td style="color:red;">Discount</td>
+                            <td style="color:red;" id="out-disc">-$0</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:20px;">TOTAL</td>
+                            <td class="total-row-main" id="out-total">$0</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div
+                    style="margin-top:60px; padding-top:30px; border-top:1px solid #eee; text-align:center; color:#888; font-size:0.8rem;">
+                    This estimate is valid for 30 days from the date of issue. A 50% deposit is required to commence
+                    work.<br>
+                    Thank you for doing business with YouSee360.
+                </div>
+            </div>
+
+            <button class="fab-pdf" onclick="generatePDF()"><i class="fas fa-file-pdf"></i></button>
+        </div>
+        <div id="rate-modal">
+            <div class="rate-panel">
+                <div class="rate-head">
+                    <div style="font-weight:700;">EDIT BASE RATES</div>
+                    <div onclick="closeRateEditor()" style="cursor:pointer;"><i class="fas fa-times"></i></div>
+                </div>
+                <div class="rate-body" id="rate-list">
+                    <!-- Injected via JS -->
+                </div>
+                <div class="rate-foot">
+                    <button class="btn btn-cancel" onclick="resetRateDefaults()">Reset Default</button>
+                    <button class="btn btn-save" onclick="saveRates()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- AUTH LOGIC ---
+        const PIN_CODES = ['360', '888'];
+        let pin = "";
+
+        function initAuth() {
+            const kb = document.getElementById('keys');
+            const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'C', 0, '>'];
+            keys.forEach(k => {
+                const btn = document.createElement('div');
+                btn.className = 'key';
+                btn.innerHTML = k === '>' ? '<i class="fas fa-arrow-right"></i>' : k;
+                btn.onclick = () => handlePin(k);
+                kb.appendChild(btn);
+            });
+        }
+
+        function handlePin(k) {
+            if (k === 'C') pin = "";
+            else if (k === '>') checkPin();
+            else if (pin.length < 3) { pin += k; if (pin.length === 3) setTimeout(checkPin, 300); }
+
+            document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i < pin.length));
+        }
+
+        function checkPin() {
+            if (PIN_CODES.includes(pin)) {
+                // Unlock
+                document.getElementById('auth-layer').style.opacity = '0';
+                setTimeout(() => document.getElementById('auth-layer').remove(), 500);
+                document.getElementById('app-layer').classList.add('active');
+            } else {
+                pin = ""; handlePin('C');
+            }
+        }
+
+        // --- UI LOGIC ---
+        function switchTab(t) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('tab-' + t).classList.remove('hidden');
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleCard(id) {
+            // FIXED: Ensure we target the element by ID cleanly
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('active');
+        }
+
+        function resetApp() {
+            if (confirm("Reset quote and clear saved data?")) {
+                localStorage.removeItem('quoteState');
+                location.reload();
+            }
+        }
+
+        function applyPreset() {
+            const p = document.getElementById('preset-sel').value;
+            // Reset sliders & checks
+            document.querySelectorAll('input[type=range]').forEach(i => i.value = 0);
+            document.querySelectorAll('input[type=checkbox]').forEach(i => i.checked = false);
+            document.querySelectorAll('select').forEach(i => i.selectedIndex = 0);
+
+            if (p === 'hotel') {
+                syncVal('r-tour', 20);
+                syncVal('r-hdr', 25);
+                syncVal('r-drone-p', 5);
+                document.getElementById('chk-host').checked = true;
+                document.getElementById('chk-doll').checked = true;
+                document.getElementById('c-ind').value = '1.2';
+                // Trigger dynamic UX for Hotel
+                updateLayout(); // Ensure OTA moves
+            }
+            else if (p === 'restaurant') {
+                syncVal('r-tour', 8);
+                syncVal('r-hdr', 20);
+                document.getElementById('chk-gbp').checked = true;
+                document.getElementById('c-ind').value = '1.1';
+            }
+            else if (p === 'realestate') {
+                syncVal('r-tour', 10);
+                syncVal('r-drone-p', 10);
+                syncVal('r-drone-v', 1);
+                document.getElementById('chk-doll').checked = true;
+                document.getElementById('c-ind').value = '0.9';
+            } else if (p === 'luxury') {
+                document.getElementById('c-ind').value = '1.3';
+                document.getElementById('sel-web').value = 3500;
+                document.getElementById('chk-ui').checked = true;
+            }
+            render();
+        }
+
+        // Helper to sync presets
+        function syncVal(rId, val) {
+            const nId = rId.replace('r-', 'n-');
+            const rEl = document.getElementById(rId);
+            const nEl = document.getElementById(nId);
+            if (rEl) rEl.value = val;
+            if (nEl) nEl.value = val;
+        }
+
+        // --- CALCULATION ENGINE ---
+
+        let RATES = {
+            tour: { base: 300, unit: 65 },       // Premium positioning
+            vid: { base: 650, unit: 250 },       // VR video complexity
+            droneP: { base: 200, unit: 30 },     // Equipment/licensing costs
+            droneV: { base: 400, unit: 200 },    // Market rate
+            hdr: { base: 150, unit: 30 },        // Professional photography
+            ota: { base: 350, unit: 85, room: 35 },
+            reels: 175,                          // High ROI service
+            gsv: 300,                            // Value-add
+            gbp: 450,                            // SEO value
+            dollhouse: 175,                      // Technical work
+            plan: 125,
+            ui: 350,                             // Custom dev work
+            info: 12,
+            vo: 175,                             // Professional talent
+            logo: 600,                           // Creative work
+            hosting: 175                         // Explicit hosting rate
+        };
+
+        const DEFAULT_RATES = JSON.parse(JSON.stringify(RATES)); // Deep copy for reset
+
+        // --- RATE EDITOR LOGIC ---
+        function openRateEditor() {
+            const list = document.getElementById('rate-list');
+            list.innerHTML = '';
+
+            // Build inputs
+            for (const [key, val] of Object.entries(RATES)) {
+                if (typeof val === 'object') {
+                    // Nested object (e.g. base/unit)
+                    for (const [subKey, subVal] of Object.entries(val)) {
+                        list.innerHTML += `
+                            <div class="rate-item">
+                                <label>${key} ${subKey}</label>
+                                <input aria-label="Edit ${Key} ${Sub Key}" type="number" id="edit-${key}-${subKey}" value="${subVal}">
+                            </div>
+                        `;
+                    }
+                } else {
+                    // Simple value
+                    list.innerHTML += `
+                        <div class="rate-item">
+                            <label>${key}</label>
+                            <input aria-label="Edit ${Key}" type="number" id="edit-${key}" value="${val}">
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('rate-modal').classList.add('active');
+        }
+
+        function closeRateEditor() {
+            document.getElementById('rate-modal').classList.remove('active');
+        }
+
+        function saveRates() {
+            for (const [key, val] of Object.entries(RATES)) {
+                if (typeof val === 'object') {
+                    for (const [subKey, subVal] of Object.entries(val)) {
+                        const el = document.getElementById(`edit-${key}-${subKey}`);
+                        if (el) RATES[key][subKey] = parseFloat(el.value);
+                    }
+                } else {
+                    const el = document.getElementById(`edit-${key}`);
+                    if (el) RATES[key] = parseFloat(el.value);
+                }
+            }
+            closeRateEditor();
+            render(); // Re-calc with new rates
+        }
+
+        function resetRateDefaults() {
+            if (confirm("Revert all rates to system defaults?")) {
+                RATES = JSON.parse(JSON.stringify(DEFAULT_RATES));
+                openRateEditor(); // Refresh form
+                render();
+            }
+        }
+
+        const SUGGESTIONS = {
+            '1.0': { text: "Focus on clear navigation and fast loading times.", icon: "fas fa-lightbulb" },
+            '0.9': { text: "Real Estate Pro Tip: Dollhouse views increase engagement by 300%.", icon: "fas fa-home" },
+            '1.2': { text: "Hotels need OTA integration and Google Street View for maximum bookings.", icon: "fas fa-hotel" },
+            '1.1': { text: "Restaurants thrive with Social Reels and updated Google Profiles.", icon: "fas fa-utensils" },
+            '1.15': { text: "Adventure tours require high-energy video and drone shots.", icon: "fas fa-mountain" },
+            '1.3': { text: "Corporate clients value Custom UI overlays for branding.", icon: "fas fa-building" }
+        };
+
+        function render() {
+            // Fix #2: Prevent NaN from empty inputs
+            const getV = (id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const val = parseFloat(el.value);
+                return isNaN(val) ? 0 : val;
+            };
+            const setT = (id, txt) => document.getElementById(id).innerText = txt;
+
+            // Sliders - Updated by sync() function now, no need to setT
+            // Smart Suggestions & Layout
+            updateSuggestions();
+            updateLayout();
+
+            // Calc
+            const mult = parseFloat(document.getElementById('c-ind').value);
+            const items = [];
+            let days = 0;
+
+            function add(name, qty, unitDisplay, amount, subtext) {
+                items.push({ name, qty, unitDisplay, total: amount, subtext });
+            }
+
+            // 1. Tour
+            const qTour = getV('r-tour');
+            if (qTour > 0) {
+                const cost = (RATES.tour.base * mult) + (qTour * RATES.tour.unit * mult);
+                add("360° Virtual Tour Package", qTour + " Panos", "Custom", cost, "Including interface & navigation");
+                days += 3 + (qTour * 0.2);
+
+                // Fix #1: Apply industry multiplier to all addons
+                if (document.getElementById('chk-host').checked) add("Hosting & Maintenance", "1 Year", "$" + Math.round(RATES.hosting * mult), Math.round(RATES.hosting * mult), "Secure SSL high-speed hosting");
+                if (document.getElementById('chk-gsv').checked) add("Google Street View", "Integration", "$" + Math.round(RATES.gsv * mult), Math.round(RATES.gsv * mult), "Upload & connection to Maps");
+                if (document.getElementById('chk-doll').checked) add("3D Dollhouse Model", "Schematic", "$" + Math.round(RATES.dollhouse * mult), Math.round(RATES.dollhouse * mult), "Immersive view mode");
+                if (document.getElementById('chk-plan').checked) add("2D Schematic Floor Plan", "PDF/JPG", "$" + Math.round(RATES.plan * mult), Math.round(RATES.plan * mult), "Generated from 3D Scan");
+                if (document.getElementById('chk-ui').checked) add("Custom UI / Menu", "Overlay", "$" + Math.round(RATES.ui * mult), Math.round(RATES.ui * mult), "Branded navigation overlay");
+
+                const qInfo = getV('r-info');
+                if (qInfo > 0) add("Info Points / Hotspots", qInfo + " Points", "$" + RATES.info, Math.round(qInfo * RATES.info * mult), "Interactive Multimedia tags");
+            }
+
+            // 2. Video
+            const qVid = getV('r-vid');
+            if (qVid > 0) {
+                const cost = (RATES.vid.base * mult) + (qVid * RATES.vid.unit * mult);
+                add("360° VR Video Production", qVid + " Mins", "Custom", cost, "filming, stitching, grading");
+                days += 5 + qVid;
+            }
+
+            const qReels = getV('r-reels');
+            if (qReels > 0) {
+                const cost = Math.round(qReels * RATES.reels * mult);
+                // Fix #5: Show dynamic rate instead of hardcoded
+                add("Social Media Reels", qReels + " Clips", "$" + RATES.reels, cost, "Vertical format (9:16) for IG/TikTok");
+                days += qReels * 0.5;
+            }
+
+            const qVo = getV('r-vo');
+            if (qVo > 0) {
+                const cost = Math.round(qVo * RATES.vo * mult);
+                // Fix #5: Show dynamic rate instead of hardcoded
+                add("Professional Voiceover", qVo + " Mins", "$" + RATES.vo, cost, "Scripted professional narration");
+                days += 1;
+            }
+
+            // 3. Drone Photo
+            const qDroneP = getV('r-drone-p');
+            if (qDroneP > 0) {
+                const cost = (RATES.droneP.base * mult) + (qDroneP * RATES.droneP.unit * mult);
+                add("Drone Photography", qDroneP + " Images", "Custom", cost, "Hi-Res Aerial Stills");
+                days += 1;
+            }
+
+            // 4. Drone Video
+            const qDroneV = getV('r-drone-v');
+            if (qDroneV > 0) {
+                const cost = (RATES.droneV.base * mult) + (qDroneV * RATES.droneV.unit * mult);
+                add("Drone Cinematography", qDroneV + " Flights", "Custom", cost, "4K/5K Aerial Video Motion");
+                days += 1;
+            }
+
+            // 5. HDR
+            const qHdr = getV('r-hdr');
+            if (qHdr > 0) {
+                const cost = (RATES.hdr.base * mult) + (qHdr * RATES.hdr.unit * mult);
+                add("HDR Photography", qHdr + " Images", "Custom", cost, "Wide angle architectural");
+                days += 2;
+            }
+
+            // 6. Digital
+            // Fix #4: Use parseFloat directly for select values
+            const vWeb = parseFloat(document.getElementById('sel-web').value) || 0;
+            if (vWeb > 0) {
+                add("Web Development", "Project", "Fixed", vWeb, document.getElementById('sel-web').selectedOptions[0].text.split('(')[0]);
+                days += 14;
+            }
+
+            // Fix #4: Use parseFloat directly for select values
+            const vApp = parseFloat(document.getElementById('sel-app').value) || 0;
+            if (vApp > 0) {
+                add("Mobile Application", "Project", "Fixed", vApp, document.getElementById('sel-app').selectedOptions[0].text.split('(')[0]);
+                days += 30;
+            }
+
+            if (document.getElementById('chk-gbp').checked) {
+                add("Google Business Profile", "Optimization", "$400", 400, "SEO & Content enhancement");
+                days += 2;
+            }
+
+            if (document.getElementById('chk-logo').checked) {
+                add("Brand Identity Kit", "Graphics", "$500", 500, "Logo design & color palette");
+                days += 5;
+            }
+
+            // 7. OTA
+            const qOtaR = getV('r-ota-r');
+            const qOtaC = getV('r-ota-c');
+            if (qOtaR > 0 || qOtaC > 0) {
+                const cost = RATES.ota.base + ((qOtaC * RATES.ota.unit) + (qOtaR * RATES.ota.room));
+                add("OTA / Channel Management", "Setup", "Custom", cost, `Setup ${qOtaC} Channels for ${qOtaR} Room Types`);
+                days += 5 + (qOtaR * 0.5);
+            }
+
+            // 8. Travel
+            const vTrav = getV('inp-travel');
+            if (vTrav > 0) add("Logistics & Travel", "Flat Fee", "Net", vTrav, "Transportation and accommodation");
+
+            // RENDER TABLE
+            const tb = document.getElementById('line-items');
+            tb.innerHTML = "";
+            let subtotal = 0;
+
+            if (items.length === 0) {
+                tb.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:40px; color:#ccc'>Configure project scope to generate estimate...</td></tr>";
+            } else {
+                items.forEach(i => {
+                    subtotal += i.total;
+                    tb.innerHTML += `
+                        <tr>
+                            <td>
+                                <div class="item-main">${i.name}</div>
+                                <div class="item-sub">${i.subtext || ''}</div>
+                            </td>
+                            <td style="text-align:right">${i.qty}</td>
+                            <td style="text-align:right">${i.unitDisplay}</td>
+                            <td style="text-align:right; font-weight:600;">$${i.total.toLocaleString()}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // FOOTER CALCS
+            // FOOTER CALCS
+            const discP = getV('inp-disc');
+            let total = subtotal;
+            let finalDisc = 0;
+
+            // Volume Discount Logic
+            let volumeDisc = 0;
+            if (qTour > 20 || subtotal > 5000) {
+                volumeDisc = subtotal * 0.05; // 5% auto discount
+            }
+
+            if (discP > 0) {
+                finalDisc = subtotal * (discP / 100);
+            }
+
+            finalDisc += volumeDisc;
+            total -= finalDisc;
+
+            // Render Discount Row
+            if (finalDisc > 0) {
+                document.getElementById('row-disc').classList.remove('hidden');
+                let discText = "-$" + finalDisc.toLocaleString();
+                if (volumeDisc > 0) discText += " (Incl. Vol Dis)";
+                document.getElementById('out-disc').innerText = discText;
+            } else {
+                document.getElementById('row-disc').classList.add('hidden');
+            }
+
+            // Fix #3: Rush fee on discounted total, not raw subtotal
+            if (document.getElementById('chk-rush').checked) {
+                const rushFee = Math.round(total * 0.25);
+                total += rushFee;
+                document.getElementById('row-rush').classList.remove('hidden');
+                document.getElementById('out-rush').innerText = "+$" + rushFee.toLocaleString();
+            } else {
+                document.getElementById('row-rush').classList.add('hidden');
+            }
+
+            document.getElementById('out-sub').innerText = "$" + subtotal.toLocaleString();
+            document.getElementById('out-total').innerText = "$" + total.toLocaleString();
+
+            // META UPDATES
+            const cName = document.getElementById('c-name').value;
+            const pTitle = document.getElementById('p-title').value;
+            const pNote = document.getElementById('p-note').value;
+
+            document.getElementById('out-client-name').innerText = cName || "Valued Client";
+            document.getElementById('out-p-title').innerText = pTitle || "Project Proposal";
+            document.getElementById('out-ind').innerText = document.getElementById('c-ind').selectedOptions[0].text;
+            document.getElementById('out-date').innerText = new Date().toLocaleDateString();
+
+            const expDate = document.getElementById('p-date-exp').value;
+            document.getElementById('out-date-exp').innerText = expDate ? new Date(expDate).toLocaleDateString() : "30 Days";
+            document.getElementById('out-time').innerText = Math.ceil(days) + " Days (Est)";
+
+            // Note Logic
+            if (pNote && pNote.trim() !== "") {
+                document.getElementById('out-intro-box').style.display = 'block';
+                document.getElementById('out-note').innerText = pNote;
+            } else {
+                document.getElementById('out-intro-box').style.display = 'none';
+            }
+
+            // AUTO-SAVE
+            saveState();
+        }
+
+        function updateSuggestions() {
+            const ind = document.getElementById('c-ind').value;
+            const panel = document.getElementById('wise-panel');
+            const txt = document.getElementById('wise-text');
+
+            if (SUGGESTIONS[ind]) {
+                panel.classList.remove('hidden');
+                txt.innerHTML = `<strong>Top Tip:</strong> ${SUGGESTIONS[ind].text}`;
+                panel.querySelector('i').className = `${SUGGESTIONS[ind].icon} wise-icon`;
+            } else {
+                panel.classList.add('hidden');
+            }
+        }
+
+        function updateLayout() {
+            const ind = document.getElementById('c-ind').value;
+            const cardOTA = document.getElementById('card-ota');
+
+            // Move OTA card based on industry
+            // 1.2 = Hotel, 1.15 = Adventure/Tourism
+            if (ind === '1.2' || ind === '1.15') {
+                document.getElementById('tab-media').appendChild(cardOTA);
+            } else {
+                // Default back to digital tab
+                // We want it before the end or in a specific spot? 
+                // Let's just append to digital tab, it was at the bottom anyway.
+                document.getElementById('tab-digital').appendChild(cardOTA);
+            }
+        }
+
+        function generatePDF() {
+            const el = document.getElementById('doc-preview');
+            const opt = {
+                margin: 0.3,
+                filename: `Estimate_${document.getElementById('c-name').value || 'Client'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(el).save();
+        }
+
+        // INIT
+        initAuth();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default date if empty
+            if (!document.getElementById('p-date-exp').value) {
+                const d = new Date();
+                d.setDate(d.getDate() + 30);
+                document.getElementById('p-date-exp').valueAsDate = d;
+            }
+
+            loadState(); // Attempt load
+
+            // Fix #6: Sync sliders with number inputs after load
+            document.querySelectorAll('input[type=range]').forEach(r => {
+                const nId = r.id.replace('r-', 'n-');
+                const nEl = document.getElementById(nId);
+                if (nEl) nEl.value = r.value;
+            });
+
+            render();
+        });
+
+        // SYNC LOGIC
+        function sync(srcId, dstId) {
+            const val = document.getElementById(srcId).value;
+            document.getElementById(dstId).value = val;
+            render();
+        }
+
+        // PERSISTENCE
+        function saveState() {
+            const state = {};
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.id && el.id !== 'r-tour' && el.type !== 'range') { // Optimization: Just save inputs/numbers/checkboxes, not syncd ranges
+                    if (el.type === 'checkbox') state[el.id] = el.checked;
+                    else state[el.id] = el.value;
+                }
+            });
+            // Also save ranges just in case
+            document.querySelectorAll('input[type=range]').forEach(el => {
+                state[el.id] = el.value;
+            });
+
+            localStorage.setItem('quoteState', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('quoteState');
+            if (!saved) return;
+            try {
+                const state = JSON.parse(saved);
+                for (const [id, val] of Object.entries(state)) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        if (el.type === 'checkbox') el.checked = val;
+                        else el.value = val;
+                    }
+                }
+            } catch (e) { console.error("Load error", e); }
+        }
+    </script>
+  <script src="js/mobile.js?v=20260814u" defer></script>
+  <script src="js/wow.js?v=20260814u" defer></script>
+  <script src="js/v2-extras.js?v=20260814u" defer></script>
+  <script src="js/motion.js?v=20260814u" defer></script>
+  <script src="js/pwa.js?v=20260814u" defer></script>
+  <script src="js/three-loader.js?v=20260814u" data-three-src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="js/aurora.js?v=20260814u" defer></script>
+  <script src="js/sidenav.js?v=20260814u" defer></script>
+</body>
+
+</html>

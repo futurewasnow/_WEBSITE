@@ -1,0 +1,10 @@
+<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="none"/>
+  <!-- Expedia logo style with airplane/travel icon -->
+  <g transform="translate(10, 15)">
+    <circle cx="15" cy="15" r="14" fill="#FFCC00"/>
+    <path d="M8 15 L22 15 M15 8 L15 22" stroke="#003366" stroke-width="2"/>
+    <circle cx="15" cy="15" r="5" fill="#003366"/>
+  </g>
+  <text x="48" y="40" font-family="Arial, sans-serif" font-size="22" fill="#003366" font-weight="bold">Expedia</text>
+</svg>

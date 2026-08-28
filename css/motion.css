@@ -1,0 +1,436 @@
+/* ============================================================
+   YOUSEE360 — MOTION LAYER (award-winning patterns)
+   - Split-text reveals
+   - Scroll-velocity skew typography
+   - Magnetic CTAs
+   - Image hover pan-zoom
+   - Cursor halo light (desktop)
+   - Marquee scroll-direction reversal
+   - Pinned counter animations
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ys-split-char, .ys-split-word { opacity: 1 !important; transform: none !important; }
+  .ys-skew-host { transform: none !important; }
+  .ys-magnetic { transform: none !important; }
+}
+
+/* ============================================================
+   1. HEADING REVEAL — whole-element fade-up
+   ============================================================ */
+.ys-heading-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform .7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.ys-heading-reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+/* Legacy classes (in case old wrapping persisted on cached pages) */
+.ys-split-word,
+.ys-split-word > span,
+.ys-split-char {
+  display: inline !important;
+  overflow: visible !important;
+  transform: none !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* ============================================================
+   2. SCROLL-VELOCITY SKEW (signature awwwards effect)
+   Sections wrapped in .ys-skew-host get a subtle skewY based on
+   scroll velocity (driven via CSS variable set by JS).
+   ============================================================ */
+.ys-skew-host {
+  transform: skewY(var(--ys-skew, 0deg));
+  transform-origin: 50% 0;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ============================================================
+   3. MAGNETIC CTAs (mouse-pull on hover within radius)
+   Set via JS; CSS just defines the smooth transform.
+   ============================================================ */
+.ys-magnetic {
+  display: inline-block;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ============================================================
+   4. HOVER PAN-ZOOM IMAGES (portfolio tiles, related cards)
+   Subtle internal pan + zoom while keeping container static.
+   ============================================================ */
+.ys-portfolio-tile img,
+.ys-includes-item img,
+.modern-service-card img {
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1), filter .6s ease;
+  will-change: transform;
+}
+.ys-portfolio-tile:hover img {
+  transform: scale(1.08) translate(-1%, -2%);
+}
+/* Subtle parallax pan based on mouse position (set --px / --py in JS) */
+.ys-portfolio-tile.has-pan img {
+  transform: scale(1.08) translate(calc(var(--px, 0) * -1%), calc(var(--py, 0) * -1%));
+}
+
+/* ============================================================
+   5. CURSOR HALO (desktop only)
+   A soft radial glow that follows the mouse on sections marked
+   .ys-halo. Provides "lit" atmosphere on dark sections.
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  .ys-halo {
+    position: relative;
+    isolation: isolate;
+  }
+  .ys-halo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      360px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(0, 255, 136, 0.06),
+      transparent 60%
+    );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .ys-halo:hover::before { opacity: 1; }
+  /* Lift halo children above the glow. Wrapped in :where() so this carries
+     ZERO specificity — a component that positions itself (e.g. the absolutely
+     positioned .scroll-indicator) keeps its own `position` instead of being
+     silently forced back to `relative` and flung off-screen by its own
+     `left: 50%`. Elements with no positioning of their own still get lifted. */
+  :where(.ys-halo) > :where(*) { position: relative; z-index: 1; }
+}
+
+/* ============================================================
+   6. MARQUEE — scroll-direction-driven speed/direction
+   ============================================================ */
+.ys-marquee-track,
+.ys-trusted-track {
+  /* Drive via CSS variable for direction (1 = forward, -1 = reverse) */
+  animation-direction: normal;
+  animation-play-state: var(--marquee-state, running);
+}
+.ys-marquee.is-reversed .ys-marquee-track,
+.ys-trusted.is-reversed .ys-trusted-track {
+  animation-direction: reverse;
+}
+/* Scroll-down speed boost */
+.ys-marquee.is-fast .ys-marquee-track,
+.ys-trusted.is-fast .ys-trusted-track {
+  animation-duration: 20s;
+}
+
+/* ============================================================
+   7. NUMBER COUNTERS — pinned animation effect
+   ============================================================ */
+[data-counter-up] {
+  font-variant-numeric: tabular-nums;
+}
+[data-counter-up]::after {
+  content: attr(data-suffix);
+}
+
+/* ============================================================
+   8. LINK UNDERLINE THAT FOLLOWS MOUSE
+   ============================================================ */
+.ys-link-anim {
+  position: relative;
+  display: inline-block;
+}
+.ys-link-anim::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: var(--lx, 0%) center;
+  transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ys-link-anim:hover::after { transform: scaleX(1); }
+
+/* ============================================================
+   9. BUTTON LIQUID HOVER (CTAs)
+   Subtle morph + sheen on green primary CTAs.
+   ============================================================ */
+.nav-cta,
+.ds-btn-primary,
+.pkg-btn,
+.ys-fab-trigger,
+.ys-mob-bar a.btn-quote,
+.ys-mobile-top-cta,
+.ys-form-submit,
+.ys-estimator-next {
+  position: relative;
+  overflow: hidden;
+}
+.nav-cta::before,
+.ds-btn-primary::before,
+.pkg-btn::before,
+.ys-mob-bar a.btn-quote::before,
+.ys-mobile-top-cta::before,
+.ys-form-submit::before,
+.ys-estimator-next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform .9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+.nav-cta:hover::before,
+.ds-btn-primary:hover::before,
+.pkg-btn:hover::before,
+.ys-mob-bar a.btn-quote:hover::before,
+.ys-mobile-top-cta:hover::before,
+.ys-form-submit:hover::before,
+.ys-estimator-next:hover::before {
+  transform: translateX(120%);
+}
+.nav-cta > *,
+.ds-btn-primary > *,
+.pkg-btn > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   10. SECTION INTRO — scroll-driven reveal with mask
+   Sections with [data-mask-reveal] expose content from bottom
+   via clip-path as they enter viewport.
+   ============================================================ */
+[data-mask-reveal] {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: clip-path;
+}
+[data-mask-reveal].is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ============================================================
+   11. FLOATING ORBS background (subtle dark-section atmosphere)
+   ============================================================ */
+.ys-orbs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+.ys-orbs span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: ys-orb-drift 22s ease-in-out infinite;
+}
+.ys-orbs span:nth-child(1) {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.35), transparent 60%);
+  top: -8%; left: 12%;
+}
+.ys-orbs span:nth-child(2) {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(1, 228, 228, 0.25), transparent 60%);
+  bottom: -10%; right: 5%;
+  animation-delay: -7s;
+}
+.ys-orbs span:nth-child(3) {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(255, 61, 166, 0.18), transparent 60%);
+  top: 35%; right: 30%;
+  animation-delay: -14s;
+}
+@keyframes ys-orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.1); }
+  66% { transform: translate(-40px, 50px) scale(0.95); }
+}
+
+/* ============================================================
+   12a. IMPRESSIVE HEADINGS — more visual weight
+   Heavier weight, tighter tracking, more dramatic line-height
+   ============================================================ */
+.sexy-heading,
+.apple-heading,
+.hero-heading,
+.ds-section-header h2,
+.ys-section-header h2,
+.section-title-group h2,
+.ys-includes h2,
+.ys-faq h2,
+.ys-related h2,
+.ys-pricing .header h2,
+.ys-testimonials .header h2,
+.ys-estimator-header h2,
+.ys-footer-cta h2,
+.ys-portfolio-teaser .header h2 {
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 1.04 !important;
+  font-feature-settings: "ss01", "ss02";
+  text-wrap: balance;
+}
+.sexy-heading,
+.apple-heading,
+.section-title-group h2,
+.ds-section-header h2 {
+  font-size: clamp(2rem, 4.5vw, 3.5rem) !important;
+}
+
+/* Highlight word: brighter glow + gradient */
+.highlight {
+  background: linear-gradient(135deg, #00ff88 0%, #2dffa6 40%, #01e4e4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(0, 255, 136, 0.45));
+  font-weight: 800;
+  display: inline-block;
+}
+
+/* ============================================================
+   SECTION-TAG REDESIGN — bigger, bolder, kinetic
+   Three layered elements: animated indicator bar, big number,
+   tracked label. Gradient border. Glow. Feels like a proper
+   badge instead of a tiny pill.
+   ============================================================ */
+.section-tag {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px 12px 18px !important;
+  border-radius: 21px !important;
+  background:
+    linear-gradient(135deg, rgba(0,255,136,0.12), rgba(1,228,228,0.06)),
+    rgba(0,0,0,0.4) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box !important;
+  color: #fff !important;
+  font-size: 0.8125rem !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  isolation: isolate;
+  box-shadow:
+    0 0 0 1px rgba(0,255,136,0.25),
+    0 8px 24px -10px rgba(0,255,136,0.35),
+    0 0 32px -16px rgba(0,255,136,0.55);
+  backdrop-filter: blur(8px);
+  margin-bottom: 28px !important;
+}
+/* Animated gradient ring around the tag */
+.section-tag::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg,
+    rgba(0,255,136,0.7) 0%,
+    rgba(1,228,228,0.5) 35%,
+    transparent 50%,
+    rgba(0,255,136,0.5) 75%,
+    rgba(0,255,136,0.7) 100%);
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: ys-tag-border 4s linear infinite;
+}
+@keyframes ys-tag-border {
+  to { background-position: 300% 0; }
+}
+/* Lead indicator — three vertical bars equalizer effect */
+.section-tag::before {
+  content: "";
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  background-image:
+    linear-gradient(var(--ys-green, #00ff88), var(--ys-green, #00ff88)),
+    linear-gradient(var(--ys-green, #00ff88), var(--ys-green, #00ff88)),
+    linear-gradient(var(--ys-green, #00ff88), var(--ys-green, #00ff88));
+  background-repeat: no-repeat;
+  background-size: 2px 100%, 2px 100%, 2px 100%;
+  background-position: 0 50%, 50% 50%, 100% 50%;
+  animation: ys-tag-eq 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(0,255,136,0.7));
+}
+@keyframes ys-tag-eq {
+  0%, 100% { background-size: 2px 35%, 2px 100%, 2px 60%; }
+  35%      { background-size: 2px 100%, 2px 50%, 2px 85%; }
+  70%      { background-size: 2px 60%, 2px 80%, 2px 35%; }
+}
+/* Center-aligned section tags: subtle entrance lift */
+.section-title-group.centered .section-tag,
+.ys-section-header .section-tag {
+  margin-bottom: 24px !important;
+}
+@media (max-width: 768px) {
+  .section-tag {
+    font-size: 0.75rem !important;
+    padding: 10px 18px 10px 14px !important;
+    letter-spacing: 0.24em !important;
+    gap: 10px;
+    border-radius: 13px !important;
+  }
+  .section-tag::before { width: 12px; height: 12px; }
+}
+
+@media (max-width: 768px) {
+  .sexy-heading,
+  .apple-heading,
+  .hero-heading,
+  .section-title-group h2 {
+    font-size: clamp(1.625rem, 7vw, 2.25rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.025em !important;
+  }
+}
+
+/* ============================================================
+   12. KINETIC EYEBROW — small bouncing arrow on labels
+   ============================================================ */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 24px; height: 1px;
+  background: currentColor;
+  animation: ys-eyebrow-tick 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+@keyframes ys-eyebrow-tick {
+  0%, 100% { width: 12px; opacity: 0.6; }
+  50% { width: 36px; opacity: 1; }
+}

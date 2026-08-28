@@ -125,7 +125,7 @@ function initStatCounters() {
         statObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.7 });
+  }, { threshold: 0.3 });
 
   statItems.forEach(item => {
     statObserver.observe(item);
@@ -171,9 +171,13 @@ function initParticleEffects() {
     });
   }
 
-  // Industry-specific particles
+  // Industry-specific particles.
+  // Guard on the canvas container itself, not on .industry-hero: 21 pages have
+  // the hero but only one has #industryParticles, and particles.js throws on a
+  // missing container ("Cannot read properties of null").
   const industrySection = document.querySelector('.industry-hero');
-  if (industrySection) {
+  const industryParticles = document.getElementById('industryParticles');
+  if (industrySection && industryParticles) {
     const industryType = industrySection.dataset.industry;
     const particlesConfig = getIndustryParticleConfig(industryType);
 
@@ -193,30 +197,95 @@ function getIndustryParticleConfig(industryType) {
         shape: { type: 'circle' },
         opacity: { value: 0.5, random: true },
         size: { value: 3, random: true },
-        move: { enable: true, speed: 2, direction: 'none', random: true }
+        line_linked: { enable: true, distance: 150, color: '#66cc79', opacity: 0.3, width: 1 },
+        move: { enable: true, speed: 2, direction: 'none', random: true, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } },
+        modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
       }
     },
-    realEstate: {
+    'real-estate': {
       particles: {
         number: { value: 60, density: { enable: true, value_area: 900 } },
         color: { value: '#50a7c2' },
         shape: { type: 'triangle' },
         opacity: { value: 0.6, random: true },
         size: { value: 4, random: true },
-        move: { enable: true, speed: 3, direction: 'top', random: true }
+        line_linked: { enable: true, distance: 120, color: '#50a7c2', opacity: 0.2, width: 1 },
+        move: { enable: true, speed: 3, direction: 'top', random: true, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'bubble' } },
+        modes: { bubble: { distance: 200, size: 6, opacity: 0.8 } }
       }
     },
     restaurants: {
       particles: {
         number: { value: 50, density: { enable: true, value_area: 800 } },
-        color: { value: '#ffffff' },
+        color: { value: ['#f5a623', '#f8e71c', '#ffffff'] },
         shape: { type: 'circle' },
-        opacity: { value: 0.4, random: true },
+        opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false } },
+        size: { value: 3, random: true },
+        line_linked: { enable: false },
+        move: { enable: true, speed: 1.5, direction: 'none', random: true, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'repulse' } },
+        modes: { repulse: { distance: 100 } }
+      }
+    },
+    'adventure-tours': {
+      particles: {
+        number: { value: 100, density: { enable: true, value_area: 600 } },
+        color: { value: '#66cc79' },
+        shape: { type: 'edge' },
+        opacity: { value: 0.7, random: true },
         size: { value: 2, random: true },
-        move: { enable: true, speed: 1.5, direction: 'none', random: true }
+        line_linked: { enable: true, distance: 100, color: '#66cc79', opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 5, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+        modes: { repulse: { distance: 150, duration: 0.4 }, push: { particles_nb: 6 } }
+      }
+    },
+    museums: {
+      particles: {
+        number: { value: 40, density: { enable: true, value_area: 1000 } },
+        color: { value: ['#9b59b6', '#d4af37', '#ffffff'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4, random: true, anim: { enable: true, speed: 0.5, opacity_min: 0.1, sync: false } },
+        size: { value: 4, random: true },
+        line_linked: { enable: true, distance: 200, color: '#d4af37', opacity: 0.15, width: 1 },
+        move: { enable: true, speed: 0.8, direction: 'none', random: true, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'grab' } },
+        modes: { grab: { distance: 250, line_linked: { opacity: 0.3 } } }
+      }
+    },
+    'retreat-centers': {
+      particles: {
+        number: { value: 35, density: { enable: true, value_area: 1200 } },
+        color: { value: ['#a8e6cf', '#88d8b0', '#ffffff'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true, anim: { enable: true, speed: 0.3, opacity_min: 0.2, sync: false } },
+        size: { value: 5, random: true, anim: { enable: true, speed: 2, size_min: 2, sync: false } },
+        line_linked: { enable: false },
+        move: { enable: true, speed: 0.5, direction: 'none', random: true, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'bubble' } },
+        modes: { bubble: { distance: 200, size: 8, opacity: 0.7 } }
       }
     }
-    // Additional industry configurations can be added here
   };
 
   // Return the specific config or a default one
@@ -281,8 +350,10 @@ function setupFormAnimations() {
           contactForm.parentElement.style.display = 'none';
           successMessage.style.display = 'block';
 
-          // Initialize celebration particles if available
-          if (typeof particlesJS !== 'undefined') {
+          // Initialize celebration particles if available.
+          // Requires the #celebration-particles container to exist — particles.js
+          // throws on a missing container, which would fire on a successful submit.
+          if (typeof particlesJS !== 'undefined' && document.getElementById('celebration-particles')) {
             particlesJS('celebration-particles', {
               particles: {
                 number: { value: 100 },

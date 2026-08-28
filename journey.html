@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Immersive Journey | How We Build Your Virtual Tour</title>
+  <meta name="description"
+    content="The process behind our virtual tours — from the 360° shoot in Costa Rica to the final interactive delivery, with you guided at every step.">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link rel="canonical" href="https://yousee360.com/journey.html" />
+  <meta property="og:url" content="https://yousee360.com/journey.html">
+  <meta property="og:title" content="The Immersive Journey | How We Build Your Virtual Tour">
+  <meta property="og:description" content="The process behind our virtual tours — from the 360° shoot in Costa Rica to the final interactive delivery, with you guided at every step.">
+  <meta name="twitter:title" content="The Immersive Journey | How We Build Your Virtual Tour">
+  <meta name="twitter:description" content="The process behind our virtual tours — from the 360° shoot in Costa Rica to the final interactive delivery, with you guided at every step.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://yousee360.com/images/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://yousee360.com/images/og-card.jpg">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="geo.region" content="CR-A">
+  <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
+  <meta name="geo.position" content="10.4678;-84.6433">
+  <meta name="ICBM" content="10.4678, -84.6433">
+  <link href="css/bundle-44f73043.css?v=44f73043" rel="stylesheet" type="text/css">
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  <style>
+    :root {
+      --color-primary: #01e4e4;
+      --color-secondary: #00ff66;
+      --color-accent-pink: #ff00ff;
+      --color-dark-bg: #050505;
+      --color-glass-bg: rgba(255, 255, 255, 0.05);
+      --color-glass-border: rgba(255, 255, 255, 0.1);
+      --glow-primary: 0 0 15px rgba(1, 228, 228, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--color-dark-bg);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .journey-hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at center, #0a1520 0%, #050505 70%);
+    }
+
+    .journey-hero canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .journey-hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 20px;
+    }
+
+    .journey-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(1, 228, 228, 0.1);
+      border: 1px solid rgba(1, 228, 228, 0.3);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-primary);
+      margin-bottom: 30px;
+    }
+
+    .journey-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .journey-title span {
+      display: block;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .journey-subtitle {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .journey-cta {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-journey {
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-journey-primary {
+      background: var(--color-primary);
+      color: #000;
+      border: none;
+    }
+
+    .btn-journey-primary:hover {
+      box-shadow: 0 0 30px rgba(1, 228, 228, 0.6);
+      transform: translateY(-3px);
+    }
+
+    .btn-journey-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-journey-secondary:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator-journey {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-indicator-journey span {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .scroll-indicator-journey i {
+      font-size: 1.5rem;
+      color: var(--color-primary);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* Journey Sections */
+    .journey-section {
+      min-height: 100vh;
+      padding: 100px 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .journey-section-inner {
+      max-width: 1400px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .journey-section:nth-child(even) .journey-section-inner {
+      direction: rtl;
+    }
+
+    .journey-section:nth-child(even) .journey-section-inner > * {
+      direction: ltr;
+    }
+
+    /* Region Info */
+    .region-info {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    .region-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+    }
+
+    .region-tag i {
+      font-size: 0.7rem;
+    }
+
+    .region-name {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .region-name span {
+      color: var(--color-primary);
+    }
+
+    .region-description {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .region-stats {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+
+    .region-stat {
+      text-align: left;
+    }
+
+    .region-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-secondary);
+      display: block;
+    }
+
+    .region-stat-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* 360 Viewer */
+    .viewer-360 {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(1, 228, 228, 0.2);
+      opacity: 0;
+      transform: translateX(50px) scale(0.95);
+      aspect-ratio: 16/10;
+    }
+
+    .viewer-360-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1520, #152535);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewer-360-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(1, 228, 228, 0.1) 0%, transparent 50%);
+    }
+
+    .viewer-360-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      opacity: 0.3;
+    }
+
+    .viewer-360-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .viewer-play-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(1, 228, 228, 0.2);
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .viewer-play-btn::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px solid rgba(1, 228, 228, 0.3);
+      animation: pulse-ring 2s infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .viewer-play-btn:hover {
+      background: var(--color-primary);
+      color: #000;
+      box-shadow: 0 0 40px rgba(1, 228, 228, 0.6);
+      transform: scale(1.1);
+    }
+
+    .viewer-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Hotspots */
+    .hotspots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .hotspot-dot {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(1, 228, 228, 0.3);
+      border: 2px solid var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      animation: hotspot-pulse 2s infinite;
+      transition: all 0.3s ease;
+    }
+
+    .hotspot:hover .hotspot-dot {
+      background: var(--color-primary);
+      color: #000;
+      box-shadow: 0 0 20px rgba(1, 228, 228, 0.8);
+    }
+
+    @keyframes hotspot-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .hotspot-tooltip {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      background: rgba(10, 15, 20, 0.95);
+      border: 1px solid rgba(1, 228, 228, 0.3);
+      border-radius: 12px;
+      padding: 15px 20px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .hotspot:hover .hotspot-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* Tooltip title. It is a <p>, not a heading: these are hover labels on the
+       map, not sections of the document outline. Weight/margins are stated
+       explicitly since it no longer inherits <h4> defaults, and it is declared
+       after .hotspot-tooltip p so it wins on both specificity and order. */
+    .hotspot-tooltip p {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.4;
+    }
+
+    .hotspot-tooltip .hotspot-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-top: 0;
+      margin-bottom: 5px;
+      color: var(--color-primary);
+    }
+
+    /* Tour Button */
+    .tour-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: rgba(1, 228, 228, 0.1);
+      border: 1px solid rgba(1, 228, 228, 0.3);
+      border-radius: 50px;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .tour-link:hover {
+      background: var(--color-primary);
+      color: #000;
+      box-shadow: 0 0 20px rgba(1, 228, 228, 0.4);
+    }
+
+    /* Parallax Background */
+    .parallax-bg-element {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .parallax-bg-1 {
+      background: var(--color-primary);
+      top: 10%;
+      right: -200px;
+    }
+
+    .parallax-bg-2 {
+      background: var(--color-secondary);
+      bottom: 10%;
+      left: -200px;
+    }
+
+    /* Progress Bar */
+    .journey-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      z-index: 9999;
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* Navigation Dots */
+    .journey-nav-dots {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 100;
+    }
+
+    .journey-nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .journey-nav-dot:hover,
+    .journey-nav-dot.active {
+      background: var(--color-primary);
+      box-shadow: 0 0 15px rgba(1, 228, 228, 0.5);
+    }
+
+    .journey-nav-dot span {
+      position: absolute;
+      right: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .journey-nav-dot:hover span {
+      opacity: 1;
+    }
+
+    /* CTA Section */
+    .journey-cta-section {
+      padding: 150px 20px;
+      text-align: center;
+      background: radial-gradient(ellipse at center, #0a1520 0%, #050505 70%);
+      position: relative;
+    }
+
+    .journey-cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(1, 228, 228, 0.3), transparent);
+    }
+
+    .journey-cta-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .journey-cta-text {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .journey-footer {
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .journey-footer p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    .journey-footer a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 968px) {
+      .journey-section-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .journey-section:nth-child(even) .journey-section-inner {
+        direction: ltr;
+      }
+
+      .viewer-360 {
+        aspect-ratio: 16/9;
+      }
+
+      .region-stats {
+        gap: 20px;
+      }
+
+      .journey-nav-dots {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .journey-section {
+        padding: 60px 20px;
+      }
+
+      .region-name {
+        font-size: 2rem;
+      }
+
+      .region-stats {
+        flex-wrap: wrap;
+      }
+
+      .journey-cta {
+        flex-direction: column;
+      }
+
+      .btn-journey {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Smooth scroll sections */
+    .journey-section {
+      scroll-margin-top: 80px;
+    }
+  </style>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+                "@type": "Question",
+                "name": "How long does it take to create a virtual tour?",
+                "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Most projects are delivered within 5-10 business days after the photo shoot, depending on the complexity of the interactive features."
+                }
+        },
+        {
+                "@type": "Question",
+                "name": "Is the virtual tour creation process disruptive?",
+                "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Not at all. We work efficiently and can often complete the on-site photography in just a few hours or days, depending on the scale of the property."
+                }
+        }
+]
+    }
+  </script>
+  <link href="css/bundle-a71341a7.css?v=a71341a7" rel="stylesheet" type="text/css">
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+<!-- Navigation -->
+
+  <!-- Navigation -->
+
+  <div data-collapse="tiny" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+
+    role="banner" class="navigation-bar w-nav">
+
+    <div class="nav-cont w-container">
+
+      <a href="./" class="logo f-logo" aria-label="YouSee360 — Home"></a>
+
+      <nav role="navigation" class="navigation-menu w-nav-menu">
+
+        <a href="./" class="navigation-link w-nav-link">Home</a>
+
+
+
+        <div data-hover="true" data-delay="0" class="w-dropdown">
+
+          <div class="w-dropdown-toggle navigation-link w-nav-link">
+
+            <div>Services</div>
+
+            <div class="w-icon-dropdown-toggle"></div>
+
+          </div>
+
+          <nav class="w-dropdown-list">
+
+            <a href="services/360-photography.html" class="w-dropdown-link" data-desc="High-resolution immersive imagery" data-icon="📷">360° Photography</a>
+
+            <a href="services/360-videography.html" class="w-dropdown-link" data-desc="Cinematic spherical video" data-icon="🎥">360° Videography</a>
+
+            <a href="services/drone-360-media.html" class="w-dropdown-link" data-desc="Aerial 360° perspectives" data-icon="🛸">Drone 360° Media</a>
+
+            <a href="services/google-streetview.html" class="w-dropdown-link" data-desc="Official Google Trusted Pro" data-icon="🗺️">Google StreetView</a>
+
+            <a href="services/augmented-reality.html" class="w-dropdown-link" data-desc="WebAR — no app required" data-icon="✨">Augmented Reality</a>
+
+            <a href="services/interactive-virtual-tours.html" class="w-dropdown-link" data-desc="Hotspots, info, navigation" data-icon="🔄">Interactive Tours</a>
+
+            <a href="services/traditional-media.html" class="w-dropdown-link" data-desc="Photo & video, the classics" data-icon="🎞️">Traditional Media</a>
+
+            <a href="services/virtual-reality.html" class="w-dropdown-link" data-desc="Full immersive headset content" data-icon="🥽">Virtual Reality</a>
+
+            <a href="services/interactive-maps.html" class="w-dropdown-link" data-desc="Custom maps with hotspots" data-icon="📍">Interactive Maps</a>
+
+          </nav>
+
+        </div>
+
+
+
+        <div data-hover="true" data-delay="0" class="w-dropdown">
+
+          <div class="w-dropdown-toggle navigation-link w-nav-link">
+
+            <div>Industries</div>
+
+            <div class="w-icon-dropdown-toggle"></div>
+
+          </div>
+
+          <nav class="w-dropdown-list">
+
+            <a href="industries/hospitality.html" class="w-dropdown-link" data-desc="Hotels &amp; resorts" data-icon="🏨">Hospitality &amp; Resorts</a>
+
+            <a href="industries/real-estate.html" class="w-dropdown-link" data-desc="Listings that sell faster" data-icon="🏡">Real Estate</a>
+
+            <a href="industries/restaurants.html" class="w-dropdown-link" data-desc="Atmosphere before arrival" data-icon="🍽️">Restaurants</a>
+
+            <a href="industries/adventure-tours.html" class="w-dropdown-link" data-desc="Capture the thrill" data-icon="🏞️">Adventure Tours</a>
+
+            <a href="industries/retreat-centers.html" class="w-dropdown-link" data-desc="Wellness &amp; retreat" data-icon="🧘">Retreat Centers</a>
+
+            <a href="industries/museums.html" class="w-dropdown-link" data-desc="Virtual exhibits" data-icon="🏛️">Museums</a>
+
+            <a href="industries/national-parks.html" class="w-dropdown-link" data-desc="Conservation storytelling" data-icon="🌳">National Parks</a>
+
+            <a href="industries/hot-springs.html" class="w-dropdown-link" data-desc="Showcase the soak" data-icon="♨️">Hot Springs</a>
+
+            <a href="industries/farms.html" class="w-dropdown-link" data-desc="Agritourism &amp; farm-to-table" data-icon="🌾">Farms</a>
+
+            <a href="industries/butterfly-gardens.html" class="w-dropdown-link" data-desc="Living exhibit experiences" data-icon="🦋">Butterfly Gardens</a>
+
+            <a href="industries/dome-structures.html" class="w-dropdown-link" data-desc="Geodesic &amp; canvas" data-icon="🔘">Dome Structures</a>
+
+            <a href="industries/event-venues.html" class="w-dropdown-link" data-desc="Weddings &amp; events" data-icon="🎉">Event Venues</a>
+
+            <a href="industries/corporate-spaces.html" class="w-dropdown-link" data-desc="Office &amp; HQ tours" data-icon="🏢">Corporate Spaces</a>
+
+            <a href="industries/educational.html" class="w-dropdown-link" data-desc="Schools &amp; universities" data-icon="🎓">Educational</a>
+
+            <a href="industries/therapy-spaces.html" class="w-dropdown-link" data-desc="Wellness &amp; healing" data-icon="💆">Therapy Spaces</a>
+
+          </nav>
+
+        </div>
+
+
+
+        <a href="pricing.html" class="navigation-link w-nav-link">Pricing</a>
+
+
+
+        <a href="portfolio.html" class="navigation-link w-nav-link">Portfolio</a>
+
+        <a href="about.html" class="navigation-link w-nav-link">About</a>
+
+        <a href="blog/" class="navigation-link w-nav-link">Blog</a>
+
+        <a href="contact.html" class="navigation-link w-nav-link">Contact</a>
+
+
+
+        <div class="nav-right">
+
+          <a href="es/" class="navigation-link nav-lang-switch"><i class="fas fa-globe"></i> ES</a>
+
+          <a href="contact.html#quote" class="nav-cta">Get a Free Quote</a>
+
+        </div>
+
+      </nav>
+
+      <div class="hamburger-button w-nav-button" aria-label="Toggle menu">
+
+        <div class="icon w-icon-nav-menu"><span></span></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <main id="main">
+
+
+
+
+  
+
+
+
+  
+
+    <!-- SEO FAQ SECTION -->
+
+    
+  <!-- Progress Bar -->
+  <div class="journey-progress" id="journeyProgress"></div>
+
+  <!-- Navigation Dots -->
+  <nav class="journey-nav-dots" id="journeyNavDots">
+    <button class="journey-nav-dot active" data-section="hero" aria-label="Top"><span>Start</span></button>
+    <button class="journey-nav-dot" data-section="arenal" aria-label="Arenal"><span>Arenal</span></button>
+    <button class="journey-nav-dot" data-section="guanacaste" aria-label="Guanacaste"><span>Guanacaste</span></button>
+    <button class="journey-nav-dot" data-section="manuel-antonio" aria-label="Manuel Antonio"><span>Manuel Antonio</span></button>
+    <button class="journey-nav-dot" data-section="monteverde" aria-label="Monteverde"><span>Monteverde</span></button>
+    <button class="journey-nav-dot" data-section="contact" aria-label="Contact"><span>Get Started</span></button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="journey-hero" id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="journey-hero-content">
+      <div class="journey-badge">
+        <i class="fas fa-compass"></i>
+        Interactive Experience
+      </div>
+      <h1 class="journey-title">
+        Journey Through
+        <span>Costa Rica</span>
+      </h1>
+      <p class="journey-subtitle">
+        Explore the magic of Costa Rica through immersive 360° virtual tours. 
+        From volcanic landscapes to pristine beaches, experience the beauty before you arrive.
+      </p>
+      <div class="journey-cta">
+        <a href="#arenal" class="btn-journey btn-journey-primary">
+          <i class="fas fa-play"></i>
+          Start the Journey
+        </a>
+        <a href="contact.html" class="btn-journey btn-journey-secondary">
+          <i class="fas fa-envelope"></i>
+          Get Your Tour
+        </a>
+      </div>
+    </div>
+    <div class="scroll-indicator-journey">
+      <span>Scroll to explore</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- Arenal Volcano Section -->
+  <section class="journey-section" id="arenal">
+    <div class="parallax-bg-element parallax-bg-1"></div>
+    <div class="journey-section-inner">
+      <div class="region-info">
+        <div class="region-tag">
+          <i class="fas fa-map-marker-alt"></i>
+          Alajuela Province
+        </div>
+        <h2 class="region-name">Arenal <span>Volcano</span></h2>
+        <p class="region-description">
+          Witness the majestic Arenal Volcano, Costa Rica's most active volcano for over 40 years. 
+          Now resting, its perfect conical shape dominates the landscape, surrounded by lush rainforest 
+          and natural hot springs. Experience 360° views of this natural wonder.
+        </p>
+        <div class="region-stats">
+          <div class="region-stat">
+            <span class="region-stat-value">1,657m</span>
+            <span class="region-stat-label">Elevation</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">7,000+</span>
+            <span class="region-stat-label">Hectares National Park</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">89°F</span>
+            <span class="region-stat-label">Avg Temperature</span>
+          </div>
+        </div>
+        <a href="locations/la-fortuna-arenal.html" class="tour-link">
+          <i class="fas fa-external-link-alt"></i>
+          View Full Tour
+        </a>
+      </div>
+      <div class="viewer-360">
+        <div class="viewer-360-placeholder">
+          <div class="viewer-360-bg"><i class="fas fa-mountain"></i></div>
+          <div class="viewer-360-content">
+            <button class="viewer-play-btn" aria-label="Play 360 tour">
+              <i class="fas fa-play" style="margin-left: 4px;"></i>
+            </button>
+            <span class="viewer-label">Interactive 360° Tour</span>
+          </div>
+          <div class="hotspots">
+            <div class="hotspot" style="top: 30%; left: 25%;">
+              <div class="hotspot-dot">1</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Volcano Summit</p>
+                <p>The perfect cone rises 1,657 meters above sea level.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 60%; left: 70%;">
+              <div class="hotspot-dot">2</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Lake Arenal</p>
+                <p>Costa Rica's largest lake, perfect for windsurfing.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 75%; left: 40%;">
+              <div class="hotspot-dot">3</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Hot Springs</p>
+                <p>Natural thermal pools with mineral-rich waters.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guanacaste Section -->
+  <section class="journey-section" id="guanacaste">
+    <div class="parallax-bg-element parallax-bg-2"></div>
+    <div class="journey-section-inner">
+      <div class="region-info">
+        <div class="region-tag">
+          <i class="fas fa-map-marker-alt"></i>
+          Northwestern Pacific Coast
+        </div>
+        <h2 class="region-name">Guanacaste's <span>Beaches</span></h2>
+        <p class="region-description">
+          Discover the stunning beaches of Guanacaste, where golden sands meet crystal-clear waters. 
+          From the famous surfing paradise of Tamarindo to the tranquil shores of Playa Flamingo, 
+          this Pacific coast paradise offers world-class beaches and sunsets.
+        </p>
+        <div class="region-stats">
+          <div class="region-stat">
+            <span class="region-stat-value">30+</span>
+            <span class="region-stat-label">Beaches to Explore</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">11mo</span>
+            <span class="region-stat-label">Dry Season</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">95°F</span>
+            <span class="region-stat-label">Peak Season Temp</span>
+          </div>
+        </div>
+        <a href="locations/guanacaste.html" class="tour-link">
+          <i class="fas fa-external-link-alt"></i>
+          View Full Tour
+        </a>
+      </div>
+      <div class="viewer-360">
+        <div class="viewer-360-placeholder">
+          <div class="viewer-360-bg"><i class="fas fa-umbrella-beach"></i></div>
+          <div class="viewer-360-content">
+            <button class="viewer-play-btn" aria-label="Play 360 tour">
+              <i class="fas fa-play" style="margin-left: 4px;"></i>
+            </button>
+            <span class="viewer-label">Interactive 360° Tour</span>
+          </div>
+          <div class="hotspots">
+            <div class="hotspot" style="top: 40%; left: 20%;">
+              <div class="hotspot-dot">1</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Palm Tree Line</p>
+                <p>Shaded shores perfect for relaxation.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 55%; left: 60%;">
+              <div class="hotspot-dot">2</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Clear Waters</p>
+                <p>Perfect for swimming and snorkeling.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 25%; left: 80%;">
+              <div class="hotspot-dot">3</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Pacific Sunset</p>
+                <p>World-renowned for spectacular sunsets.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manuel Antonio Section -->
+  <section class="journey-section" id="manuel-antonio">
+    <div class="parallax-bg-element parallax-bg-1"></div>
+    <div class="journey-section-inner">
+      <div class="region-info">
+        <div class="region-tag">
+          <i class="fas fa-map-marker-alt"></i>
+          Puntarenas Province
+        </div>
+        <h2 class="region-name">Manuel <span>Antonio</span></h2>
+        <p class="region-description">
+          Experience Manuel Antonio, where the rainforest meets the sea. Home to one of Costa Rica's 
+          most beautiful beaches and a thriving national park teeming with wildlife — monkeys, sloths, 
+          toucans, and more. The perfect blend of nature and coastal paradise.
+        </p>
+        <div class="region-stats">
+          <div class="region-stat">
+            <span class="region-stat-value">685</span>
+            <span class="region-stat-label">Hectares National Park</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">3</span>
+            <span class="region-stat-label">Beaches Inside Park</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">109</span>
+            <span class="region-stat-label">Mammal & Bird Species</span>
+          </div>
+        </div>
+        <a href="locations/manuel-antonio.html" class="tour-link">
+          <i class="fas fa-external-link-alt"></i>
+          View Full Tour
+        </a>
+      </div>
+      <div class="viewer-360">
+        <div class="viewer-360-placeholder">
+          <div class="viewer-360-bg"><i class="fas fa-palm-tree"></i></div>
+          <div class="viewer-360-content">
+            <button class="viewer-play-btn" aria-label="Play 360 tour">
+              <i class="fas fa-play" style="margin-left: 4px;"></i>
+            </button>
+            <span class="viewer-label">Interactive 360° Tour</span>
+          </div>
+          <div class="hotspots">
+            <div class="hotspot" style="top: 35%; left: 30%;">
+              <div class="hotspot-dot">1</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Beach Views</p>
+                <p>Pristine white sand meets turquoise water.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 20%; left: 55%;">
+              <div class="hotspot-dot">2</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Rainforest Canopy</p>
+                <p>Lush green covering steep hillsides.</p>
+              </div>
+            </div>
+            <div class="hotspot" style="top: 65%; left: 75%;">
+              <div class="hotspot-dot">3</div>
+              <div class="hotspot-tooltip">
+                <p class="hotspot-title">Wildlife Spotting</p>
+                <p>Monkeys, sloths, and tropical birds.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Monteverde Section -->
+  <section class="journey-section" id="monteverde">
+    <div class="parallax-bg-element parallax-bg-2"></div>
+    <div class="journey-section-inner">
+      <div class="region-info">
+        <div class="region-tag">
+          <i class="fas fa-map-marker-alt"></i>
+          Puntarenas / Alajuela
+        </div>
+        <h2 class="region-name">Monteverde <span>Cloud Forest</span></h2>
+        <p class="region-description">
+          Enter the mystical world of Monteverde, where clouds drift through the forest canopy creating 
+          an ethereal atmosphere. This biological reserve houses over 2,500 plant species, 400+ bird 
+          species, and incredible wildlife including the elusive quetzal.
+        </p>
+        <div class="region-stats">
+          <div class="region-stat">
+            <span class="region-stat-value">2,500+</span>
+            <span class="region-stat-label">Plant Species</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">400+</span>
+            <span class="region-stat-label">Bird Species</span>
+          </div>
+          <div class="region-stat">
+            <span class="region-stat-value">1,440m</span>
+            <span class="region-stat-label">Elevation</span>
+          </div>
+        </div>
+        <a href="contact.html" class="tour-link">
+          <i class="fas fa-external-link-alt"></i>
+          Plan a Monteverde Shoot
+        </a>
+      </div>
+      <div class="viewer-360">
+        <div class="viewer-360-placeholder">
+          <div class="viewer-360-bg"><i class="fas fa-cloud"></i></div>
+          <div class="viewer-360-content">
+            <button class="viewer-play-btn" aria-label="Play 360 tour">
+              <i class="fas fa-play" style="margin-left: 4px;"></i>
+            </button>
+            <span class="viewer-label">Interactive 360° Tour</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+<footer class="footer ys-footer-v2">
+
+    <div class="ys-footer-cta" data-reveal>
+
+      <span class="eyebrow">Let's build something immersive</span>
+
+      <h2>Ready to <span class="highlight">transform</span> how the world sees your business?</h2>
+
+      <p>Get a free 30-minute consultation. We'll plan the perfect 360° experience for your space — no pressure, no jargon.</p>
+
+      <div class="cta-row">
+
+        <a href="contact.html#quote" class="btn-journey btn-journey-primary">Get a Free Quote</a>
+
+        <a href="portfolio.html" class="btn-journey btn-journey-secondary">See Portfolio</a>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="ys-footer-grid">
+
+      <div class="ys-footer-col ys-footer-brand">
+
+        <div class="logo-stack">
+
+          <img src="images/350-x-375-You-see-360-logo-white-for-black-bg-1.png" alt="YouSee360 logo" width="40" height="43" loading="lazy" decoding="async">
+
+          <span>YouSee360</span>
+
+        </div>
+
+        <p class="tagline">Premium 360° media for Costa Rica. We help businesses be seen — fully, beautifully, immersively.</p>
+
+        <div class="ys-footer-social">
+
+          <a href="https://instagram.com/yousee360" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+
+          <a href="https://facebook.com/yousee360" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+
+          <a href="https://youtube.com/@yousee360" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+
+          <a href="https://linkedin.com/company/yousee360" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+
+          <a href="https://wa.me/50687971281" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="ys-footer-col">
+
+        <h3 class="footer-col-title"><a href="services/">Services</a></h3>
+
+        <a href="services/360-photography.html">360° Photography</a>
+
+        <a href="services/360-videography.html">360° Videography</a>
+
+        <a href="services/drone-360-media.html">Drone 360° Media</a>
+
+        <a href="services/google-streetview.html">Google StreetView</a>
+
+        <a href="services/interactive-virtual-tours.html">Interactive Tours</a>
+
+        <a href="services/augmented-reality.html">Augmented Reality</a>
+
+        <a href="services/virtual-reality.html">Virtual Reality</a>
+
+      </div>
+
+
+
+      <div class="ys-footer-col">
+
+        <h3 class="footer-col-title"><a href="industries/">Industries</a></h3>
+
+        <a href="industries/hospitality.html">Hospitality &amp; Resorts</a>
+
+        <a href="industries/real-estate.html">Real Estate</a>
+
+        <a href="industries/restaurants.html">Restaurants</a>
+
+        <a href="industries/adventure-tours.html">Adventure Tours</a>
+
+        <a href="industries/retreat-centers.html">Retreat Centers</a>
+
+        <a href="industries/museums.html">Museums</a>
+
+        <a href="industries/national-parks.html">National Parks</a>
+
+      </div>
+
+
+
+      <div class="ys-footer-col">
+        <h3 class="footer-col-title"><a href="locations/">Locations</a></h3>
+        <a href="locations/la-fortuna-arenal.html">La Fortuna &amp; Arenal</a>
+        <a href="locations/guanacaste.html">Guanacaste</a>
+        <a href="locations/manuel-antonio.html">Manuel Antonio</a>
+        <a href="locations/san-jose.html">San Jos&eacute;</a>
+        <a href="locations/monteverde.html">Monteverde</a>
+        <a href="locations/tamarindo.html">Tamarindo</a>
+        <a href="locations/nosara.html">Nosara</a>
+        <a href="locations/santa-teresa.html">Santa Teresa</a>
+        <a href="journey.html">The Journey</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="blog/">Blog</a>
+      </div>
+
+      <div class="ys-footer-col">
+        <h3 class="footer-col-title">Contact</h3>
+
+        <p class="ys-footer-contact-item"><i class="fas fa-envelope"></i> <a href="mailto:info@yousee360.com">info@yousee360.com</a></p>
+
+        <p class="ys-footer-contact-item"><i class="fas fa-phone"></i> <a href="tel:+50687971281">+506 8797-1281</a></p>
+
+        <p class="ys-footer-contact-item"><i class="fas fa-map-marker-alt"></i> La Fortuna, Alajuela, Costa Rica</p>
+
+        <p class="ys-footer-contact-item"><i class="far fa-clock"></i> Mon–Sat · 8am – 8pm CST</p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="ys-footer-bottom">
+
+      <p>&copy; 2026 YouSee360. Crafted in Costa Rica.</p>
+
+      <div class="ys-footer-legal">
+
+        <a href="privacy-policy.html">Privacy</a>
+
+        <a href="terms-of-service.html">Terms</a>
+
+        <a href="contact.html">Contact</a>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+n
