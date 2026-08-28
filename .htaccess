@@ -38,10 +38,13 @@ DirectoryIndex index.html
 
 <IfModule mod_headers.c>
   # Caches must key on Accept, or a WebP response can be served to a client
-  # that cannot render it.
+  # that cannot render it. Two rules are needed: FilesMatch sees the file that
+  # is finally served, so after the rewrite it matches .webp and never the
+  # original .jpg -- the env flag set on the RewriteRule covers that case.
   <FilesMatch "\.(jpe?g|png)$">
     Header append Vary Accept
   </FilesMatch>
+  Header append Vary Accept env=WEBP_SERVED
 </IfModule>
 
 # ============================================================
