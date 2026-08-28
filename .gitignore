@@ -24,3 +24,4 @@ Screenshot_*.png
 # Local deploy staging folder
 _DEPLOY/
 yousee360-deploy.zip
+_REUPLOAD/

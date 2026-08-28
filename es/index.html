@@ -426,15 +426,42 @@
                 <h2 class="apple-heading">Experiméntalo en <span class="highlight">360°</span></h2>
                 <p class="section-subheading">Explora uno de nuestros tours virtuales</p>
             </div>
-            <div class="tour-container">
-                <div class="tour-frame">
-                    <iframe src="https://elsalto.yousee360.com" title="Tour Virtual de Ejemplo - El Salto Costa Rica"
-                        loading="lazy" allowfullscreen></iframe>
+            <div class="tour-container ys-live-tour-host">
+                <!-- Tour real de cliente. Carga al tocar para no ralentizar la página. -->
+                <div class="ys-live-tour" id="ysLiveTour" data-tour-url="https://elsalto.yousee360.com/"
+                     data-tour-title="El Salto — tour virtual 360° de YouSee360">
+                  <button type="button" class="ys-live-tour-facade" id="ysLiveTourFacade"
+                          aria-label="Cargar el tour virtual 360° de El Salto">
+                    <picture>
+                      <source type="image/webp" srcset="../images/tours/elsalto.webp">
+                      <img src="../images/tours/elsalto.jpg"
+                           width="1200" height="675" loading="lazy" decoding="async"
+                           class="ys-live-tour-poster"
+                           alt="Vista aérea 360° de El Salto, Costa Rica, con el río y las montañas al fondo">
+                    </picture>
+                    <span class="ys-live-tour-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+                    <span class="ys-live-tour-meta">
+                      <span class="ys-live-tour-name">El Salto · Costa Rica</span>
+                      <span class="ys-live-tour-sub">Aéreas · Río · Entorno natural</span>
+                    </span>
+                  </button>
+
+                  <div class="ys-live-tour-frame" id="ysLiveTourFrame"></div>
+
+                  <div class="ys-live-tour-overlay">
+                    <span class="ys-live-tour-badge">360° en vivo</span>
+                    <span class="ys-live-tour-hint"><i class="fas fa-hand-pointer"></i> Toca para explorar</span>
+                  </div>
+                  <a href="https://elsalto.yousee360.com/" target="_blank" rel="noopener"
+                     class="ys-live-tour-expand" aria-label="Abrir el tour de El Salto en una pestaña nueva">
+                    <i class="fas fa-expand"></i>
+                  </a>
                 </div>
+
                 <p class="tour-caption">
                     <i class="fas fa-info-circle"></i>
-                    Haz clic y arrastra para explorar. Usa la rueda del ratón para zoom. Doble clic para pantalla
-                    completa.
+                    Toca para abrir el tour completo. Arrastra para mirar alrededor, usa la rueda para acercar y
+                    el menú para moverte entre áreas.
                 </p>
             </div>
             <div class="tour-cta" style="text-align: center; margin-top: 30px;">
@@ -789,6 +816,42 @@
       }
       if ('requestIdleCallback' in window) requestIdleCallback(mountHeroVideo, { timeout: 2500 });
       else setTimeout(mountHeroVideo, 1500);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var host = document.getElementById('ysLiveTour');
+      var facade = document.getElementById('ysLiveTourFacade');
+      var frame = document.getElementById('ysLiveTourFrame');
+      if (!host || !facade || !frame) return;
+
+      var loaded = false;
+      function loadTour() {
+        if (loaded) return;
+        loaded = true;
+        var iframe = document.createElement('iframe');
+        iframe.src = host.dataset.tourUrl;
+        iframe.title = host.dataset.tourTitle || 'Tour virtual';
+        iframe.allow = 'accelerometer; gyroscope; xr-spatial-tracking; fullscreen';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.loading = 'eager';
+        frame.appendChild(iframe);
+        host.classList.add('is-loaded');
+        if (window.gtag) {
+          window.gtag('event', 'tour_open', { tour: 'elsalto', location: 'home_experience_es' });
+        }
+      }
+
+      facade.addEventListener('click', loadTour);
+      facade.addEventListener('pointerenter', function () {
+        if (loaded || document.getElementById('ysTourPrefetch')) return;
+        var l = document.createElement('link');
+        l.id = 'ysTourPrefetch';
+        l.rel = 'prefetch';
+        l.href = host.dataset.tourUrl;
+        document.head.appendChild(l);
+      }, { once: true });
     })();
   </script>
 </body>
