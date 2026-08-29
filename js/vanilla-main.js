@@ -193,7 +193,7 @@ function createMobileAccordion(dropdown, index) {
     // Header
     const header = document.createElement('div');
     header.className = 'mobile-nav-accordion-header';
-    header.innerHTML = `<span>${toggleText}</span><i class="fas fa-chevron-down"></i>`;
+    header.innerHTML = `<span>${toggleText}</span><i class="fas fa-chevron-down" aria-hidden="true"></i>`;
 
     // Content
     const content = document.createElement('div');

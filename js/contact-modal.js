@@ -12,7 +12,7 @@
     <div class="contact-modal-overlay" id="contactModalOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" hidden>
       <div class="contact-modal">
         <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">
-          <i class="fas fa-times"></i>
+          <i class="fas fa-times" aria-hidden="true"></i>
         </button>
         
         <div class="modal-header">
@@ -23,15 +23,15 @@
         <!-- Trust Signal Bar -->
         <div class="modal-trust-bar">
           <div class="trust-item">
-            <i class="fas fa-clock"></i>
+            <i class="fas fa-clock" aria-hidden="true"></i>
             <span>Response within 24 hours</span>
           </div>
           <div class="trust-item">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-shield-alt" aria-hidden="true"></i>
             <span>100% Secure</span>
           </div>
           <div class="trust-item">
-            <i class="fas fa-comments"></i>
+            <i class="fas fa-comments" aria-hidden="true"></i>
             <span>Free Consultation</span>
           </div>
         </div>
@@ -45,7 +45,7 @@
           <!-- Services Selection -->
           <div class="modal-form-section">
             <label class="modal-section-label">
-              <i class="fas fa-check-circle"></i>
+              <i class="fas fa-check-circle" aria-hidden="true"></i>
               SELECT YOUR SERVICES
               <span class="label-hint">(Select all that apply)</span>
             </label>
@@ -80,7 +80,7 @@
           <!-- Contact Details -->
           <div class="modal-form-section">
             <label class="modal-section-label">
-              <i class="fas fa-user"></i>
+              <i class="fas fa-user" aria-hidden="true"></i>
               YOUR DETAILS
             </label>
             <div class="modal-form-row">
@@ -91,13 +91,13 @@
               <input type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input">
               <input type="email" name="email" placeholder="Email Address *" required class="modal-input" id="modalEmail">
             </div>
-            <textarea name="message" placeholder="Tell us about your project, location, and goals..." required class="modal-textarea" id="modalMessage"></textarea>
+            <textarea name="message" placeholder="Tell us about your project, location, and goals…" required class="modal-textarea" id="modalMessage"></textarea>
           </div>
 
           <!-- Budget Selection -->
           <div class="modal-form-section">
             <label class="modal-section-label">
-              <i class="fas fa-dollar-sign"></i>
+              <i class="fas fa-dollar-sign" aria-hidden="true"></i>
               PROJECT BUDGET (USD)
               <span class="label-hint">(Helps us tailor your quote)</span>
             </label>
@@ -133,12 +133,12 @@
             <button type="submit" class="modal-submit-btn" id="modalSubmitBtn">
               <span class="btn-text">Get Your Free Quote</span>
               <span class="btn-loading" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i> Sending...
+                <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Sending…
               </span>
-              <i class="fas fa-arrow-right btn-arrow"></i>
+              <i class="fas fa-arrow-right btn-arrow" aria-hidden="true"></i>
             </button>
             <p class="modal-guarantee">
-              <i class="fas fa-lock"></i> Your information is secure. We never share your data.
+              <i class="fas fa-lock" aria-hidden="true"></i> Your information is secure. We never share your data.
             </p>
           </div>
         </form>
@@ -146,13 +146,13 @@
         <!-- Success Message -->
         <div class="modal-success" id="modalSuccess" style="display: none;">
           <div class="success-icon">
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
           </div>
           <h3>Thank You! 🎉</h3>
           <p>Your request has been received successfully.</p>
           <div class="success-details">
-            <p><i class="fas fa-clock"></i> We'll respond within <strong>24 hours</strong></p>
-            <p><i class="fas fa-envelope"></i> Check your inbox for a confirmation email</p>
+            <p><i class="fas fa-clock" aria-hidden="true"></i> We'll respond within <strong>24 hours</strong></p>
+            <p><i class="fas fa-envelope" aria-hidden="true"></i> Check your inbox for a confirmation email</p>
           </div>
           <button class="modal-close-success" id="modalCloseSuccess">Close</button>
         </div>
@@ -160,7 +160,7 @@
         <!-- Error Message -->
         <div class="modal-error" id="modalError" style="display: none;">
           <div class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
+            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
           </div>
           <p>Oops! Something went wrong.</p>
           <p class="error-help">Please try again or email us directly at <a href="mailto:info@yousee360.com">info@yousee360.com</a></p>

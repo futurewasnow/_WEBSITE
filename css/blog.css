@@ -93,7 +93,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   text-decoration: none;
 }
 
@@ -144,7 +144,7 @@
   border-radius: var(--radius-xl);
   overflow: hidden;
   margin-bottom: 80px;
-  transition: all 0.5s var(--ease-out);
+  transition: transform 0.5s var(--ease-out), opacity 0.5s var(--ease-out), color 0.5s var(--ease-out), background-color 0.5s var(--ease-out), border-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
 }
 
 .featured-article:hover {
@@ -257,7 +257,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.9rem;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   text-decoration: none;
   width: fit-content;
 }
@@ -304,7 +304,7 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all 0.4s var(--ease-out);
+  transition: transform 0.4s var(--ease-out), opacity 0.4s var(--ease-out), color 0.4s var(--ease-out), background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), filter 0.4s var(--ease-out);
   text-decoration: none;
   display: flex;
   flex-direction: column;
@@ -532,7 +532,7 @@
   color: #fff;
   font-size: 1rem;
   outline: none;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
 
 .newsletter-input:focus {
@@ -554,7 +554,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
 
 .newsletter-btn:hover {
@@ -576,7 +576,7 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 21px;
   text-align: center;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   text-decoration: none;
 }
 
@@ -752,7 +752,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #fff;
-  transition: all 0.3s var(--ease-out);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   text-decoration: none;
 }
 
@@ -802,7 +802,7 @@
   text-decoration: none;
   white-space: nowrap;
   margin-bottom: 40px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, gap 0.3s ease;
 }
 
 @media (max-width: 700px) {

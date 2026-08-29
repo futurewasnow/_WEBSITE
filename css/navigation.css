@@ -61,7 +61,7 @@
     padding: 0 !important;
     margin: 0 !important;
 
-    transition: all var(--nav-transition);
+    transition: transform var(--nav-transition), opacity var(--nav-transition), color var(--nav-transition), background-color var(--nav-transition), border-color var(--nav-transition), box-shadow var(--nav-transition), backdrop-filter var(--nav-transition), -webkit-backdrop-filter var(--nav-transition), padding var(--nav-transition);
 }
 
 /* Scrolled state */
@@ -155,7 +155,7 @@
     white-space: nowrap;
     text-decoration: none !important;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
 }
 
 .navigation-link:hover,
@@ -231,7 +231,7 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: all var(--nav-transition);
+    transition: transform var(--nav-transition), opacity var(--nav-transition), color var(--nav-transition), background-color var(--nav-transition), border-color var(--nav-transition), box-shadow var(--nav-transition);
     z-index: 1000;
 }
 
@@ -256,7 +256,7 @@
     color: var(--nav-text-muted) !important;
     text-decoration: none !important;
     border-radius: 13px;
-    transition: all var(--nav-transition-fast);
+    transition: transform var(--nav-transition-fast), opacity var(--nav-transition-fast), color var(--nav-transition-fast), background-color var(--nav-transition-fast), border-color var(--nav-transition-fast), box-shadow var(--nav-transition-fast);
 }
 
 .w-dropdown-link:hover {
@@ -335,7 +335,7 @@
     transform: translateY(-20px);
     pointer-events: none;
 
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #mobile-nav-overlay.active {
@@ -383,7 +383,7 @@
     /* Animation setup */
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-nav-link:hover,
@@ -439,7 +439,7 @@
     /* Animation setup */
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #mobile-nav-overlay.active .mobile-nav-accordion {
@@ -460,7 +460,7 @@
     padding: 16px 20px;
     border-radius: 13px;
     cursor: pointer;
-    transition: all var(--nav-transition);
+    transition: transform var(--nav-transition), opacity var(--nav-transition), color var(--nav-transition), background-color var(--nav-transition), border-color var(--nav-transition), box-shadow var(--nav-transition);
 }
 
 .mobile-nav-accordion-header:hover,
@@ -503,7 +503,7 @@
     text-align: center;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--nav-transition-fast);
+    transition: transform var(--nav-transition-fast), opacity var(--nav-transition-fast), color var(--nav-transition-fast), background-color var(--nav-transition-fast), border-color var(--nav-transition-fast), box-shadow var(--nav-transition-fast);
 }
 
 .mobile-nav-sublink:last-child {
@@ -540,7 +540,7 @@
     /* Animation setup */
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-nav-cta:hover {

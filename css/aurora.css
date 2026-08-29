@@ -708,10 +708,15 @@ body.aurora-on .footer-col-title::after {
   background: linear-gradient(90deg, var(--aurora-green,#00ff88), var(--aurora-cyan,#22d3ee));
 }
 /* Footer links */
+/* display:block, not inline-block: as inline-block these wrap into shared rows,
+   so a column of eight links rendered as run-on sentences ("360° Photography
+   360° Videography Drone 360° Media") instead of a readable list. */
 body.aurora-on .ys-footer-col a:not(.ys-footer-social a) {
   color: var(--aurora-text-muted);
   transition: color .25s, padding-left .25s var(--ease-aurora);
-  display: inline-block;
+  display: block;
+  width: fit-content;
+  padding: 4px 0;
 }
 body.aurora-on .ys-footer-col > a:hover {
   color: var(--aurora-green, #00ff88);
@@ -729,7 +734,7 @@ body.aurora-on .ys-footer-social a {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   color: var(--aurora-text-muted);
-  transition: all .3s var(--ease-aurora);
+  transition: transform .3s var(--ease-aurora), opacity .3s var(--ease-aurora), color .3s var(--ease-aurora), background-color .3s var(--ease-aurora), border-color .3s var(--ease-aurora), box-shadow .3s var(--ease-aurora);
 }
 body.aurora-on .ys-footer-social a:hover {
   color: #04120c;

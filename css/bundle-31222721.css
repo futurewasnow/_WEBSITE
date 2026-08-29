@@ -3,7 +3,6 @@
  * webflow.css
  * yousee360-66cc79.webflow.css
  * theme.css
- * navigation.css
  * design-system.css
  * page-modules.css
  * nav-v2.css
@@ -11,6 +10,7 @@
  * mobile.css
  * wow.css
  * animations.css
+ * a11y-fixes.css
  */
 /* ===== normalize.css ===== */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -14618,767 +14618,6 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   .scroll-indicator { min-width: 44px; }
 }
 
-/* ===== navigation.css ===== */
-/* ============================================================
-   YOUSEE360 - NAVIGATION SYSTEM
-   Complete, standalone navigation styles
-   Mobile-first responsive design
-   ============================================================ */
-
-/* ============================================================
-   CSS VARIABLES
-   ============================================================ */
-:root {
-    /* Navigation specific colors */
-    --nav-bg: rgba(10, 10, 15, 0.85);
-    --nav-bg-solid: rgba(5, 5, 8, 0.95);
-    --nav-text: rgba(255, 255, 255, 0.9);
-    --nav-text-muted: rgba(255, 255, 255, 0.7);
-    --nav-primary: #01e4e4;
-    --nav-secondary: #00ff66;
-    --nav-border: rgba(255, 255, 255, 0.1);
-    --nav-hover-bg: rgba(255, 255, 255, 0.08);
-
-    /* Timing */
-    --nav-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --nav-transition-fast: 0.2s ease;
-
-    /* Sizes */
-    --nav-height: 80px;
-    --nav-height-mobile: 70px;
-    --nav-blur: 20px;
-}
-
-/* ============================================================
-   NAVIGATION BAR - BASE
-   ============================================================ */
-.navigation-bar,
-.navigation-bar.w-nav {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: var(--nav-height-mobile);
-    z-index: 99999 !important;
-
-    /* Glass effect */
-    background: var(--nav-bg) !important;
-    backdrop-filter: blur(var(--nav-blur)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--nav-blur)) saturate(180%);
-
-    /* Border */
-    border: none !important;
-    border-bottom: 1px solid var(--nav-border) !important;
-    border-radius: 0 !important;
-
-    /* Shadow */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-
-    /* Layout */
-    display: flex !important;
-    align-items: center;
-    padding: 0 !important;
-    margin: 0 !important;
-
-    transition: all var(--nav-transition);
-}
-
-/* Scrolled state */
-.navigation-bar.scrolled {
-    background: var(--nav-bg-solid) !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-
-/* ============================================================
-   NAV CONTAINER
-   ============================================================ */
-.nav-cont,
-.nav-cont.w-container {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    max-width: 1400px !important;
-    height: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 24px !important;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-}
-
-/* ============================================================
-   LOGO
-   ============================================================ */
-.logo.f-logo {
-    position: relative !important;
-    flex-shrink: 0;
-    width: 130px !important;
-    min-width: 130px !important;
-    max-width: 130px !important;
-    height: 45px !important;
-    min-height: 45px !important;
-    max-height: 45px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background-image: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png') !important;
-    background-size: contain !important;
-    background-position: left center !important;
-    background-repeat: no-repeat !important;
-
-    transition: transform var(--nav-transition);
-    z-index: 100;
-}
-
-.logo.f-logo:hover {
-    transform: scale(1.05);
-}
-
-/* ============================================================
-   DESKTOP NAVIGATION MENU (Hidden on Mobile)
-   ============================================================ */
-.navigation-menu,
-.navigation-menu.w-nav-menu {
-    display: none !important;
-    align-items: center;
-    height: 100%;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    position: static !important;
-    width: auto !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transform: none !important;
-    overflow: visible !important;
-    flex-direction: row !important;
-}
-
-/* ============================================================
-   NAVIGATION LINKS - BASE
-   ============================================================ */
-.navigation-link,
-.navigation-link.w-nav-link {
-    display: flex !important;
-    align-items: center;
-    font-family: 'Outfit', 'Montserrat', sans-serif !important;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-    letter-spacing: 0.5px;
-    padding: 10px 16px !important;
-    border-radius: 25px;
-    background: transparent !important;
-    white-space: nowrap;
-    text-decoration: none !important;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.navigation-link:hover,
-.navigation-link.w-nav-link:hover,
-.navigation-link.w--current,
-.navigation-link.w-nav-link.w--current {
-    color: #fff !important;
-    background: var(--nav-hover-bg) !important;
-    border-color: rgba(255, 255, 255, 0.15);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.navigation-link.w--current,
-.navigation-link.w-nav-link.w--current {
-    color: var(--nav-primary) !important;
-    border-color: rgba(1, 228, 228, 0.3);
-    background: rgba(1, 228, 228, 0.1) !important;
-}
-
-/* ============================================================
-   DROPDOWNS - DESKTOP
-   ============================================================ */
-.w-dropdown {
-    position: relative !important;
-    display: inline-flex !important;
-    align-items: center;
-}
-
-.w-dropdown-toggle {
-    display: flex !important;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    padding-right: 8px !important;
-}
-
-.w-dropdown-toggle>div:first-child {
-    order: 1;
-}
-
-.w-icon-dropdown-toggle {
-    order: 2;
-    margin: 0 !important;
-    font-size: 0.7em;
-    transition: transform var(--nav-transition);
-}
-
-.w-dropdown:hover .w-icon-dropdown-toggle,
-.w-dropdown.open .w-icon-dropdown-toggle {
-    transform: rotate(180deg);
-}
-
-/* Dropdown List */
-.w-dropdown-list {
-    position: absolute !important;
-    top: 100% !important;
-    left: 50% !important;
-    transform: translateX(-50%) translateY(10px) !important;
-    min-width: 240px;
-    padding: 10px !important;
-    margin-top: 10px !important;
-
-    background: rgba(15, 15, 20, 0.95) !important;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 21px !important;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(1, 228, 228, 0.05);
-
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: all var(--nav-transition);
-    z-index: 1000;
-}
-
-/* Show dropdown on hover/open */
-.w-dropdown:hover .w-dropdown-list,
-.w-dropdown.open .w-dropdown-list,
-.w-dropdown-list.w--open {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0) !important;
-}
-
-/* Dropdown Links */
-.w-dropdown-link {
-    display: block !important;
-    padding: 12px 18px !important;
-    margin: 2px 0;
-    font-family: 'Outfit', 'Montserrat', sans-serif !important;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: var(--nav-text-muted) !important;
-    text-decoration: none !important;
-    border-radius: 13px;
-    transition: all var(--nav-transition-fast);
-}
-
-.w-dropdown-link:hover {
-    background: var(--nav-primary) !important;
-    color: #000 !important;
-    transform: translateX(5px);
-}
-
-/* ============================================================
-   HAMBURGER BUTTON
-   ============================================================ */
-.hamburger-button,
-.hamburger-button.w-nav-button,
-.w-nav-button {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background var(--nav-transition);
-    z-index: 100;
-}
-
-.hamburger-button:hover {
-    background: var(--nav-hover-bg) !important;
-}
-
-.w-icon-nav-menu,
-.hamburger-button .icon {
-    font-size: 28px !important;
-    color: var(--nav-primary) !important;
-    line-height: 1;
-}
-
-/* Hamburger animation when open */
-.hamburger-button.is-open .w-icon-nav-menu,
-.w-nav-button.w--open .w-icon-nav-menu {
-    color: #fff !important;
-}
-
-/* ============================================================
-   MOBILE MENU OVERLAY
-   ============================================================ */
-#mobile-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    /* Dynamic viewport height for mobile */
-    z-index: 99998;
-
-    background: rgba(5, 5, 8, 0.98);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: calc(var(--nav-height-mobile) + 20px) 20px 40px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-
-    /* Initial state - hidden */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    pointer-events: none;
-
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#mobile-nav-overlay.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* Hide scrollbar */
-#mobile-nav-overlay::-webkit-scrollbar {
-    display: none;
-}
-
-#mobile-nav-overlay {
-    scrollbar-width: none;
-}
-
-/* ============================================================
-   MOBILE MENU CONTAINER
-   ============================================================ */
-.mobile-nav-inner {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* ============================================================
-   MOBILE MENU LINKS
-   ============================================================ */
-.mobile-nav-link {
-    display: block;
-    font-family: 'Outfit', 'Montserrat', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--nav-text);
-    text-decoration: none;
-    text-align: center;
-    padding: 16px 20px;
-    border-radius: 13px;
-    cursor: pointer;
-
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mobile-nav-link:hover,
-.mobile-nav-link:active {
-    color: var(--nav-primary);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-#mobile-nav-overlay.active .mobile-nav-link {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Staggered animation delays */
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(1) {
-    transition-delay: 0.05s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(2) {
-    transition-delay: 0.1s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(3) {
-    transition-delay: 0.15s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(4) {
-    transition-delay: 0.2s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(5) {
-    transition-delay: 0.25s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(6) {
-    transition-delay: 0.3s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(7) {
-    transition-delay: 0.35s;
-}
-
-#mobile-nav-overlay.active .mobile-nav-link:nth-child(8) {
-    transition-delay: 0.4s;
-}
-
-/* ============================================================
-   MOBILE ACCORDION (Dropdowns)
-   ============================================================ */
-.mobile-nav-accordion {
-    width: 100%;
-
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#mobile-nav-overlay.active .mobile-nav-accordion {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.mobile-nav-accordion-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Outfit', 'Montserrat', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--nav-text);
-    text-align: center;
-    padding: 16px 20px;
-    border-radius: 13px;
-    cursor: pointer;
-    transition: all var(--nav-transition);
-}
-
-.mobile-nav-accordion-header:hover,
-.mobile-nav-accordion-header.active {
-    color: var(--nav-primary);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.mobile-nav-accordion-header i {
-    font-size: 0.8em;
-    transition: transform var(--nav-transition);
-}
-
-.mobile-nav-accordion-header.active i {
-    transform: rotate(180deg);
-}
-
-/* Accordion Content */
-.mobile-nav-accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 13px;
-    margin: 0 10px;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mobile-nav-accordion.open .mobile-nav-accordion-content {
-    max-height: 500px;
-    /* Enough for all items */
-}
-
-.mobile-nav-sublink {
-    display: block;
-    font-family: 'Outfit', 'Montserrat', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--nav-text-muted);
-    text-decoration: none;
-    text-align: center;
-    padding: 14px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--nav-transition-fast);
-}
-
-.mobile-nav-sublink:last-child {
-    border-bottom: none;
-}
-
-.mobile-nav-sublink:hover,
-.mobile-nav-sublink:active {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* ============================================================
-   MOBILE CTA BUTTON
-   ============================================================ */
-.mobile-nav-cta {
-    display: inline-block;
-    margin-top: 24px;
-    padding: 18px 40px;
-
-    font-family: 'Outfit', 'Montserrat', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-decoration: none;
-    text-align: center;
-
-    background: var(--nav-primary);
-    color: #000 !important;
-    border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(1, 228, 228, 0.3);
-
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mobile-nav-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(1, 228, 228, 0.4);
-}
-
-#mobile-nav-overlay.active .mobile-nav-cta {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: 0.45s;
-}
-
-/* ============================================================
-   LANGUAGE SWITCHER
-   ============================================================ */
-.nav-lang-switch {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem !important;
-    opacity: 0.7;
-}
-
-.nav-lang-switch:hover {
-    opacity: 1;
-}
-
-.nav-lang-switch i {
-    font-size: 0.9em;
-}
-
-/* ============================================================
-   RESPONSIVE - TABLET (768px - 991px)
-   ============================================================ */
-@media (min-width: 768px) and (max-width: 991px) {
-    .navigation-bar {
-        height: 75px;
-    }
-
-    .logo.f-logo {
-        width: 140px !important;
-        height: 48px !important;
-    }
-
-    #mobile-nav-overlay {
-        padding-top: calc(75px + 30px);
-    }
-
-    .mobile-nav-link,
-    .mobile-nav-accordion-header {
-        font-size: 1.8rem;
-    }
-}
-
-/* ============================================================
-   RESPONSIVE - DESKTOP (992px+)
-   ============================================================ */
-@media (min-width: 992px) {
-    .navigation-bar {
-        height: var(--nav-height);
-    }
-
-    .logo.f-logo {
-        width: 160px !important;
-        max-width: 160px !important;
-        height: 55px !important;
-        max-height: 55px !important;
-    }
-
-    /* Show desktop nav */
-    .navigation-menu,
-    .navigation-menu.w-nav-menu {
-        display: flex !important;
-    }
-
-    /* Hide hamburger */
-    .hamburger-button,
-    .hamburger-button.w-nav-button,
-    .w-nav-button {
-        display: none !important;
-    }
-
-    /* Hide mobile overlay on desktop */
-    #mobile-nav-overlay {
-        display: none !important;
-    }
-
-    .nav-cont {
-        padding: 0 40px !important;
-    }
-}
-
-/* ============================================================
-   RESPONSIVE - LARGE DESKTOP (1400px+)
-   ============================================================ */
-@media (min-width: 1400px) {
-    .nav-cont {
-        max-width: 1600px !important;
-        padding: 0 60px !important;
-    }
-
-    .navigation-link.w-nav-link {
-        font-size: 0.9rem !important;
-        padding: 10px 16px !important;
-    }
-}
-
-/* ============================================================
-   SMALL MOBILE (< 480px)
-   ============================================================ */
-@media (max-width: 479px) {
-    .navigation-bar {
-        height: 65px;
-    }
-
-    .logo.f-logo {
-        width: 110px !important;
-        min-width: 110px !important;
-        height: 40px !important;
-    }
-
-    .hamburger-button {
-        width: 44px;
-        height: 44px;
-    }
-
-    .w-icon-nav-menu {
-        font-size: 24px !important;
-    }
-
-    #mobile-nav-overlay {
-        padding-top: calc(65px + 15px);
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .mobile-nav-link,
-    .mobile-nav-accordion-header {
-        font-size: 1.3rem;
-        padding: 14px 16px;
-    }
-
-    .mobile-nav-sublink {
-        font-size: 1rem;
-        padding: 12px 16px;
-    }
-
-    .mobile-nav-cta {
-        padding: 16px 32px;
-        font-size: 0.9rem;
-    }
-}
-
-/* ============================================================
-   BODY SCROLL LOCK
-   ============================================================ */
-body.nav-open {
-    overflow: hidden !important;
-    position: fixed;
-    width: 100%;
-}
-
-/* ============================================================
-   ACCESSIBILITY
-   ============================================================ */
-.navigation-link:focus,
-.w-dropdown-toggle:focus,
-.w-dropdown-link:focus,
-.hamburger-button:focus,
-.mobile-nav-link:focus,
-.mobile-nav-accordion-header:focus,
-.mobile-nav-sublink:focus {
-    outline: 2px solid var(--nav-primary);
-    outline-offset: 2px;
-}
-
-/* Skip link */
-.skip-to-content {
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    background: var(--nav-primary);
-    color: #000;
-    font-weight: 600;
-    border-radius: 0 0 8px 8px;
-    z-index: 999999;
-    transition: top 0.3s ease;
-}
-
-.skip-to-content:focus {
-    top: 0;
-}
-
-/* ============================================================
-   HIDE OLD WEBFLOW MOBILE MENU
-   ============================================================ */
-@media (max-width: 991px) {
-
-    .w-nav-menu[data-nav-menu-open],
-    .w-nav-overlay {
-        display: none !important;
-    }
-}
-
-/* ============================================================
-   FIX Z-INDEX STACKING
-   ============================================================ */
-.hero-section {
-    z-index: 1;
-}
-
-.section {
-    z-index: 5;
-}
 /* ===== design-system.css ===== */
 /* ============================================================
    YOUSEE360 — DESIGN SYSTEM v2
@@ -21246,4 +20485,169 @@ body {
   .service-options .apple-heading {
     font-size: 1.8rem;
   }
+}
+/* ===== a11y-fixes.css ===== */
+/* ============================================================
+   ACCESSIBILITY & INTERACTION FIXES
+   Loaded last in every bundle so it can correct rules that
+   earlier stylesheets set with !important.
+   ============================================================ */
+
+/* --- Dark colour scheme ---------------------------------------------------
+   Tells the UA to paint scrollbars, form controls, native selects and the
+   spellcheck underline for a dark page. Without it Windows/Chrome renders
+   <select> and <input> chrome in light mode on a black background. */
+:root {
+  color-scheme: dark;
+}
+
+/* --- Focus rings ----------------------------------------------------------
+   Several stylesheets clear the outline on :focus (some with !important) and
+   replace it with a border/box-shadow only. That also removes the ring for
+   keyboard users, so restore a real :focus-visible ring here. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.w-input:focus-visible,
+.w-select:focus-visible,
+.modal-input:focus-visible,
+.modal-textarea:focus-visible,
+.modal-select:focus-visible,
+.ys-form-field input:focus-visible,
+.ys-form-field select:focus-visible,
+.ys-form-field textarea:focus-visible,
+.ys-protected-input:focus-visible,
+.utility-page-form input:focus-visible,
+.cf-contact-form-field:focus-visible,
+.glass-input:focus-visible,
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 1px !important;
+}
+
+/* Checkbox/radio cards: the real control is visually hidden, so the ring has
+   to show on the wrapping label instead. */
+.modal-checkbox:focus-within,
+.modal-radio:focus-within,
+.ys-estimator-option:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+/* --- Anchor targets under the fixed header --------------------------------
+   The navigation is position: fixed, so an in-page jump would otherwise land
+   with the target hidden behind it. */
+:target,
+[id]:is(h1, h2, h3, h4, h5, h6),
+section[id],
+article[id],
+div[id][class*="section"],
+#main,
+#What {
+  scroll-margin-top: 96px;
+}
+
+@media (max-width: 768px) {
+  :target,
+  [id]:is(h1, h2, h3, h4, h5, h6),
+  section[id],
+  article[id],
+  div[id][class*="section"],
+  #main,
+  #What {
+    scroll-margin-top: 76px;
+  }
+}
+
+/* --- Touch behaviour ------------------------------------------------------
+   Removes the 300ms double-tap-to-zoom delay on tap targets without
+   disabling pinch zoom on the page itself. */
+a,
+button,
+summary,
+label,
+[role="button"],
+[role="tab"],
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+input[type="radio"],
+.portfolio-filter-btn,
+.faq-question,
+.process-tab-btn,
+.ys-estimator-option {
+  touch-action: manipulation;
+}
+
+/* --- Scroll containment in overlays ---------------------------------------
+   Keeps a modal/lightbox scroll from chaining to the page behind it. */
+.contact-modal-overlay,
+.contact-modal,
+.modal-overlay,
+.modal-body,
+.ys-lightbox,
+.lightbox-overlay,
+.portfolio-lightbox,
+.pricing-lightbox,
+.mobile-menu,
+.side-nav,
+.nav-drawer {
+  overscroll-behavior: contain;
+}
+
+/* --- Screen-reader-only helper -------------------------------------------- */
+.ys-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Hero video pause control --------------------------------------------- */
+.hero-video-toggle {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background-color .2s ease, border-color .2s ease, opacity .2s ease;
+}
+
+.hero-video-toggle:hover {
+  background: rgba(0, 0, 0, 0.68);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-video-toggle[hidden] {
+  display: none;
 }

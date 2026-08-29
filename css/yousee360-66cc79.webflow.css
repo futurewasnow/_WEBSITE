@@ -254,7 +254,7 @@ p {
   background-color: #22b2c900;
   border-radius: 21px;
   margin-top: 0;
-  transition: all .3s ease-in-out;
+  transition: transform .3s ease-in-out, opacity .3s ease-in-out, color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out, text-shadow .3s ease-in-out;
   transform: scale(.8);
 }
 
@@ -1868,7 +1868,7 @@ p {
   font-weight: 600;
   line-height: 1.5;
   text-decoration: none;
-  transition: all .3s;
+  transition: transform .3s, opacity .3s, color .3s, background-color .3s, border-color .3s, box-shadow .3s;
   display: flex;
   box-shadow: 0 1px 2px #1018280d;
 }
@@ -2434,7 +2434,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .2s;
+  transition: transform .2s, opacity .2s, color .2s, background-color .2s, border-color .2s, box-shadow .2s;
   display: flex;
 }
 
@@ -2453,7 +2453,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .35s;
+  transition: transform .35s, opacity .35s, color .35s, background-color .35s, border-color .35s, box-shadow .35s;
 }
 
 .f-navigation-link:hover {
@@ -2624,7 +2624,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .2s;
+  transition: transform .2s, opacity .2s, color .2s, background-color .2s, border-color .2s, box-shadow .2s;
   display: flex;
 }
 
@@ -2643,7 +2643,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .35s;
+  transition: transform .35s, opacity .35s, color .35s, background-color .35s, border-color .35s, box-shadow .35s;
 }
 
 .f-navigation-link-2:hover {

@@ -53,14 +53,14 @@
     // Tap hint
     const hint = document.createElement('span');
     hint.className = 'ys-tour-drag-hint';
-    hint.innerHTML = '<i class="fas fa-vr-cardboard"></i> Tap to explore';
+    hint.innerHTML = '<i class="fas fa-vr-cardboard" aria-hidden="true"></i> Tap to explore';
     media.appendChild(hint);
 
     // A play affordance so it's obviously interactive
     const play = document.createElement('span');
     play.className = 'ys-tour-playbtn';
     play.setAttribute('aria-hidden', 'true');
-    play.innerHTML = '<i class="fas fa-play"></i>';
+    play.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i>';
     media.appendChild(play);
 
     // Whole media area opens the live tour

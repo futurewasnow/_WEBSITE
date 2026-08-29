@@ -141,13 +141,13 @@
     bar.setAttribute('aria-label', es ? 'Acciones rápidas' : 'Quick actions');
     bar.innerHTML = `
       <a href="tel:${phone}" class="btn-call" aria-label="${es ? 'Llamar' : 'Call'}">
-        <i class="fas fa-phone"></i><span>${es ? 'Llamar' : 'Call'}</span>
+        <i class="fas fa-phone" aria-hidden="true"></i><span>${es ? 'Llamar' : 'Call'}</span>
       </a>
       <a href="${whatsapp}" class="btn-wa" target="_blank" rel="noopener" aria-label="WhatsApp">
-        <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+        <i class="fab fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span>
       </a>
       <a href="${quoteHref}" class="btn-quote" aria-label="${es ? 'Cotización' : 'Quote'}">
-        <i class="fas fa-bolt"></i><span>${es ? 'Cotización Gratis' : 'Get a Quote'}</span>
+        <i class="fas fa-bolt" aria-hidden="true"></i><span>${es ? 'Cotización Gratis' : 'Get a Quote'}</span>
       </a>
     `;
     document.body.appendChild(bar);
@@ -183,17 +183,17 @@
     fab.innerHTML = `
       <div class="ys-fab-options" role="menu">
         <a href="mailto:info@yousee360.com" class="ys-fab-option" style="--i:0" role="menuitem">
-          <i class="fas fa-envelope"></i> info@yousee360.com
+          <i class="fas fa-envelope" aria-hidden="true"></i> info@yousee360.com
         </a>
         <a href="${whatsapp}" target="_blank" rel="noopener" class="ys-fab-option" style="--i:1" role="menuitem">
-          <i class="fab fa-whatsapp"></i> ${es ? 'Chatear' : 'Chat on WhatsApp'}
+          <i class="fab fa-whatsapp" aria-hidden="true"></i> ${es ? 'Chatear' : 'Chat on WhatsApp'}
         </a>
         <a href="tel:${phone}" class="ys-fab-option" style="--i:2" role="menuitem">
-          <i class="fas fa-phone"></i> ${phoneHuman}
+          <i class="fas fa-phone" aria-hidden="true"></i> ${phoneHuman}
         </a>
       </div>
       <button class="ys-fab-trigger" aria-label="${es ? 'Contacto' : 'Contact options'}" aria-expanded="false">
-        <i class="fas fa-plus"></i>
+        <i class="fas fa-plus" aria-hidden="true"></i>
       </button>
     `;
     document.body.appendChild(fab);
@@ -216,7 +216,11 @@
      Hooks into Pannellum viewers + adds tilt-to-look-around
      ================================================================= */
   function initGyro() {
-    const containers = document.querySelectorAll('.ys-360-hero, .featured-tour-container, [data-pannellum]');
+    // Only interactive viewers, never a decorative hero backdrop. The hero
+    // panorama sits behind the headline, so attaching the prompt there covered
+    // the H1 with a dark blurred overlay reading "Move your phone to explore".
+    const containers = [...document.querySelectorAll('.ys-360-hero, .featured-tour-container, [data-pannellum]')]
+      .filter(c => !c.closest('.hero-section') && !c.classList.contains('ys-hero-360-bg'));
     if (!containers.length) return;
     // Only on touch devices that support orientation
     const hasOrient = ('DeviceOrientationEvent' in window);
@@ -237,7 +241,7 @@
       prompt.className = 'ys-gyro-prompt';
       prompt.innerHTML = `
         <div class="ys-gyro-prompt-inner">
-          <div class="ys-gyro-prompt-icon"><i class="fas fa-mobile-alt"></i></div>
+          <div class="ys-gyro-prompt-icon"><i class="fas fa-mobile-alt" aria-hidden="true"></i></div>
           <h4>Move your phone to explore</h4>
           <p>Tilt and pan to look around. Drag with your finger if you prefer.</p>
           <button type="button">Enable Motion</button>

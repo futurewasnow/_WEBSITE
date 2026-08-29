@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#06070a">
   <link rel="canonical" href="https://yousee360.com/internal-quote.html" />
   <meta property="og:url" content="https://yousee360.com/internal-quote.html">
   <meta property="og:type" content="website">
@@ -792,7 +793,7 @@
             color: #000;
         }
     </style>
-  <link href="css/bundle-a432a7ae.css?v=a432a7ae" rel="stylesheet" type="text/css">
+  <link href="css/bundle-69a4c244.css?v=69a4c244" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -817,9 +818,9 @@
     <div id="app-layer">
         <!-- SIDEBAR -->
         <div class="sidebar">
-            <div class="nav-icon active"><i class="fas fa-calculator"></i></div>
-            <div class="nav-icon" title="Reset" onclick="resetApp()"><i class="fas fa-undo"></i></div>
-            <div class="nav-icon" title="Edit Rates" onclick="openRateEditor()"><i class="fas fa-cog"></i></div>
+            <div class="nav-icon active"><i class="fas fa-calculator" aria-hidden="true"></i></div>
+            <div class="nav-icon" title="Reset" onclick="resetApp()"><i class="fas fa-undo" aria-hidden="true"></i></div>
+            <div class="nav-icon" title="Edit Rates" onclick="openRateEditor()"><i class="fas fa-cog" aria-hidden="true"></i></div>
         </div>
 
         <!-- CONFIG -->
@@ -830,7 +831,7 @@
                     <select aria-label="Preset Sel" id="preset-sel" class="inp"
                         style="width: 140px; margin: 0; padding: 6px 12px; font-size: 0.8rem; height: auto;"
                         onchange="applyPreset()">
-                        <option value="">Load Preset...</option>
+                        <option value="">Load Preset…</option>
                         <option value="hotel">Hotel Package</option>
                         <option value="realestate">Real Estate</option>
                         <option value="restaurant">Restaurant / Bar</option>
@@ -875,12 +876,12 @@
                     <input aria-label="P Date Exp" type="date" id="p-date-exp" class="inp" onchange="render()">
 
                     <label class="inp-label">Introductory Note</label>
-                    <textarea aria-label="Optional personal message" id="p-note" class="inp" rows="3" placeholder="Optional personal message..."
+                    <textarea aria-label="Optional personal message" id="p-note" class="inp" rows="3" placeholder="Optional personal message…"
                         style="resize:vertical;" oninput="render()"></textarea>
 
                     <!-- Wise Suggestion Panel -->
                     <div id="wise-panel" class="wise-box hidden" style="margin-top:10px; margin-bottom:0;">
-                        <i class="fas fa-lightbulb wise-icon"></i>
+                        <i class="fas fa-lightbulb wise-icon" aria-hidden="true"></i>
                         <div class="wise-content" id="wise-text">
                             <strong>Wise Suggestion</strong>
                             <span>Consider adding social reels for better reach.</span>
@@ -893,8 +894,8 @@
                     <!-- Tour -->
                     <div class="svc-card active" id="card-tour">
                         <div class="svc-head" onclick="toggleCard('card-tour')">
-                            <span><i class="fas fa-street-view" style="color:var(--cyan)"></i> VIRTUAL TOUR</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-street-view" style="color:var(--cyan)" aria-hidden="true"></i> VIRTUAL TOUR</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -943,8 +944,8 @@
                     <!-- Video -->
                     <div class="svc-card" id="card-vid">
                         <div class="svc-head" onclick="toggleCard('card-vid')">
-                            <span><i class="fas fa-video" style="color:var(--green)"></i> Video Content</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-video" style="color:var(--green)" aria-hidden="true"></i> Video Content</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -981,8 +982,8 @@
                     <!-- Drone Photo -->
                     <div class="svc-card" id="card-drone-p">
                         <div class="svc-head" onclick="toggleCard('card-drone-p')">
-                            <span><i class="fas fa-camera" style="color:violet"></i> AERIAL PHOTO</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-camera" style="color:violet" aria-hidden="true"></i> AERIAL PHOTO</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -1000,8 +1001,8 @@
                     <!-- Drone Video -->
                     <div class="svc-card" id="card-drone-v">
                         <div class="svc-head" onclick="toggleCard('card-drone-v')">
-                            <span><i class="fas fa-helicopter" style="color:violet"></i> AERIAL VIDEO</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-helicopter" style="color:violet" aria-hidden="true"></i> AERIAL VIDEO</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -1019,8 +1020,8 @@
                     <!-- HDR -->
                     <div class="svc-card" id="card-hdr">
                         <div class="svc-head" onclick="toggleCard('card-hdr')">
-                            <span><i class="fas fa-camera" style="color:orange"></i> HDR Photo</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-camera" style="color:orange" aria-hidden="true"></i> HDR Photo</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -1039,7 +1040,7 @@
                 <!-- TAB: DIGITAL -->
                 <div id="tab-digital" class="tab-content hidden">
                     <div class="svc-card active">
-                        <div class="svc-head"><span><i class="fas fa-globe"></i> Digital Presence</span></div>
+                        <div class="svc-head"><span><i class="fas fa-globe" aria-hidden="true"></i> Digital Presence</span></div>
                         <div class="svc-body" style="max-height:800px; opacity:1;">
                             <label class="inp-label">Website Development</label>
                             <select aria-label="Sel Web" id="sel-web" class="inp" onchange="render()">
@@ -1072,8 +1073,8 @@
 
                     <div class="svc-card" id="card-ota">
                         <div class="svc-head" onclick="toggleCard('card-ota')">
-                            <span><i class="fas fa-sync"></i> OTA & Channels</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <span><i class="fas fa-sync" aria-hidden="true"></i> OTA & Channels</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </div>
                         <div class="svc-body">
                             <div class="range-group">
@@ -1210,13 +1211,13 @@
                 </div>
             </div>
 
-            <button class="fab-pdf" onclick="generatePDF()"><i class="fas fa-file-pdf"></i></button>
+            <button class="fab-pdf" type="button" aria-label="Download Quote as PDF" onclick="generatePDF()"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
         </div>
         <div id="rate-modal">
             <div class="rate-panel">
                 <div class="rate-head">
                     <div style="font-weight:700;">EDIT BASE RATES</div>
-                    <div onclick="closeRateEditor()" style="cursor:pointer;"><i class="fas fa-times"></i></div>
+                    <div onclick="closeRateEditor()" style="cursor:pointer;"><i class="fas fa-times" aria-hidden="true"></i></div>
                 </div>
                 <div class="rate-body" id="rate-list">
                     <!-- Injected via JS -->
@@ -1240,7 +1241,7 @@
             keys.forEach(k => {
                 const btn = document.createElement('div');
                 btn.className = 'key';
-                btn.innerHTML = k === '>' ? '<i class="fas fa-arrow-right"></i>' : k;
+                btn.innerHTML = k === '>' ? '<i class="fas fa-arrow-right" aria-hidden="true"></i>' : k;
                 btn.onclick = () => handlePin(k);
                 kb.appendChild(btn);
             });
@@ -1557,7 +1558,7 @@
             let subtotal = 0;
 
             if (items.length === 0) {
-                tb.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:40px; color:#ccc'>Configure project scope to generate estimate...</td></tr>";
+                tb.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:40px; color:#ccc'>Configure project scope to generate estimate…</td></tr>";
             } else {
                 items.forEach(i => {
                     subtotal += i.total;

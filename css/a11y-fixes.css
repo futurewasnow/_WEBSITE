@@ -1,0 +1,164 @@
+/* ============================================================
+   ACCESSIBILITY & INTERACTION FIXES
+   Loaded last in every bundle so it can correct rules that
+   earlier stylesheets set with !important.
+   ============================================================ */
+
+/* --- Dark colour scheme ---------------------------------------------------
+   Tells the UA to paint scrollbars, form controls, native selects and the
+   spellcheck underline for a dark page. Without it Windows/Chrome renders
+   <select> and <input> chrome in light mode on a black background. */
+:root {
+  color-scheme: dark;
+}
+
+/* --- Focus rings ----------------------------------------------------------
+   Several stylesheets clear the outline on :focus (some with !important) and
+   replace it with a border/box-shadow only. That also removes the ring for
+   keyboard users, so restore a real :focus-visible ring here. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.w-input:focus-visible,
+.w-select:focus-visible,
+.modal-input:focus-visible,
+.modal-textarea:focus-visible,
+.modal-select:focus-visible,
+.ys-form-field input:focus-visible,
+.ys-form-field select:focus-visible,
+.ys-form-field textarea:focus-visible,
+.ys-protected-input:focus-visible,
+.utility-page-form input:focus-visible,
+.cf-contact-form-field:focus-visible,
+.glass-input:focus-visible,
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 1px !important;
+}
+
+/* Checkbox/radio cards: the real control is visually hidden, so the ring has
+   to show on the wrapping label instead. */
+.modal-checkbox:focus-within,
+.modal-radio:focus-within,
+.ys-estimator-option:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+/* --- Anchor targets under the fixed header --------------------------------
+   The navigation is position: fixed, so an in-page jump would otherwise land
+   with the target hidden behind it. */
+:target,
+[id]:is(h1, h2, h3, h4, h5, h6),
+section[id],
+article[id],
+div[id][class*="section"],
+#main,
+#What {
+  scroll-margin-top: 96px;
+}
+
+@media (max-width: 768px) {
+  :target,
+  [id]:is(h1, h2, h3, h4, h5, h6),
+  section[id],
+  article[id],
+  div[id][class*="section"],
+  #main,
+  #What {
+    scroll-margin-top: 76px;
+  }
+}
+
+/* --- Touch behaviour ------------------------------------------------------
+   Removes the 300ms double-tap-to-zoom delay on tap targets without
+   disabling pinch zoom on the page itself. */
+a,
+button,
+summary,
+label,
+[role="button"],
+[role="tab"],
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+input[type="radio"],
+.portfolio-filter-btn,
+.faq-question,
+.process-tab-btn,
+.ys-estimator-option {
+  touch-action: manipulation;
+}
+
+/* --- Scroll containment in overlays ---------------------------------------
+   Keeps a modal/lightbox scroll from chaining to the page behind it. */
+.contact-modal-overlay,
+.contact-modal,
+.modal-overlay,
+.modal-body,
+.ys-lightbox,
+.lightbox-overlay,
+.portfolio-lightbox,
+.pricing-lightbox,
+.mobile-menu,
+.side-nav,
+.nav-drawer {
+  overscroll-behavior: contain;
+}
+
+/* --- Screen-reader-only helper -------------------------------------------- */
+.ys-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Hero video pause control --------------------------------------------- */
+.hero-video-toggle {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background-color .2s ease, border-color .2s ease, opacity .2s ease;
+}
+
+.hero-video-toggle:hover {
+  background: rgba(0, 0, 0, 0.68);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-video-toggle[hidden] {
+  display: none;
+}

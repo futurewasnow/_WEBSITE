@@ -1,4 +1,4 @@
-/*! YouSee360 CSS bundle — 9 files, exact concatenation of:
+/*! YouSee360 CSS bundle — 13 files, exact concatenation of:
  * normalize.css
  * webflow.css
  * yousee360-66cc79.webflow.css
@@ -7,7 +7,11 @@
  * design-system.css
  * page-modules.css
  * nav-v2.css
+ * perf-fixes.css
+ * mobile.css
+ * wow.css
  * animations.css
+ * a11y-fixes.css
  */
 /* ===== normalize.css ===== */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -18545,6 +18549,1645 @@ section.hero:first-of-type {
   padding-top: clamp(120px, 14vh, 180px) !important;
 }
 
+/* ===== perf-fixes.css ===== */
+/* ============================================================
+   YOUSEE360 — SCROLL PERFORMANCE FIXES
+   Loaded LAST. Strips expensive paint triggers off elements that
+   don't benefit from them, so native scrolling stays smooth.
+   ============================================================ */
+
+/* 1. Kill backdrop-filter on static cards/panels — they sit on a
+      solid dark bg so the blur is pure cost with no visual benefit.
+      Keep blur only on the nav and dropdown which actually overlap content. */
+.ds-card,
+.bento-card,
+.value-card,
+.ys-package,
+.ys-testimonial,
+.ys-portfolio-tile,
+.ys-contact-card,
+.glass-panel,
+.featured-tour-container,
+.utility-page-content,
+.ys-trust,
+.ys-trust-badge,
+.contact-item,
+.faq-item,
+.accordion-item {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 2. The custom-cursor CSS used mix-blend-mode: difference, which
+      promotes layers and causes paint storms even when the cursor is
+      hidden. Force it off site-wide. */
+.ys-cursor-dot,
+.ys-cursor-ring {
+  mix-blend-mode: normal !important;
+}
+
+/* 3. Limit will-change to the elements that animate. Indiscriminate
+      will-change on transitions makes the GPU hold layers forever. */
+.ds-card, .bento-card, .value-card, .ys-package,
+.ys-testimonial, .ys-portfolio-tile, .nav-cta,
+.portfolio-card, .ys-trust-badge, .ds-btn {
+  will-change: auto;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .ys-portfolio-tile:hover, .nav-cta:hover,
+.portfolio-card:hover, .ds-btn:hover {
+  will-change: transform;
+}
+
+/* 4. Off-screen sections skip layout/paint until near viewport. */
+section, .ys-section, .ds-section,
+.ys-portfolio-teaser, .ys-testimonials, .ys-pricing,
+.values-section, .mission-section, .founder-section,
+.process-timeline, .industry-applications, .strategic-benefits {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* Don't apply to hero — first paint matters there */
+.hero-section, section.hero-section,
+.about-hero, .portfolio-hero,
+section[id="Hero"], #Hero {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+/* 5. Disable expensive card cursor-tracking glow on mid/low-power
+      devices and during scroll. */
+@media (max-width: 1024px), (pointer: coarse) {
+  .ds-card::before, .bento-card::before { display: none !important; }
+}
+
+/* 6. Tone down hover transition that animates box-shadow on big cards
+      (shadow re-blur during scroll = janky on weaker GPUs). */
+.ds-card, .bento-card, .value-card,
+.ys-package, .portfolio-card {
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1),
+              border-color .3s ease !important;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .portfolio-card:hover {
+  box-shadow: none !important;
+}
+.ds-card:hover, .bento-card:hover, .value-card:hover,
+.ys-package:hover, .portfolio-card:hover,
+.ys-portfolio-tile:hover {
+  transform: translateY(-3px);
+}
+
+/* 7. Pannellum + tour iframes — promote to their own layer so they
+      don't repaint with surrounding content. */
+.ys-360-hero, .featured-tour-container, [data-pannellum] {
+  transform: translateZ(0);
+}
+
+/* 8. The marquee animation — confine to its own layer */
+.ys-marquee-track {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 9. Body / html — let the browser scroll natively */
+html { scroll-behavior: auto !important; }
+body { overflow-x: hidden; }
+
+/* 10. Reveal animations — shorten transition + don't animate filters */
+[data-reveal] {
+  transition: opacity .5s ease-out, transform .5s ease-out !important;
+}
+
+/* ============================================================
+   HOMEPAGE SERVICES — replace clipping slider with clean grid
+   ============================================================ */
+.modern-services-slider-container {
+  overflow: visible !important;
+  padding: var(--s-5, 48px) clamp(20px, 4vw, 40px) !important;
+  max-width: 1200px !important;
+}
+.modern-services-slider {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--s-3, 24px) !important;
+  transform: none !important;
+  cursor: default !important;
+  overflow: visible !important;
+}
+.modern-slide {
+  flex: none !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+.modern-service-card {
+  height: 100% !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)), #0f1219 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: var(--radius-lg, 24px) !important;
+  padding: var(--s-5, 40px) var(--s-4, 28px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  text-align: center;
+  text-decoration: none !important;
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1), border-color .3s !important;
+  box-shadow: none !important;
+}
+.modern-service-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,255,136,0.3) !important;
+  box-shadow: none !important;
+}
+.service-icon-circle {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 13px !important;
+  background: linear-gradient(135deg, rgba(0,255,136,0.18), rgba(1,228,228,0.08)) !important;
+  border: 1px solid rgba(0,255,136,0.22);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s-3, 20px) !important;
+  color: var(--ys-green, #00ff88) !important;
+  font-size: 1.25rem !important;
+}
+.service-title {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  text-transform: none !important;
+  margin: 0 0 10px !important;
+  color: #fff !important;
+  line-height: 1.25 !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+.service-title strong { color: var(--ys-green, #00ff88); font-weight: 800; }
+.service-description {
+  font-size: 0.9375rem !important;
+  color: rgba(255,255,255,0.65) !important;
+  line-height: 1.55 !important;
+  margin: 0 !important;
+  flex: 1;
+}
+
+/* Hide the slider controls (no longer needed) */
+.slider-navigation,
+.modern-services-slider-container .slider-button,
+.modern-services-slider-container .slider-pagination {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .modern-services-slider { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px) {
+  .modern-services-slider { grid-template-columns: 1fr !important; }
+  .modern-service-card { padding: 32px 24px !important; }
+}
+
+/* ===== mobile.css ===== */
+/* ============================================================
+   YOUSEE360 — MOBILE EXPERIENCE
+   Full mobile redesign: menu, sticky action bar, FAB, 360 gyro,
+   typography. Loaded last; mobile-first conversion-focused.
+   ============================================================ */
+
+/* The JS-injected mobile menu CTA — hidden on desktop, only shown
+   when the mobile menu is open (rules inside @media below). */
+.ys-mobile-top-cta {
+  display: none !important;
+}
+
+/* ============================================================
+   1. MOBILE NAV FIX — close behavior + X icon + CTA-first
+   ============================================================ */
+@media (max-width: 980px) {
+
+  /* The menu container */
+  .navigation-menu,
+  .navigation-menu.w-nav-menu {
+    position: fixed !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    height: 100dvh !important;
+    height: 100vh !important;
+    max-height: 100dvh !important;
+    background: rgba(6, 7, 10, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    padding: 88px 20px max(20px, env(safe-area-inset-bottom)) !important;
+    gap: 2px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(100%) !important;
+    transition: transform .35s cubic-bezier(0.16,1,0.3,1) !important;
+    z-index: 99998 !important;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .w-nav[data-nav-menu-open] .navigation-menu,
+  .navigation-menu.w--nav-menu-open,
+  .navigation-menu.is-open {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  /* Persistent mobile CTA at TOP of open menu — real <a> element */
+  .navigation-menu::before { content: none !important; }
+  .ys-mobile-top-cta {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 22px !important;
+    margin: 0 0 14px 0;
+    border-radius: 13px !important;
+    background: linear-gradient(135deg, #00ff88, #2dffa6) !important;
+    color: #001a10 !important;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none !important;
+    box-shadow: 0 8px 24px -8px rgba(0,255,136,0.5);
+    flex-shrink: 0;
+    min-height: 56px;
+    width: 100%;
+  }
+  .ys-mobile-top-cta::after { content: "→"; transition: transform .2s; }
+  .ys-mobile-top-cta:active::after { transform: translateX(3px); }
+  .navigation-menu .nav-cta {
+    display: none !important; /* hide the bottom-positioned one — replaced by ys-mobile-top-cta */
+  }
+  /* On mobile, show the top CTA inside the open menu */
+  .navigation-menu .ys-mobile-top-cta { display: flex !important; }
+
+  /* Each link gets a big tap target + chevron */
+  .navigation-link,
+  .w-dropdown-toggle {
+    width: 100%;
+    padding: 18px 20px !important;
+    font-size: 1.0625rem !important;
+    border-radius: 13px !important;
+    background: rgba(255,255,255,0.02) !important;
+    border: 1px solid rgba(255,255,255,0.04);
+    margin: 0 !important;
+    min-height: 56px;
+    justify-content: space-between !important;
+    color: rgba(255,255,255,0.92) !important;
+  }
+  .navigation-link:hover,
+  .navigation-link:active,
+  .w-dropdown-toggle:active {
+    background: rgba(0,255,136,0.06) !important;
+    border-color: rgba(0,255,136,0.18) !important;
+  }
+  .navigation-link.w--current {
+    background: rgba(0,255,136,0.08) !important;
+    border-color: rgba(0,255,136,0.25) !important;
+  }
+  .navigation-link.w--current::after { display: none; }
+
+  /* Right side block in menu — language switch only on mobile */
+  .navigation-menu .nav-right {
+    display: flex !important;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    width: 100%;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-lang-switch {
+    width: auto !important;
+    padding: 10px 16px !important;
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 999px !important;
+    font-size: 0.875rem !important;
+    color: rgba(255,255,255,0.7) !important;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+  }
+
+  /* Dropdown panel (Services / Industries) */
+  .w-dropdown { width: 100%; }
+  .w-dropdown.is-open .w-dropdown-toggle,
+  .w-dropdown.w--open .w-dropdown-toggle {
+    background: rgba(0,255,136,0.06) !important;
+    border-color: rgba(0,255,136,0.18) !important;
+    color: #fff !important;
+  }
+  .w-dropdown.is-open .w-icon-dropdown-toggle,
+  .w-dropdown.w--open .w-icon-dropdown-toggle { transform: rotate(180deg); }
+  /* High specificity selectors to override nav-v2.css desktop rules */
+  .navigation-menu .w-dropdown-list,
+  .navigation-menu .w-dropdown-list.w--open,
+  .w-dropdown .w-dropdown-list,
+  .w-dropdown.w--open .w-dropdown-list,
+  .w-dropdown.is-open .w-dropdown-list {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    margin: 4px 0 6px !important;
+    grid-template-columns: 1fr !important;
+    background: rgba(0,255,136,0.03) !important;
+    border: 1px solid rgba(0,255,136,0.08) !important;
+    padding: 6px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    display: none !important;
+    border-radius: 13px !important;
+    box-shadow: none !important;
+  }
+  .w-dropdown.is-open .w-dropdown-list,
+  .w-dropdown.w--open .w-dropdown-list,
+  .navigation-menu .w-dropdown.is-open .w-dropdown-list,
+  .navigation-menu .w-dropdown.w--open .w-dropdown-list { display: grid !important; }
+  .w-dropdown-link {
+    padding: 14px 16px !important;
+    font-size: 0.9375rem !important;
+    min-height: 48px;
+    border-radius: 13px !important;
+  }
+  .w-dropdown-link::before { font-size: 0.6875rem !important; }
+  .w-dropdown-link[data-icon]::after {
+    font-size: 1rem !important;
+    top: 14px !important;
+  }
+
+  /* Hamburger BUTTON — animate to X when open */
+  .hamburger-button {
+    width: 48px !important;
+    height: 48px !important;
+    z-index: 100000 !important;
+    position: relative !important;
+  }
+  .hamburger-button .icon::before,
+  .hamburger-button .icon::after,
+  .hamburger-button .icon span {
+    background: #fff !important;
+  }
+  .navigation-bar.is-menu-open .hamburger-button .icon::before {
+    top: 7px !important;
+    transform: rotate(45deg);
+  }
+  .navigation-bar.is-menu-open .hamburger-button .icon::after {
+    bottom: 7px !important;
+    transform: rotate(-45deg);
+  }
+  .navigation-bar.is-menu-open .hamburger-button .icon span {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  /* When menu is open, lock the nav bg so it doesn't flicker */
+  .navigation-bar.is-menu-open {
+    background: rgba(6,7,10,0.95) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Body lock when menu open */
+  body.menu-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   2. STICKY BOTTOM ACTION BAR (mobile only)
+   ============================================================ */
+.ys-mob-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 9990;
+  display: none;
+  align-items: stretch;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(8, 10, 14, 0.85);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 21px;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6);
+  transform: translateY(0);
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1), opacity .25s ease;
+}
+.ys-mob-bar.is-hidden {
+  transform: translateY(140%);
+  opacity: 0;
+  pointer-events: none;
+}
+.ys-mob-bar a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 13px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 48px;
+  transition: transform .15s ease, background .25s ease;
+}
+.ys-mob-bar a:active { transform: scale(0.97); }
+.ys-mob-bar a.btn-call {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.ys-mob-bar a.btn-wa {
+  background: rgba(37,211,102,0.15);
+  color: #25d366;
+  border: 1px solid rgba(37,211,102,0.35);
+}
+.ys-mob-bar a.btn-quote {
+  background: linear-gradient(135deg, #00ff88, #2dffa6);
+  color: #001a10;
+  flex: 1.4;
+  font-weight: 700;
+  box-shadow: 0 6px 18px -6px rgba(0,255,136,0.5);
+}
+.ys-mob-bar i { font-size: 1rem; }
+
+@media (max-width: 768px) {
+  .ys-mob-bar { display: flex; }
+  /* Sticky bar clearance handled by body padding below */
+
+  /* Portfolio tour cards: taller (portrait) so the 360 is more visible */
+  body.aurora-on .portfolio-card-media,
+  .portfolio-card-media {
+    aspect-ratio: 3 / 4 !important;
+  }
+  /* Featured tour taller on mobile too */
+  .featured-tour-container { min-height: 70vh; }
+
+  /* Portfolio: force single column + contain width (no horizontal overflow) */
+  .portfolio-showcase {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .portfolio-card { max-width: 100% !important; }
+  .portfolio-grid-section,
+  .portfolio-filter-section,
+  .featured-project-section,
+  .portfolio-hero { overflow-x: clip; }
+  .portfolio-filter-bar {
+    flex-wrap: wrap !important;
+    justify-content: center;
+    gap: 8px !important;
+    padding: 0 16px !important;
+  }
+  .featured-tour-container { max-width: 100% !important; }
+}
+
+/* ============================================================
+   3. FLOATING CONTACT FAB (mobile only)
+   Tap to expand contact methods radially.
+   ============================================================ */
+.ys-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(86px + env(safe-area-inset-bottom)); /* above the action bar */
+  z-index: 9991;
+  display: none;
+}
+.ys-fab-trigger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ff88, #2dffa6);
+  color: #001a10;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -8px rgba(0,255,136,0.6), inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+  -webkit-tap-highlight-color: transparent;
+}
+.ys-fab.is-open .ys-fab-trigger { transform: rotate(45deg); }
+
+.ys-fab-options {
+  position: absolute;
+  right: 4px;
+  bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.ys-fab.is-open .ys-fab-options {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ys-fab-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(8, 10, 14, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transform: translateY(10px);
+  transition: transform .25s cubic-bezier(0.16,1,0.3,1) calc(var(--i, 0) * .04s), background .2s;
+}
+.ys-fab.is-open .ys-fab-option { transform: translateY(0); }
+.ys-fab-option:active { background: rgba(0,255,136,0.15); }
+.ys-fab-option i { color: var(--ys-green, #00ff88); width: 18px; }
+
+@media (max-width: 768px) {
+  .ys-fab { display: block; }
+}
+
+/* ============================================================
+   4. GYROSCOPE 360 — overlay + permission prompt
+   ============================================================ */
+.ys-gyro-prompt {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  text-align: center;
+  padding: 24px;
+}
+.ys-gyro-prompt.is-visible { display: flex; }
+.ys-gyro-prompt-inner {
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.ys-gyro-prompt-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0,255,136,0.25), rgba(1,228,228,0.1));
+  border: 1px solid rgba(0,255,136,0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ys-green, #00ff88);
+  font-size: 1.5rem;
+  animation: gyro-tilt 2s ease-in-out infinite;
+}
+@keyframes gyro-tilt {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(15deg); }
+}
+.ys-gyro-prompt h4 {
+  font-size: 1.0625rem !important;
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+.ys-gyro-prompt p {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0 !important;
+}
+.ys-gyro-prompt button {
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00ff88, #2dffa6);
+  color: #001a10;
+  border: none;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ys-gyro-active-badge {
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 5;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0,255,136,0.18);
+  border: 1px solid rgba(0,255,136,0.4);
+  color: var(--ys-green, #00ff88);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.ys-gyro-active-badge.is-visible { display: inline-flex; }
+.ys-gyro-active-badge::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ys-green, #00ff88);
+  box-shadow: 0 0 8px rgba(0,255,136,0.8);
+  animation: ds-pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   5. MOBILE TYPOGRAPHY & SPACING TIGHTENING
+   ============================================================ */
+@media (max-width: 768px) {
+  :root {
+    --fs-display: clamp(2.25rem, 9vw, 3.25rem);
+    --fs-h1: clamp(1.875rem, 6.5vw, 2.5rem);
+    --fs-h2: clamp(1.5rem, 5vw, 2rem);
+    --fs-body: 1rem;
+    --section-py: clamp(48px, 8vw, 80px);
+    --section-py-lg: clamp(64px, 10vw, 96px);
+  }
+  h1, .h1, .heading, .hero-heading,
+  .apple-heading, .hero-section h1, .about-hero h1, .portfolio-hero h1 {
+    font-size: clamp(2rem, 8.5vw, 3rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em !important;
+  }
+  h2, .h2, .section-heading, .heading-2,
+  .sexy-heading, .mission-title {
+    font-size: clamp(1.625rem, 5.5vw, 2.25rem) !important;
+    line-height: 1.1 !important;
+  }
+  h3, .h3, .bento-title, .service-title { font-size: 1.125rem !important; }
+
+  /* Service/industry heroes shorten on mobile; homepage video hero stays full */
+  .hero-section[data-service], .hero-section[data-industry], .hero-section.bg-dark:not(#Hero) {
+    min-height: auto !important;
+    padding: 100px 16px 40px !important;
+  }
+  #Hero.hero-section {
+    height: 100vh !important;
+    min-height: 560px !important;
+    padding: 0 !important;
+  }
+  .about-hero, .portfolio-hero {
+    min-height: auto !important;
+    padding: 100px 16px 40px !important;
+  }
+
+  /* Reduce extreme padding everywhere */
+  .ds-section, .section, section, .ys-section { padding: 56px 0 !important; }
+  .container, .w-container { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Cards smaller padding */
+  .ds-card, .bento-card, .value-card, .ys-package,
+  .ys-testimonial, .modern-service-card { padding: 24px !important; }
+
+  /* Why Us bento — clean 3-stat row + 2-feature row, no overlapping */
+  #WhyUs .bento-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-auto-rows: auto !important;
+    gap: 8px !important;
+    padding: 0 16px !important;
+    max-width: 100% !important;
+    margin: 24px 0 0 !important;
+  }
+  /* Override ALL col-X rules on mobile */
+  #WhyUs .bento-card,
+  #WhyUs .bento-card.col-4,
+  #WhyUs .bento-card.col-6,
+  #WhyUs .bento-card.col-8,
+  #WhyUs .bento-card.col-12 {
+    grid-column: span 1 !important;
+    position: static !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 18px 10px !important;
+    border-radius: 13px !important;
+    background: linear-gradient(180deg, rgba(0,255,136,0.04), rgba(255,255,255,0.005)), #0f1219 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  /* Feature cards (col-6) span full row of 3 */
+  #WhyUs .bento-card.col-6 {
+    grid-column: span 3 !important;
+    padding: 22px 18px !important;
+  }
+  #WhyUs .bento-content {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  #WhyUs .bento-stat {
+    font-size: 1.5rem !important;
+    line-height: 1 !important;
+    margin: 0 0 6px !important;
+    color: var(--ys-cyan, #01e4e4) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+  }
+  #WhyUs .bento-text {
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+    color: rgba(255,255,255,0.65) !important;
+    margin: 0 !important;
+  }
+  #WhyUs .bento-card.col-6 .bento-text {
+    font-size: 0.8125rem !important;
+  }
+  #WhyUs .bento-title {
+    font-size: 1rem !important;
+    margin: 8px 0 4px !important;
+    color: #fff !important;
+  }
+  #WhyUs .bento-icon-wrapper {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 auto 8px !important;
+    font-size: 0.875rem !important;
+  }
+  /* Belt-and-braces fallback under 380px: stack stats vertically */
+  @media (max-width: 380px) {
+    #WhyUs .bento-grid { grid-template-columns: 1fr 1fr !important; }
+    #WhyUs .bento-card.col-6 { grid-column: span 2 !important; }
+    #WhyUs .bento-card { padding: 16px 8px !important; }
+    #WhyUs .bento-stat { font-size: 1.375rem !important; }
+  }
+
+  /* Bottom-of-page padding so last section doesn't sit under action bar (single source of truth) */
+  body { padding-bottom: 88px !important; }
+
+  /* Marquee smaller */
+  .ys-marquee-item { font-size: clamp(1.5rem, 7vw, 2rem) !important; }
+
+  /* Testimonials stack already done */
+  /* Portfolio grid mobile */
+  .ys-portfolio-grid { min-height: 0; grid-template-rows: none !important; }
+  .ys-portfolio-grid > a:nth-child(1) { grid-row: auto !important; }
+
+  /* Trust strip wraps tighter */
+  .ys-trust-badges { gap: 8px !important; }
+  .ys-trust-badge { padding: 8px 12px !important; font-size: 0.8125rem !important; }
+
+  /* Hide nav-right items on mobile when collapsed (they appear inside open menu) */
+  .navigation-bar .nav-right { display: none !important; }
+
+  /* Footer CTA tighter */
+  .ys-footer-v2 .ys-footer-cta h2 { font-size: 1.875rem !important; line-height: 1.1 !important; }
+
+  /* Buttons grow tap target */
+  .ds-btn, .btn-primary, .nav-cta { min-height: 48px; padding: 13px 22px !important; }
+
+  /* The 360 hero on service pages — reduce height */
+  .ys-360-hero { height: 360px !important; }
+  /* body padding-bottom set above (single source) */
+}
+
+/* ============================================================
+   6. SCROLL FATIGUE REDUCTION — collapse heavy sections
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Hide marquee on mobile — too much visual noise alongside everything else */
+  .ys-marquee { display: none !important; }
+
+  /* Hide the homepage social-proof-bar duplicate (it appears twice) */
+  .social-proof-bar { padding: 24px 16px !important; }
+}
+
+/* ============================================================
+   7. ENTRY ANIMATIONS — subtle for mobile
+   ============================================================ */
+@media (max-width: 768px) {
+  [data-reveal] {
+    transition: opacity .4s ease-out, transform .4s ease-out !important;
+    transform: translateY(12px) !important;
+  }
+  [data-reveal].is-visible { transform: none !important; }
+}
+
+/* ============================================================
+   9. HOW WE WORK — centered, contained on mobile
+   ============================================================ */
+@media (max-width: 768px) {
+  #How.section,
+  section#How {
+    padding: 56px 0 !important;
+  }
+  #How .container { padding: 0 !important; }
+  .process-tabs {
+    padding: 0 !important;
+    max-width: 100%;
+  }
+
+  /* Tab buttons: horizontal scroll snap row, centered start */
+  .process-tab-buttons {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    gap: 8px !important;
+    padding: 4px 16px 16px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    box-sizing: border-box;
+  }
+  .process-tab-buttons::-webkit-scrollbar { display: none; }
+  .process-tab-btn {
+    flex: 0 0 auto !important;
+    scroll-snap-align: center;
+    padding: 10px 18px !important;
+    font-size: 0.8125rem !important;
+    border-radius: 999px !important;
+    white-space: nowrap;
+    min-height: 40px;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em;
+  }
+
+  /* Panel: contained inside viewport, centered, glass card */
+  .process-tab-panels {
+    padding: 0 16px;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .process-tab-panel {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .process-tab-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 28px 22px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    border-radius: 21px !important;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)), #0f1219 !important;
+    border: 1px solid rgba(0,255,136,0.15) !important;
+  }
+  .process-tab-text {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+  }
+  .process-tab-text .step-number {
+    display: inline-block !important;
+    margin-bottom: 12px !important;
+    font-size: 0.6875rem !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    color: var(--ys-green, #00ff88) !important;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.22);
+  }
+  .process-tab-text h3,
+  .process-tab-text .sexy-heading {
+    font-size: 1.5rem !important;
+    line-height: 1.15 !important;
+    margin: 8px 0 12px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center !important;
+    letter-spacing: -0.02em;
+  }
+  .process-tab-text p,
+  .process-tab-text .bento-description {
+    font-size: 0.9375rem !important;
+    line-height: 1.6 !important;
+    color: rgba(255,255,255,0.7) !important;
+    margin: 0 !important;
+  }
+  /* Visual icon: smaller, centered, with glow circle */
+  .process-tab-visual {
+    width: 80px !important;
+    height: 80px !important;
+    max-width: 80px !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    font-size: 1.75rem !important;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,255,136,0.18), rgba(1,228,228,0.08)) !important;
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--ys-green, #00ff88) !important;
+    text-shadow: none !important;
+    order: -1;
+  }
+
+  /* === ROI CALCULATOR mobile fix === */
+  #ROICalculator.section .section-title-group,
+  #ROICalculator .section-title-group {
+    text-align: center !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 16px;
+  }
+  #ROICalculator h2.sexy-heading {
+    text-align: center !important;
+    font-size: clamp(1.625rem, 5.5vw, 2.25rem) !important;
+    line-height: 1.1 !important;
+    margin: 0 auto var(--s-2) !important;
+  }
+  #ROICalculator .section-subheading {
+    text-align: center !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    font-size: 0.9375rem !important;
+  }
+  #ROICalculator .glass-card {
+    grid-template-columns: 1fr !important;
+    max-width: 100% !important;
+    margin: 24px 16px 0 !important;
+    padding: 20px !important;
+    gap: 24px !important;
+  }
+  #ROICalculator .roi-results,
+  #ROICalculator .roi-inputs {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* === Contact section heading center on mobile === */
+  #Contact .section-title-group,
+  #Contact h2 { text-align: center !important; }
+}
+
+/* ============================================================
+   10. SERVICES GRID — elegant horizontal swipe-card carousel on mobile
+   ============================================================ */
+@media (max-width: 768px) {
+  /* ============================================================
+     SERVICES — IMMERSIVE CARD STACK (mobile)
+     Vertical stack of full-width cards, unique accent color per
+     service, animated sheen on press, counter badges, staggered
+     reveal. No more horizontal swipe, no more tiny tiles.
+     ============================================================ */
+
+  /* Force section into single-column block layout */
+  main#What.section,
+  #What.section.wwd {
+    display: block !important;
+    padding: 64px 0 !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  #What .container-8,
+  #What .container-8.w-container {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Section heading row — centered, full width */
+  main#What .section-title-group,
+  #What .section-title-group {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 24px !important;
+    margin: 0 0 36px !important;
+    text-align: center !important;
+    float: none !important;
+  }
+
+  /* Hide ALL old slider controls */
+  .slider-navigation,
+  .modern-services-slider-container .slider-button,
+  .modern-services-slider-container .slider-pagination,
+  .modern-services-slider-container::before,
+  .modern-services-slider-container::after {
+    display: none !important;
+  }
+
+  .modern-services-slider-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: none !important;
+  }
+
+  /* Vertical stack — counter-reset for the badge numbers */
+  .modern-services-slider {
+    counter-reset: ys-svc !important;
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 14px !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    scroll-snap-type: none !important;
+  }
+
+  .modern-slide {
+    flex: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    counter-increment: ys-svc !important;
+    position: relative;
+  }
+
+  /* Brand colors only — green + cyan (consistent across all cards) */
+  .modern-slide .modern-service-card { --accent: #00ff88; --accent2: #22d3ee; }
+
+  /* THE IMMERSIVE CARD */
+  .modern-service-card {
+    --accent: #00ff88;
+    --accent2: #2dffa6;
+    position: relative;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    height: auto !important;
+    min-height: 200px !important;
+    padding: 26px 24px !important;
+    border-radius: 21px !important;
+    background:
+      radial-gradient(140% 110% at 100% -10%, rgba(0,255,136,0.16), transparent 55%),
+      radial-gradient(130% 90% at -10% 110%, rgba(1,228,228,0.10), transparent 55%),
+      linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.005)),
+      #0a0d14 !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    box-shadow:
+      0 28px 56px -28px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255,255,255,0.02) inset !important;
+    text-decoration: none !important;
+    overflow: hidden;
+    transition: transform .3s cubic-bezier(0.16,1,0.3,1),
+                border-color .35s ease,
+                box-shadow .35s ease !important;
+    text-align: left !important;
+    isolation: isolate;
+  }
+
+  /* Diagonal accent strip top-left — visual identity */
+  .modern-service-card > .service-icon-circle {
+    width: 54px !important;
+    height: 54px !important;
+    margin: 0 0 16px !important;
+    border-radius: 13px !important;
+    font-size: 1.4rem !important;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+    border: none !important;
+    color: #04120c !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 26px -10px rgba(0,255,136,0.6);
+    position: relative;
+    z-index: 2;
+  }
+  .modern-service-card > .service-icon-circle i {
+    color: #04120c !important;
+  }
+
+  /* Counter badge top-right ("01" "02" etc.) */
+  .modern-service-card::after {
+    content: counter(ys-svc, decimal-leading-zero);
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    color: color-mix(in srgb, var(--accent) 75%, white);
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, rgba(0,0,0,0.4));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    z-index: 3;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Animated sheen on press */
+  .modern-service-card::before {
+    content: "";
+    position: absolute;
+    top: -120%; left: -20%;
+    width: 140%; height: 340%;
+    background: linear-gradient(
+      45deg,
+      transparent 42%,
+      color-mix(in srgb, var(--accent) 14%, transparent) 50%,
+      transparent 58%
+    );
+    opacity: 0;
+    transform: translateY(40%);
+    transition: opacity .4s ease, transform .9s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .modern-service-card:active::before {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Active state */
+  .modern-service-card:active {
+    transform: scale(0.985);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent) !important;
+    box-shadow:
+      0 28px 56px -28px rgba(0,0,0,0.7),
+      0 0 32px -8px color-mix(in srgb, var(--accent) 35%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent) inset !important;
+  }
+
+  /* Title — large, bold, left-aligned */
+  .modern-service-card > .service-title {
+    position: relative;
+    z-index: 2;
+    font-size: 1.25rem !important;
+    margin: 0 0 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    color: #ffffff !important;
+    text-align: left !important;
+    width: 100%;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .modern-service-card > .service-title strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* Description — brighter for legibility */
+  .modern-service-card > .service-description {
+    position: relative;
+    z-index: 2;
+    font-size: 0.9375rem !important;
+    line-height: 1.55 !important;
+    color: rgba(255,255,255,0.82) !important;
+    margin: 0 0 16px !important;
+    text-align: left !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    flex: 1;
+  }
+
+  /* "Explore →" CTA pinned at bottom-right of each card */
+  .modern-service-card .service-cta,
+  .modern-slide .modern-service-card::after {
+    /* keeping ::after for counter, will inject CTA via JS or rely on description ::after */
+  }
+  /* Inject Explore CTA in the corner via container */
+  .modern-slide::after {
+    content: "Explore →";
+    position: absolute;
+    bottom: 22px;
+    right: 24px;
+    z-index: 3;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--accent, #00ff88) 90%, white);
+    pointer-events: none;
+    transition: transform .3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .modern-slide:active::after { transform: translateX(4px); }
+
+  /* Staggered entrance reveal */
+  .modern-slide {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .55s cubic-bezier(0.16,1,0.3,1),
+                transform .55s cubic-bezier(0.16,1,0.3,1);
+  }
+  .modern-slide.is-visible { opacity: 1; transform: none; }
+  .modern-slide:nth-child(1) { transition-delay: 0.06s; }
+  .modern-slide:nth-child(2) { transition-delay: 0.12s; }
+  .modern-slide:nth-child(3) { transition-delay: 0.18s; }
+  .modern-slide:nth-child(4) { transition-delay: 0.24s; }
+  .modern-slide:nth-child(5) { transition-delay: 0.30s; }
+  .modern-slide:nth-child(6) { transition-delay: 0.36s; }
+}
+
+/* Fallback: browsers without color-mix support — keep accent visible */
+@supports not (background: color-mix(in srgb, #fff 50%, transparent)) {
+  @media (max-width: 768px) {
+    .modern-service-card {
+      background:
+        radial-gradient(140% 110% at 100% -10%, rgba(0,255,136,0.16), transparent 55%),
+        #0a0d14 !important;
+      border-color: rgba(0,255,136,0.2) !important;
+    }
+    .modern-service-card::after {
+      color: var(--accent, #00ff88) !important;
+      background: rgba(0,255,136,0.1) !important;
+      border-color: rgba(0,255,136,0.3) !important;
+    }
+  }
+}
+
+/* ============================================================
+   Z. HIDE DUPLICATES on mobile
+   The bottom action bar already gives Call + WhatsApp + Quote.
+   The old floating widgets are removed for the mobile breakpoint.
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Old standalone WhatsApp floater */
+  .whatsapp-float,
+  a.whatsapp-float,
+  .whatsapp-floating-button { display: none !important; }
+  /* Old "Book Your Tour Now" sticky CTA on home */
+  .mobile-sticky-cta,
+  a.mobile-sticky-cta { display: none !important; }
+  /* Any leftover floating contact widgets */
+  .floating-contact,
+  .floating-cta:not(.ys-fab):not(.ys-mob-bar) { display: none !important; }
+}
+
+/* On desktop keep the original whatsapp floater visible only if user wants it */
+@media (min-width: 769px) {
+  .whatsapp-float { z-index: 9989; }
+}
+
+/* ============================================================
+   8. SUPER-COOL TOUCH RIPPLE on .ripple-able buttons
+   ============================================================ */
+.ripple-able { position: relative; overflow: hidden; }
+.ripple-able .ys-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  pointer-events: none;
+  animation: ys-ripple .55s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes ys-ripple {
+  to { transform: scale(3.5); opacity: 0; }
+}
+
+/* ===== wow.css ===== */
+/* ============================================================
+   YOUSEE360 — WOW LAYER
+   Coolest-ever effects: mesh bg, magnetic CTAs, 3D tilt, hero
+   text reveal, counters, spotlight cursor, page transitions.
+   Loaded last in the cascade.
+   ============================================================ */
+
+/* ============================================================
+   1. ANIMATED MESH GRADIENT BACKGROUND (body)
+   ============================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(at 22% 18%, rgba(0,255,136,0.16) 0px, transparent 38%),
+    radial-gradient(at 78% 32%, rgba(1,228,228,0.10) 0px, transparent 42%),
+    radial-gradient(at 30% 78%, rgba(255,61,166,0.06) 0px, transparent 40%),
+    radial-gradient(at 88% 90%, rgba(0,255,136,0.07) 0px, transparent 42%);
+  filter: blur(40px);
+  opacity: 0.65;
+  animation: ys-mesh-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(6,7,10,0.4) 0%, rgba(6,7,10,0.92) 100%);
+}
+@keyframes ys-mesh-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-3%, 2%, 0) scale(1.05); }
+  100% { transform: translate3d(2%, -2%, 0) scale(1.02); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+/* Only show on dark sections (which is everywhere) */
+.ys-error-page,
+.utility-page-wrap {
+  isolation: isolate; /* keep error pages from sitting under the mesh */
+}
+
+/* ============================================================
+   2. MAGNETIC CTA — buttons drift toward cursor (desktop)
+   JS sets --mag-x / --mag-y, CSS animates.
+   ============================================================ */
+.ys-magnetic {
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.ys-magnetic.is-near {
+  transform: translate(var(--mag-x, 0), var(--mag-y, 0));
+}
+@media (hover: none) {
+  .ys-magnetic { transform: none !important; }
+}
+
+/* ============================================================
+   3. 3D CARD TILT — perspective + cursor-following depth
+   ============================================================ */
+.ys-tilt {
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(0deg) rotateY(0deg);
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.ys-tilt > * { transform: translateZ(20px); transform-style: preserve-3d; }
+.ys-tilt .icon-wrap,
+.ys-tilt .service-icon-circle,
+.ys-tilt .bento-icon-wrapper,
+.ys-tilt .value-icon { transform: translateZ(40px); }
+@media (hover: none), (max-width: 980px) {
+  .ys-tilt { transform: none !important; }
+  .ys-tilt > * { transform: none !important; }
+}
+
+/* ============================================================
+   4. HERO TEXT REVEAL — letter-by-letter mask
+   ============================================================ */
+.ys-reveal-text {
+  display: inline-block;
+  /* overflow was hidden to mask the per-word slide-up. With that animation
+     removed it only risks clipping descenders on g, y and p. */
+  overflow: visible;
+  vertical-align: bottom;
+}
+/* These spans are injected into hero H1s at runtime by wow.js. They used to be
+   opacity:0 with a translateY, made visible only when a CSS animation ran to
+   completion — so a headline's legibility depended on an animation finishing.
+   A paused animation clock (a background tab at load, or throttling on a slow
+   phone) holds the first keyframe indefinitely and leaves the headline blank,
+   clipped by the wrapper's overflow. That was reported in the wild: a hero
+   headline rendering only its first line.
+   The per-word animation is therefore gone. The heading still reveals as a
+   whole via .ys-heading-reveal in motion.css, which is transition-based and
+   whose resting state cannot trap the text invisible. */
+.ys-reveal-text > .ys-letter,
+.ys-reveal-text > .ys-word {
+  display: inline-block;
+  transform: none;
+  opacity: 1;
+  animation: none;
+  white-space: pre;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ys-reveal-text > .ys-letter,
+  .ys-reveal-text > .ys-word { transform: none; opacity: 1; animation: none; }
+}
+
+/* ============================================================
+   5. SPOTLIGHT CURSOR — radial light follows pointer
+   Subtle ambient illumination of the section under the cursor.
+   ============================================================ */
+.ys-spotlight {
+  position: fixed;
+  top: 0; left: 0;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0,255,136,0.10) 0%,
+    rgba(0,255,136,0.04) 30%,
+    transparent 65%);
+  transform: translate(-50%, -50%) translate3d(0,0,0);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity .4s ease;
+  will-change: transform, opacity;
+}
+.ys-spotlight.is-visible { opacity: 1; }
+@media (hover: none), (max-width: 980px) { .ys-spotlight { display: none; } }
+
+/* ============================================================
+   6. CINEMATIC PAGE TRANSITION
+   ============================================================ */
+.ys-page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: linear-gradient(135deg, #00ff88 0%, #2dffa6 50%, #01e4e4 100%);
+  transform: translateY(100%);
+  pointer-events: none;
+  will-change: transform;
+}
+.ys-page-transition.is-entering {
+  transform: translateY(0);
+  transition: transform .55s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ys-page-transition.is-leaving {
+  transform: translateY(-100%);
+  transition: transform .55s cubic-bezier(0.65, 0, 0.35, 1) .05s;
+}
+.ys-page-transition .ys-loader-mark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(0,26,16,0.15);
+  border: 2px solid rgba(0,26,16,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #001a10;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.05em;
+  animation: ys-spin 1s linear infinite;
+}
+@keyframes ys-spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+/* ============================================================
+   7. ANIMATED COUNTERS
+   ============================================================ */
+.ys-counter {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 1ch;
+}
+
+/* ============================================================
+   8. SHIMMER LINK — green underline animates under links
+   ============================================================ */
+.ys-shimmer {
+  position: relative;
+  display: inline-block;
+}
+.ys-shimmer::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: -3px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--ys-green, #00ff88), transparent);
+  transition: right .4s cubic-bezier(0.16,1,0.3,1);
+}
+.ys-shimmer:hover::after { right: 0; }
+
+/* ============================================================
+   9. NOISY GLITCH on key headings (opt-in via .glitch)
+   ============================================================ */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.glitch:hover::before {
+  color: var(--ys-cyan, #01e4e4);
+  transform: translate(-2px, 0);
+  animation: ys-glitch-1 .35s ease;
+  opacity: 0.85;
+}
+.glitch:hover::after {
+  color: var(--ys-accent-pink, #ff3da6);
+  transform: translate(2px, 0);
+  animation: ys-glitch-2 .35s ease;
+  opacity: 0.85;
+}
+@keyframes ys-glitch-1 {
+  0%,100% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(10% 0 70% 0); }
+  40% { clip-path: inset(50% 0 25% 0); }
+  60% { clip-path: inset(75% 0 5% 0); }
+  80% { clip-path: inset(20% 0 60% 0); }
+}
+@keyframes ys-glitch-2 {
+  0%,100% { clip-path: inset(0 0 0 0); }
+  25% { clip-path: inset(60% 0 15% 0); }
+  50% { clip-path: inset(15% 0 70% 0); }
+  75% { clip-path: inset(40% 0 30% 0); }
+}
+
+/* ============================================================
+   10. SECTION ENTRY — staggered fade-up by index
+   ============================================================ */
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(28px);
+}
+[data-stagger].is-in > * {
+  opacity: 1;
+  transform: none;
+  transition: opacity .8s cubic-bezier(0.16,1,0.3,1),
+              transform .8s cubic-bezier(0.16,1,0.3,1);
+}
+[data-stagger].is-in > *:nth-child(1) { transition-delay: 0s; }
+[data-stagger].is-in > *:nth-child(2) { transition-delay: .08s; }
+[data-stagger].is-in > *:nth-child(3) { transition-delay: .16s; }
+[data-stagger].is-in > *:nth-child(4) { transition-delay: .24s; }
+[data-stagger].is-in > *:nth-child(5) { transition-delay: .32s; }
+[data-stagger].is-in > *:nth-child(6) { transition-delay: .40s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-stagger] > * { opacity: 1 !important; transform: none !important; }
+}
+
+/* ============================================================
+   11. SCROLL BORDER ACCENT — green line draws on as you scroll
+   ============================================================ */
+.ys-side-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(0,255,136,0) 0%, rgba(0,255,136,0.4) 50%, rgba(0,255,136,0) 100%);
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.ys-side-rail.is-visible { opacity: 1; }
+@media (max-width: 980px) { .ys-side-rail { display: none; } }
+
+/* ============================================================
+   12. CTA AURORA — green aura around primary CTAs
+   ============================================================ */
+.ds-btn-primary,
+.nav-cta,
+.pkg-btn:not(.ghost) {
+  position: relative;
+  isolation: isolate;
+}
+.ds-btn-primary::before,
+.nav-cta::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(135deg, rgba(0,255,136,0.6), rgba(45,255,166,0.6), rgba(1,228,228,0.4));
+  border-radius: inherit;
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.ds-btn-primary:hover::before,
+.nav-cta:hover::before { opacity: 0.85; }
+
 /* ===== animations.css ===== */
 /* YouSee360 Advanced Animations & Apple-Inspired Design System */
 
@@ -19604,4 +21247,169 @@ body {
   .service-options .apple-heading {
     font-size: 1.8rem;
   }
+}
+/* ===== a11y-fixes.css ===== */
+/* ============================================================
+   ACCESSIBILITY & INTERACTION FIXES
+   Loaded last in every bundle so it can correct rules that
+   earlier stylesheets set with !important.
+   ============================================================ */
+
+/* --- Dark colour scheme ---------------------------------------------------
+   Tells the UA to paint scrollbars, form controls, native selects and the
+   spellcheck underline for a dark page. Without it Windows/Chrome renders
+   <select> and <input> chrome in light mode on a black background. */
+:root {
+  color-scheme: dark;
+}
+
+/* --- Focus rings ----------------------------------------------------------
+   Several stylesheets clear the outline on :focus (some with !important) and
+   replace it with a border/box-shadow only. That also removes the ring for
+   keyboard users, so restore a real :focus-visible ring here. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.w-input:focus-visible,
+.w-select:focus-visible,
+.modal-input:focus-visible,
+.modal-textarea:focus-visible,
+.modal-select:focus-visible,
+.ys-form-field input:focus-visible,
+.ys-form-field select:focus-visible,
+.ys-form-field textarea:focus-visible,
+.ys-protected-input:focus-visible,
+.utility-page-form input:focus-visible,
+.cf-contact-form-field:focus-visible,
+.glass-input:focus-visible,
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 1px !important;
+}
+
+/* Checkbox/radio cards: the real control is visually hidden, so the ring has
+   to show on the wrapping label instead. */
+.modal-checkbox:focus-within,
+.modal-radio:focus-within,
+.ys-estimator-option:focus-visible {
+  outline: 2px solid var(--ys-green, #00ff88) !important;
+  outline-offset: 3px !important;
+}
+
+/* --- Anchor targets under the fixed header --------------------------------
+   The navigation is position: fixed, so an in-page jump would otherwise land
+   with the target hidden behind it. */
+:target,
+[id]:is(h1, h2, h3, h4, h5, h6),
+section[id],
+article[id],
+div[id][class*="section"],
+#main,
+#What {
+  scroll-margin-top: 96px;
+}
+
+@media (max-width: 768px) {
+  :target,
+  [id]:is(h1, h2, h3, h4, h5, h6),
+  section[id],
+  article[id],
+  div[id][class*="section"],
+  #main,
+  #What {
+    scroll-margin-top: 76px;
+  }
+}
+
+/* --- Touch behaviour ------------------------------------------------------
+   Removes the 300ms double-tap-to-zoom delay on tap targets without
+   disabling pinch zoom on the page itself. */
+a,
+button,
+summary,
+label,
+[role="button"],
+[role="tab"],
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+input[type="radio"],
+.portfolio-filter-btn,
+.faq-question,
+.process-tab-btn,
+.ys-estimator-option {
+  touch-action: manipulation;
+}
+
+/* --- Scroll containment in overlays ---------------------------------------
+   Keeps a modal/lightbox scroll from chaining to the page behind it. */
+.contact-modal-overlay,
+.contact-modal,
+.modal-overlay,
+.modal-body,
+.ys-lightbox,
+.lightbox-overlay,
+.portfolio-lightbox,
+.pricing-lightbox,
+.mobile-menu,
+.side-nav,
+.nav-drawer {
+  overscroll-behavior: contain;
+}
+
+/* --- Screen-reader-only helper -------------------------------------------- */
+.ys-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Hero video pause control --------------------------------------------- */
+.hero-video-toggle {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background-color .2s ease, border-color .2s ease, opacity .2s ease;
+}
+
+.hero-video-toggle:hover {
+  background: rgba(0, 0, 0, 0.68);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-video-toggle[hidden] {
+  display: none;
 }
