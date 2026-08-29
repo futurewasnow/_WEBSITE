@@ -32,7 +32,7 @@
 
     <!-- Hreflang -->
 
-    <link href="../css/bundle-a5954ce2.css?v=a5954ce2" rel="stylesheet" type="text/css">
+    <link href="../css/bundle-1e5169d2.css?v=1e5169d2" rel="stylesheet" type="text/css">
     <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
@@ -149,7 +149,7 @@
   <meta name="theme-color" content="#06070a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="../css/bundle-816782ed.css?v=816782ed" rel="stylesheet" type="text/css">
+  <link href="../css/bundle-8bd9886a.css?v=8bd9886a" rel="stylesheet" type="text/css">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
   <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
@@ -267,8 +267,8 @@
         <div class="hero-overlay"></div>
         <div class="container hero-content centered">
             <h1 class="hero-heading">EXPERTOS EN TOURS VIRTUALES <br> <span class="highlight">EN COSTA RICA</span></h1>
-            <div class="hero-subheading">Te ayudamos a <span id="typing-text">ser visto</span><span
-                    class="typing-cursor"></span></div>
+            <p class="hero-subheading">Deja que tus hu&eacute;spedes recorran tu hotel, restaurante o propiedad antes de reservar
+                &mdash; tours 360&deg; en 12K&nbsp;HDR, en tu web y dentro de Google Maps.</p>
             <div class="hero-buttons">
                 <a href="#Contacto" class="btn-primary">Solicitar Cotización</a>
                 <a href="portafolio.html" class="btn-hollow">Ver Nuestro Trabajo</a>
@@ -801,35 +801,6 @@
     <script src="../js/animations.js?v=20260814u" type="text/javascript" defer></script>
     <script src="../js/interactive-elements.js?v=20260814u" type="text/javascript" defer></script>
 
-    <script>
-        // Typing effect for Spanish
-        const words = ['ser visto', 'destacar', 'crecer', 'impresionar'];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typingText = document.getElementById('typing-text');
-
-        function type() {
-            const currentWord = words[wordIndex];
-            if (isDeleting) {
-                typingText.textContent = currentWord.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typingText.textContent = currentWord.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === currentWord.length) {
-                setTimeout(() => isDeleting = true, 1500);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-            }
-
-            setTimeout(type, isDeleting ? 50 : 100);
-        }
-        type();
-    </script>
   <script src="../js/polish.js?v=20260814u" defer></script>
   <script src="../js/mobile.js?v=20260814u" defer></script>
   <script src="../js/wow.js?v=20260814u" defer></script>

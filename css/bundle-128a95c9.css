@@ -1,9 +1,1070 @@
-/*! YouSee360 CSS bundle — 4 files, exact concatenation of:
+/*! YouSee360 CSS bundle — 5 files, exact concatenation of:
+ * animations.css
  * v2-extras.css
  * motion.css
  * aurora.css
  * refine.css
  */
+/* ===== animations.css ===== */
+/* YouSee360 Advanced Animations & Apple-Inspired Design System */
+
+/* Global Variables */
+:root {
+  --primary-color: #66cc79;
+  --primary-glow: rgba(102, 204, 121, 0.7);
+  --apple-black: #1d1d1f;
+  --apple-gray: #f5f5f7;
+  --apple-text-gray: #86868b;
+  --white: #ffffff;
+  --animation-speed-medium: 0.5s;
+  --animation-speed-fast: 0.3s;
+}
+
+/* Force Legibility on ALL backgrounds */
+.bg-dark {
+  background-color: #000000 !important;
+  color: var(--white) !important;
+}
+
+.bg-dark h1,
+.bg-dark h2,
+.bg-dark h3,
+.bg-dark h4,
+.bg-dark p,
+.bg-dark span,
+.bg-dark div {
+  color: var(--white) !important;
+}
+
+.bg-dark .section-subheading,
+.bg-dark .bento-description {
+  color: var(--apple-text-gray) !important;
+}
+
+.bg-light {
+  background-color: var(--apple-gray) !important;
+  color: var(--apple-black) !important;
+}
+
+.bg-light h1,
+.bg-light h2,
+.bg-light h3,
+.bg-light h4,
+.bg-light p,
+.bg-light span,
+.bg-light div {
+  color: var(--apple-black) !important;
+}
+
+.bg-light .section-subheading,
+.bg-light .bento-description {
+  color: var(--apple-text-gray) !important;
+}
+
+/* Apple Typography */
+.section-tag {
+  color: var(--primary-color) !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.apple-heading {
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.highlight {
+  color: var(--primary-color) !important;
+}
+
+@media (max-width: 768px) {
+  .apple-heading {
+    font-size: 32px;
+  }
+}
+
+/* Standard Section Padding */
+.section {
+  padding: 100px 0 !important;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.centered {
+  text-align: center;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(200px, auto);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.bento-card {
+  background: #161617;
+  /* Slightly lighter than pure black */
+  border-radius: 34px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bento-card:hover {
+  transform: scale(1.02);
+}
+
+.bento-card.col-6 {
+  grid-column: span 6;
+}
+
+.bento-card.col-4 {
+  grid-column: span 4;
+}
+
+.bento-card.col-8 {
+  grid-column: span 8;
+}
+
+.bento-card.row-2 {
+  grid-row: span 2;
+}
+
+@media (max-width: 991px) {
+
+  .bento-card.col-6,
+  .bento-card.col-4,
+  .bento-card.col-8 {
+    grid-column: span 12;
+  }
+}
+
+.bento-title {
+  color: var(--white) !important;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-transform: none;
+  /* Override global uppercase */
+  letter-spacing: normal;
+}
+
+.bento-description {
+  color: var(--apple-text-gray) !important;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.bento-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.bento-icon-wrapper i {
+  font-size: 24px;
+  color: var(--primary-color) !important;
+}
+
+/* Glass Tabs - Modern Apple Style */
+.apple-tabs-menu {
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px;
+  border-radius: 21px;
+  margin-bottom: 48px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.apple-tab-link {
+  padding: 10px 24px;
+  border-radius: 13px;
+  color: var(--apple-black) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.apple-tab-link.w--current {
+  background: var(--white) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: var(--primary-color) !important;
+}
+
+.apple-tab-pane {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  padding: 20px 0;
+}
+
+.apple-tab-visual {
+  flex: 1;
+  background: var(--apple-gray);
+  border-radius: 34px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Standard Animations */
+[data-scroll-animation] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-scroll-animation].visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Primary Button Apple Style */
+.btn-primary {
+  background-color: var(--apple-black) !important;
+  color: var(--white) !important;
+  padding: 16px 32px;
+  border-radius: 980px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* === FUTURE UI UPGRADES === */
+
+/* 1. Hero Particles Container */
+#hero-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Behind content but above background */
+  pointer-events: none;
+  /* Let clicks pass through */
+  overflow: hidden;
+}
+
+.hero-section {
+  position: relative;
+  /* Ensure it contains the absolute particles */
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+  /* Content above particles */
+}
+
+/* 2. Custom Cursor (Enhancement Overlay - keeps native cursor visible) */
+body {
+  /* cursor: none removed - keep native cursor visible for reliability */
+}
+
+/* Force show standard cursor on touch devices */
+@media (pointer: coarse) {
+  body {
+    cursor: auto !important;
+  }
+
+  #future-cursor,
+  #future-follower {
+    display: none !important;
+  }
+}
+
+#future-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147483647;
+  box-shadow: 0 0 10px #fff, 0 0 3px 2px rgba(0, 0, 0, 0.5);
+  transition: transform 0.05s linear;
+  opacity: 0;
+  will-change: transform;
+  /* Start hidden until mouse moves */
+}
+
+#future-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(1, 228, 228, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147483646;
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  box-shadow: 0 0 15px rgba(1, 228, 228, 0.3);
+  will-change: transform;
+}
+
+#future-follower.active {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(1, 228, 228, 0.1);
+  border-color: #00ff66;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.btn-primary:hover {
+  background-color: #333 !important;
+  transform: scale(1.05);
+}
+
+.bg-dark .btn-primary {
+  background-color: var(--primary-color) !important;
+  color: var(--apple-black) !important;
+}
+
+/* Helper Classes */
+.white-text {
+  color: var(--white) !important;
+}
+
+.black-text {
+  color: var(--apple-black) !important;
+}
+
+.off-white-text {
+  color: var(--apple-text-gray) !important;
+}
+
+/* ===================================
+   SERVICE PAGE SPECIFIC STYLES
+   =================================== */
+
+/* Service Page Hero - Parallax Background */
+.hero-section[data-service] {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0a0a0a 0%, #050510 100%);
+  padding: 120px 20px 80px;
+  overflow: hidden;
+}
+
+.parallax-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.parallax-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
+  width: 60%;
+  height: auto;
+  opacity: 0.15;
+  filter: brightness(0) invert(1);
+}
+
+.particles-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-section[data-service] .container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-section[data-service] .animated-heading,
+.hero-section[data-service] h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: #fff !important;
+  margin-bottom: 20px;
+  text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.hero-section[data-service] .animated-subheading,
+.hero-section[data-service] .hero-subheading {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.7) !important;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+
+  .hero-section[data-service] .animated-heading,
+  .hero-section[data-service] h1 {
+    font-size: 2rem;
+  }
+
+  .parallax-bg {
+    max-width: 250px;
+    opacity: 0.1;
+  }
+}
+
+/* Process Timeline - Service Pages */
+.process-timeline {
+  background: linear-gradient(180deg, #050510 0%, #0a0a0a 100%);
+  padding: 80px 0;
+  position: relative;
+}
+
+.process-timeline h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 60px;
+}
+
+.timeline {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 60px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--primary-color), rgba(102, 204, 121, 0.2));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 50px;
+  padding-left: 30px;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: -45px;
+  width: 50px;
+  height: 50px;
+  background: #161617;
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.timeline-icon i {
+  color: var(--primary-color) !important;
+  font-size: 1.2rem;
+}
+
+.timeline-content h3 {
+  color: #fff !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.timeline-content p {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.timeline-details {
+  margin-top: 15px;
+}
+
+.timeline-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timeline-details ul li {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.9rem;
+  padding: 5px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.timeline-details ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+}
+
+/* Industry Applications Section */
+.industry-applications {
+  background: #0a0a0a;
+  padding: 80px 0;
+}
+
+.industry-applications h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 50px;
+}
+
+.industry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.industry-card {
+  position: relative;
+  border-radius: 21px;
+  overflow: hidden;
+  height: 280px;
+  display: block;
+  text-decoration: none;
+  background: #161617;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.industry-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: var(--primary-color);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 0 40px rgba(102, 204, 121, 0.2);
+}
+
+.industry-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.4s ease;
+}
+
+.industry-card:hover .industry-image {
+  opacity: 0.15;
+}
+
+.industry-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  transition: all 0.4s ease;
+}
+
+.industry-card:hover .industry-image img {
+  opacity: 0.2;
+  transform: scale(1.05);
+}
+
+.industry-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 25px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+  z-index: 2;
+  transition: all 0.4s ease;
+}
+
+.industry-card:hover .industry-overlay {
+  background: transparent;
+}
+
+.industry-overlay h3 {
+  color: #fff !important;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  transition: color 0.4s ease;
+}
+
+.industry-card:hover .industry-overlay h3 {
+  color: #000 !important;
+}
+
+.industry-overlay p {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  transition: color 0.4s ease;
+}
+
+.industry-card:hover .industry-overlay p {
+  color: #333 !important;
+}
+
+.learn-more {
+  color: var(--primary-color) !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.industry-card:hover .learn-more {
+  gap: 12px;
+  color: var(--primary-color) !important;
+}
+
+/* CTA Section - Service Pages */
+.cta-section {
+  background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.cta-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 20px;
+}
+
+.cta-content p {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: var(--primary-color);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cta-button:hover .btn-glow {
+  opacity: 0.4;
+}
+
+/* Form Container */
+.form-container {
+  max-width: 500px;
+  margin: 40px auto 0;
+  background: #161617;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 21px;
+  padding: 40px;
+  display: none;
+}
+
+.form-container.active {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(102, 204, 121, 0.2);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.success-message {
+  background: rgba(102, 204, 121, 0.1);
+  border: 1px solid var(--primary-color);
+  border-radius: 21px;
+  padding: 40px;
+  text-align: center;
+  display: none;
+  max-width: 500px;
+  margin: 40px auto 0;
+}
+
+.success-message.active {
+  display: block;
+}
+
+.success-message h3 {
+  color: var(--primary-color) !important;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.success-message p {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ===================================
+   INDUSTRY HERO SECTION
+   =================================== */
+
+.industry-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0a0a0a 0%, #050510 100%);
+  padding: 120px 20px 80px;
+  overflow: hidden;
+}
+
+.industry-hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse, rgba(102, 204, 121, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.industry-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.industry-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.industry-hero .apple-heading {
+  font-size: 3rem;
+  color: #fff !important;
+}
+
+.industry-hero .hero-subheading {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Text color classes */
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.text-secondary {
+  color: var(--primary-color) !important;
+}
+
+/* Service page section fixes */
+.section.bg-dark .section-subheading,
+.section.bg-dark .bento-description {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Ensure bento-card col-12 spans full width */
+.bento-card.col-12 {
+  grid-column: span 12;
+}
+
+/* ===================================
+   INDUSTRY STATS SECTION
+   =================================== */
+.industry-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 50px;
+  flex-wrap: wrap;
+}
+
+.industry-stats .stat-item {
+  text-align: center;
+  padding: 20px 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 21px;
+  backdrop-filter: blur(10px);
+  min-width: 140px;
+  transition: all 0.3s ease;
+}
+
+.industry-stats .stat-item:hover {
+  background: rgba(102, 204, 121, 0.1);
+  border-color: var(--primary-color);
+  transform: translateY(-5px);
+}
+
+.industry-stats .stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-color) !important;
+  text-shadow: 0 0 20px rgba(102, 204, 121, 0.4);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.industry-stats .stat-number .counter {
+  color: inherit !important;
+}
+
+.industry-stats .stat-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+/* ===================================
+   STRATEGIC BENEFITS SECTION
+   =================================== */
+.strategic-benefits {
+  padding: 80px 0;
+  background: #050505;
+}
+
+.strategic-benefits .section-title-group {
+  margin-bottom: 40px;
+}
+
+.strategic-benefits .section-title-group.centered {
+  text-align: center;
+}
+
+.strategic-benefits .apple-heading {
+  font-size: 2.5rem;
+  color: #fff !important;
+  margin-bottom: 20px;
+}
+
+.strategic-benefits .bento-grid {
+  margin-top: 40px;
+}
+
+.strategic-benefits .bento-card {
+  background: rgba(22, 22, 23, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 21px;
+}
+
+.strategic-benefits .bento-card:hover {
+  border-color: var(--primary-color);
+  background: rgba(40, 40, 45, 0.9);
+}
+
+.strategic-benefits .bento-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background: rgba(102, 204, 121, 0.1);
+  border-radius: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.strategic-benefits .bento-icon-wrapper i {
+  font-size: 28px;
+  color: var(--primary-color) !important;
+}
+
+.strategic-benefits .bento-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff !important;
+  margin-bottom: 12px;
+}
+
+.strategic-benefits .bento-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Success Stories Section */
+.success-stories {
+  padding: 80px 0;
+  background: #0a0a0a;
+}
+
+.success-stories h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 20px;
+}
+
+.success-stories .section-intro {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 50px;
+}
+
+/* Service Options Section */
+.service-options {
+  padding: 80px 0;
+  background: #050505;
+}
+
+.service-options .section-title-group.centered {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.service-options .section-tag {
+  color: var(--primary-color) !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.service-options .apple-heading {
+  font-size: 2.5rem;
+  color: #fff !important;
+  margin-bottom: 20px;
+}
+
+.service-options .section-intro {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .industry-hero .apple-heading {
+    font-size: 2rem;
+  }
+
+  .industry-hero {
+    min-height: 50vh;
+    padding: 100px 20px 60px;
+  }
+
+  .industry-stats {
+    gap: 20px;
+  }
+
+  .industry-stats .stat-item {
+    min-width: 100px;
+    padding: 15px 20px;
+  }
+
+  .industry-stats .stat-number {
+    font-size: 2rem;
+  }
+
+  .strategic-benefits .apple-heading,
+  .success-stories h2,
+  .service-options .apple-heading {
+    font-size: 1.8rem;
+  }
+}
 /* ===== v2-extras.css ===== */
 /* ============================================================
    YOUSEE360 — V2 EXTRAS
@@ -3040,4 +4101,47 @@ main#main, main {
    so clipping at the root is safe here. */
 html {
   overflow-x: hidden;
+}
+
+/* ============================================================
+   HERO HEADLINE LEGIBILITY GUARANTEE
+   Loaded last, so this wins the cascade.
+
+   Hero headings were invisible at rest and made visible only by a CSS
+   animation or a GSAP tween. Any condition that stops that from completing --
+   a paused animation clock, a throttled tab, a slow phone, a script that never
+   runs -- leaves the most important text on the page blank. This was reported
+   from a real device: a hero headline rendering only its first line.
+
+   !important is deliberate. In the CSS cascade an !important declaration beats
+   both animations and inline styles, which is exactly what is needed to
+   override a stalled fadeInUp or a gsap.from() that set opacity to 0 and never
+   finished. Section-level reveals elsewhere on the page are untouched.
+   ============================================================ */
+.hero-section h1,
+.hero-heading,
+h1.animated-heading,
+h1.apple-heading,
+h1.sexy-heading,
+.blog-hero-title,
+.hero-section h1 .ys-word,
+.hero-section h1 .ys-reveal-text,
+/* The supporting line carries the actual proposition, so it needs the same
+   guarantee as the headline itself. */
+.hero-subheading,
+.hero-eyebrow,
+.hero-trust-strip,
+.about-hero .subtitle,
+.blog-hero-subtitle {
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Buttons keep their own transitions; only guarantee they are visible. */
+.hero-buttons,
+.hero-buttons > * {
+  opacity: 1 !important;
+  visibility: visible !important;
 }

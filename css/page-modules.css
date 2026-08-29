@@ -407,10 +407,13 @@
   align-items: center;
   gap: 12px;
 }
-.ys-footer-brand .logo-stack::before {
-  content: "";
-  width: 44px; height: 44px;
-  background: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png') center/contain no-repeat;
+/* The footer markup already contains a real <img> of the logo, with alt text.
+   A ::before background of the same file rendered a second, duplicate logo
+   beside it. The <img> is kept because it is the accessible one. */
+.ys-footer-brand .logo-stack img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(0,255,136,0.5));
 }
 .ys-footer-brand .logo-stack span {

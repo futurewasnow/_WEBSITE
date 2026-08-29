@@ -565,3 +565,46 @@ main#main, main {
 html {
   overflow-x: hidden;
 }
+
+/* ============================================================
+   HERO HEADLINE LEGIBILITY GUARANTEE
+   Loaded last, so this wins the cascade.
+
+   Hero headings were invisible at rest and made visible only by a CSS
+   animation or a GSAP tween. Any condition that stops that from completing --
+   a paused animation clock, a throttled tab, a slow phone, a script that never
+   runs -- leaves the most important text on the page blank. This was reported
+   from a real device: a hero headline rendering only its first line.
+
+   !important is deliberate. In the CSS cascade an !important declaration beats
+   both animations and inline styles, which is exactly what is needed to
+   override a stalled fadeInUp or a gsap.from() that set opacity to 0 and never
+   finished. Section-level reveals elsewhere on the page are untouched.
+   ============================================================ */
+.hero-section h1,
+.hero-heading,
+h1.animated-heading,
+h1.apple-heading,
+h1.sexy-heading,
+.blog-hero-title,
+.hero-section h1 .ys-word,
+.hero-section h1 .ys-reveal-text,
+/* The supporting line carries the actual proposition, so it needs the same
+   guarantee as the headline itself. */
+.hero-subheading,
+.hero-eyebrow,
+.hero-trust-strip,
+.about-hero .subtitle,
+.blog-hero-subtitle {
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Buttons keep their own transitions; only guarantee they are visible. */
+.hero-buttons,
+.hero-buttons > * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}

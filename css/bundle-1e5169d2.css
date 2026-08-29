@@ -16649,10 +16649,13 @@ h1 .highlight, h2 .highlight, h3 .highlight {
   align-items: center;
   gap: 12px;
 }
-.ys-footer-brand .logo-stack::before {
-  content: "";
-  width: 44px; height: 44px;
-  background: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png') center/contain no-repeat;
+/* The footer markup already contains a real <img> of the logo, with alt text.
+   A ::before background of the same file rendered a second, duplicate logo
+   beside it. The <img> is kept because it is the accessible one. */
+.ys-footer-brand .logo-stack img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(0,255,136,0.5));
 }
 .ys-footer-brand .logo-stack span {
@@ -19959,20 +19962,28 @@ body::after {
    ============================================================ */
 .ys-reveal-text {
   display: inline-block;
-  overflow: hidden;
+  /* overflow was hidden to mask the per-word slide-up. With that animation
+     removed it only risks clipping descenders on g, y and p. */
+  overflow: visible;
   vertical-align: bottom;
 }
+/* These spans are injected into hero H1s at runtime by wow.js. They used to be
+   opacity:0 with a translateY, made visible only when a CSS animation ran to
+   completion — so a headline's legibility depended on an animation finishing.
+   A paused animation clock (a background tab at load, or throttling on a slow
+   phone) holds the first keyframe indefinitely and leaves the headline blank,
+   clipped by the wrapper's overflow. That was reported in the wild: a hero
+   headline rendering only its first line.
+   The per-word animation is therefore gone. The heading still reveals as a
+   whole via .ys-heading-reveal in motion.css, which is transition-based and
+   whose resting state cannot trap the text invisible. */
 .ys-reveal-text > .ys-letter,
 .ys-reveal-text > .ys-word {
   display: inline-block;
-  transform: translateY(110%);
-  opacity: 0;
-  animation: ys-reveal-up .9s cubic-bezier(0.16,1,0.3,1) forwards;
-  animation-delay: calc(var(--i, 0) * 30ms);
+  transform: none;
+  opacity: 1;
+  animation: none;
   white-space: pre;
-}
-@keyframes ys-reveal-up {
-  to { transform: translateY(0); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ys-reveal-text > .ys-letter,
