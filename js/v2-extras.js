@@ -14,6 +14,50 @@
     if (!root) return;
 
     const state = { step: 0, type: null, size: null, addons: [] };
+
+    /* ---- URL <-> state -------------------------------------------------
+       The estimator is stateful UI, so the step and the answers belong in
+       the query string: Back returns to the previous question instead of
+       leaving the page, and a link carries the estimate with it. */
+    const PARAMS = ['est-step', 'est-type', 'est-size', 'est-addons'];
+
+    function readUrl() {
+      const q = new URLSearchParams(window.location.search);
+      if (!PARAMS.some(k => q.has(k))) return false;
+      const step = parseInt(q.get('est-step'), 10);
+      state.step = isNaN(step) ? 0 : Math.max(0, Math.min(3, step));
+      state.type = TYPE[q.get('est-type')] ? q.get('est-type') : null;
+      state.size = SIZE[q.get('est-size')] ? q.get('est-size') : null;
+      state.addons = (q.get('est-addons') || '').split(',').filter(a => ADDON[a]);
+      if (!state.type) state.step = 0;
+      else if (!state.size && state.step > 1) state.step = 1;
+      return true;
+    }
+
+    function paintSelections() {
+      root.querySelectorAll('.ys-estimator-option').forEach(o => {
+        const val = o.dataset.value;
+        const chosen = val === state.type || val === state.size ||
+                       state.addons.indexOf(val) !== -1;
+        o.classList.toggle('is-selected', chosen);
+        o.setAttribute('aria-pressed', String(chosen));
+      });
+    }
+
+    function writeUrl(push) {
+      const url = new URL(window.location.href);
+      const q = url.searchParams;
+      if (!state.type && !state.size && !state.addons.length && state.step === 0) {
+        PARAMS.forEach(k => q.delete(k));
+      } else {
+        q.set('est-step', String(state.step));
+        if (state.type) q.set('est-type', state.type); else q.delete('est-type');
+        if (state.size) q.set('est-size', state.size); else q.delete('est-size');
+        if (state.addons.length) q.set('est-addons', state.addons.join(','));
+        else q.delete('est-addons');
+      }
+      history[push ? 'pushState' : 'replaceState']({ estimator: true }, '', url);
+    }
     const panels = root.querySelectorAll('.ys-estimator-panel');
     const steps = root.querySelectorAll('.ys-estimator-step');
     const back = root.querySelector('.ys-estimator-back');
@@ -94,8 +138,9 @@
       `;
       wrap.querySelector('[data-estimator-restart]').addEventListener('click', () => {
         state.step = 0; state.type = null; state.size = null; state.addons = [];
-        root.querySelectorAll('.ys-estimator-option').forEach(o => o.classList.remove('is-selected'));
+        paintSelections();
         render();
+        writeUrl(true);
         haptic(8);
       });
     }
@@ -111,26 +156,40 @@
 
         if (multi) {
           // Toggle addon
-          opt.classList.toggle('is-selected');
+          const on = opt.classList.toggle('is-selected');
+          opt.setAttribute('aria-pressed', String(on));
           state.addons = [...panel.querySelectorAll('.is-selected')].map(o => o.dataset.value);
         } else {
           // Single select
-          panel.querySelectorAll('.ys-estimator-option').forEach(o => o.classList.remove('is-selected'));
+          panel.querySelectorAll('.ys-estimator-option').forEach(o => {
+            o.classList.remove('is-selected');
+            o.setAttribute('aria-pressed', 'false');
+          });
           opt.classList.add('is-selected');
+          opt.setAttribute('aria-pressed', 'true');
           if (key === 'type') state.type = val;
           if (key === 'size') state.size = val;
         }
         render();
+        writeUrl(false);
       });
     });
 
     next.addEventListener('click', () => {
-      if (state.step < 3) { state.step++; render(); haptic(10); }
+      if (state.step < 3) { state.step++; render(); writeUrl(true); haptic(10); }
     });
     back.addEventListener('click', () => {
-      if (state.step > 0) { state.step--; render(); haptic(6); }
+      if (state.step > 0) { state.step--; render(); writeUrl(true); haptic(6); }
     });
 
+    window.addEventListener('popstate', () => {
+      state.step = 0; state.type = null; state.size = null; state.addons = [];
+      readUrl();
+      paintSelections();
+      render();
+    });
+
+    if (readUrl()) paintSelections();
     render();
   }
 
@@ -146,8 +205,15 @@
         const wasOpen = item.classList.contains('is-open');
         // close siblings within the same .ys-faq
         const root = item.closest('.ys-faq');
-        if (root) root.querySelectorAll('.ys-faq-item.is-open').forEach(i => i.classList.remove('is-open'));
+        if (root) {
+          root.querySelectorAll('.ys-faq-item.is-open').forEach(i => {
+            i.classList.remove('is-open');
+            const btn = i.querySelector('.ys-faq-question');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          });
+        }
         if (!wasOpen) item.classList.add('is-open');
+        q.setAttribute('aria-expanded', String(!wasOpen));
       });
     });
   }

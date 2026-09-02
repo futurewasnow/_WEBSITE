@@ -31,7 +31,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600&display=swap"
         rel="stylesheet">
-    <script src="js/html2pdf.bundle.min.js?v=20260814u" defer></script>
+    <script src="js/html2pdf.bundle.min.js?v=20260829a" defer></script>
 
     <style>
         /* --- RESET & CORE --- */
@@ -359,6 +359,26 @@
             font-weight: 500;
             font-size: 0.95rem;
             pointer-events: auto;
+        }
+
+        /* .svc-head and .nav-icon are <button>s now: strip the UA chrome so
+           they still look like the panel headers/icons they replaced. */
+        button.svc-head {
+            width: 100%;
+            background: none;
+            border: 0;
+            color: inherit;
+            font: inherit;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        button.nav-icon {
+            background: none;
+            border: 0;
+            padding: 0;
+            font: inherit;
         }
 
         .svc-head:hover {
@@ -793,7 +813,7 @@
             color: #000;
         }
     </style>
-  <link href="css/bundle-69a4c244.css?v=69a4c244" rel="stylesheet" type="text/css">
+  <link href="css/bundle-7bc66f74.css?v=20260829a" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -818,9 +838,9 @@
     <div id="app-layer">
         <!-- SIDEBAR -->
         <div class="sidebar">
-            <div class="nav-icon active"><i class="fas fa-calculator" aria-hidden="true"></i></div>
-            <div class="nav-icon" title="Reset" onclick="resetApp()"><i class="fas fa-undo" aria-hidden="true"></i></div>
-            <div class="nav-icon" title="Edit Rates" onclick="openRateEditor()"><i class="fas fa-cog" aria-hidden="true"></i></div>
+            <button type="button" class="nav-icon active" aria-label="Estimator" aria-current="page"><i class="fas fa-calculator" aria-hidden="true"></i></button>
+            <button type="button" class="nav-icon" aria-label="Reset quote" onclick="resetApp()"><i class="fas fa-undo" aria-hidden="true"></i></button>
+            <button type="button" class="nav-icon" aria-label="Edit base rates" onclick="openRateEditor()"><i class="fas fa-cog" aria-hidden="true"></i></button>
         </div>
 
         <!-- CONFIG -->
@@ -828,7 +848,7 @@
             <div class="panel-header">
                 <div class="panel-title">QUOTE CONFIGURATION</div>
                 <div style="position:relative;">
-                    <select aria-label="Preset Sel" id="preset-sel" class="inp"
+                    <select aria-label="Load a preset package" id="preset-sel" class="inp"
                         style="width: 140px; margin: 0; padding: 6px 12px; font-size: 0.8rem; height: auto;"
                         onchange="applyPreset()">
                         <option value="">Load Preset…</option>
@@ -863,7 +883,7 @@
                         oninput="render()">
 
                     <label class="inp-label">Industry / Type</label>
-                    <select aria-label="C Ind" id="c-ind" class="inp" onchange="render()">
+                    <select aria-label="Industry / Type" id="c-ind" class="inp" onchange="render()">
                         <option value="1.0">Standard Business</option>
                         <option value="1.2">Hospitality / Hotel</option>
                         <option value="0.9">Real Estate (Volume)</option>
@@ -873,7 +893,7 @@
                     </select>
 
                     <label class="inp-label">Valid Until</label>
-                    <input aria-label="P Date Exp" type="date" id="p-date-exp" class="inp" onchange="render()">
+                    <input aria-label="Quote expiry date" type="date" id="p-date-exp" class="inp" onchange="render()">
 
                     <label class="inp-label">Introductory Note</label>
                     <textarea aria-label="Optional personal message" id="p-note" class="inp" rows="3" placeholder="Optional personal message…"
@@ -893,49 +913,49 @@
                 <div id="tab-media" class="tab-content">
                     <!-- Tour -->
                     <div class="svc-card active" id="card-tour">
-                        <div class="svc-head" onclick="toggleCard('card-tour')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-tour-body" onclick="toggleCard('card-tour')">
                             <span><i class="fas fa-street-view" style="color:var(--cyan)" aria-hidden="true"></i> VIRTUAL TOUR</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-tour-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Panoramas</span>
-                                    <input aria-label="N Tour" type="number" id="n-tour" class="num-inp" min="0" max="100" value="0"
+                                    <input aria-label="Panoramas" type="number" id="n-tour" class="num-inp" min="0" max="100" value="0"
                                         oninput="sync('n-tour', 'r-tour')">
                                 </div>
-                                <input aria-label="R Tour" type="range" id="r-tour" min="0" max="100" value="0"
+                                <input aria-label="Panoramas (slider)" type="range" id="r-tour" min="0" max="100" value="0"
                                     oninput="sync('r-tour', 'n-tour')">
                             </div>
 
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Info Points / Hotspots</span>
-                                    <input aria-label="N Info" type="number" id="n-info" class="num-inp" min="0" max="50" value="0"
+                                    <input aria-label="Info Points / Hotspots" type="number" id="n-info" class="num-inp" min="0" max="50" value="0"
                                         oninput="sync('n-info', 'r-info')">
                                 </div>
-                                <input aria-label="R Info" type="range" id="r-info" min="0" max="50" value="0"
+                                <input aria-label="Info Points / Hotspots (slider)" type="range" id="r-info" min="0" max="50" value="0"
                                     oninput="sync('r-info', 'n-info')">
                             </div>
 
                             <label class="chk-wrap">
-                                <input aria-label="Chk Doll" type="checkbox" id="chk-doll" onchange="render()">
+                                <input type="checkbox" id="chk-doll" onchange="render()">
                                 <span>3D Dollhouse / Schematic - $150</span>
                             </label>
                             <label class="chk-wrap">
-                                <input aria-label="Chk Plan" type="checkbox" id="chk-plan" onchange="render()">
+                                <input type="checkbox" id="chk-plan" onchange="render()">
                                 <span>2D Floor Plan - $100</span>
                             </label>
                             <label class="chk-wrap">
-                                <input aria-label="Chk Ui" type="checkbox" id="chk-ui" onchange="render()">
+                                <input type="checkbox" id="chk-ui" onchange="render()">
                                 <span>Custom Menu / UI Overlay - $300</span>
                             </label>
                             <label class="chk-wrap">
-                                <input aria-label="Chk Host" type="checkbox" id="chk-host" onchange="render()">
+                                <input type="checkbox" id="chk-host" onchange="render()">
                                 <span>Hosting (1 Year) - $150</span>
                             </label>
                             <label class="chk-wrap">
-                                <input aria-label="Chk Gsv" type="checkbox" id="chk-gsv" onchange="render()">
+                                <input type="checkbox" id="chk-gsv" onchange="render()">
                                 <span>Google Street View Upload - $250</span>
                             </label>
                         </div>
@@ -943,56 +963,56 @@
 
                     <!-- Video -->
                     <div class="svc-card" id="card-vid">
-                        <div class="svc-head" onclick="toggleCard('card-vid')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-vid-body" onclick="toggleCard('card-vid')">
                             <span><i class="fas fa-video" style="color:var(--green)" aria-hidden="true"></i> Video Content</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-vid-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>360° Video (Minutes)</span>
-                                    <input aria-label="N Vid" type="number" id="n-vid" class="num-inp" min="0" max="20" value="0"
+                                    <input aria-label="360° Video (Minutes)" type="number" id="n-vid" class="num-inp" min="0" max="20" value="0"
                                         oninput="sync('n-vid', 'r-vid')">
                                 </div>
-                                <input aria-label="R Vid" type="range" id="r-vid" min="0" max="20" value="0"
+                                <input aria-label="360° Video (Minutes) (slider)" type="range" id="r-vid" min="0" max="20" value="0"
                                     oninput="sync('r-vid', 'n-vid')">
                             </div>
 
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Social Media Reels (Vertical)</span>
-                                    <input aria-label="N Reels" type="number" id="n-reels" class="num-inp" min="0" max="10" value="0"
+                                    <input aria-label="Social Media Reels (Vertical)" type="number" id="n-reels" class="num-inp" min="0" max="10" value="0"
                                         oninput="sync('n-reels', 'r-reels')">
                                 </div>
-                                <input aria-label="R Reels" type="range" id="r-reels" min="0" max="10" value="0"
+                                <input aria-label="Social Media Reels (Vertical) (slider)" type="range" id="r-reels" min="0" max="10" value="0"
                                     oninput="sync('r-reels', 'n-reels')">
                             </div>
 
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Pro Voiceover (Mins)</span>
-                                    <input aria-label="N Vo" type="number" id="n-vo" class="num-inp" min="0" max="10" value="0"
+                                    <input aria-label="Pro Voiceover (Mins)" type="number" id="n-vo" class="num-inp" min="0" max="10" value="0"
                                         oninput="sync('n-vo', 'r-vo')">
                                 </div>
-                                <input aria-label="R Vo" type="range" id="r-vo" min="0" max="10" value="0" oninput="sync('r-vo', 'n-vo')">
+                                <input aria-label="Pro Voiceover (Mins) (slider)" type="range" id="r-vo" min="0" max="10" value="0" oninput="sync('r-vo', 'n-vo')">
                             </div>
                         </div>
                     </div>
 
                     <!-- Drone Photo -->
                     <div class="svc-card" id="card-drone-p">
-                        <div class="svc-head" onclick="toggleCard('card-drone-p')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-drone-p-body" onclick="toggleCard('card-drone-p')">
                             <span><i class="fas fa-camera" style="color:violet" aria-hidden="true"></i> AERIAL PHOTO</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-drone-p-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Images</span>
-                                    <input aria-label="N Drone P" type="number" id="n-drone-p" class="num-inp" min="0" max="20" value="0"
+                                    <input aria-label="Images" type="number" id="n-drone-p" class="num-inp" min="0" max="20" value="0"
                                         oninput="sync('n-drone-p', 'r-drone-p')">
                                 </div>
-                                <input aria-label="R Drone P" type="range" id="r-drone-p" min="0" max="20" value="0"
+                                <input aria-label="Images (slider)" type="range" id="r-drone-p" min="0" max="20" value="0"
                                     oninput="sync('r-drone-p', 'n-drone-p')">
                             </div>
                         </div>
@@ -1000,18 +1020,18 @@
 
                     <!-- Drone Video -->
                     <div class="svc-card" id="card-drone-v">
-                        <div class="svc-head" onclick="toggleCard('card-drone-v')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-drone-v-body" onclick="toggleCard('card-drone-v')">
                             <span><i class="fas fa-helicopter" style="color:violet" aria-hidden="true"></i> AERIAL VIDEO</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-drone-v-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Flight Ops / Locations</span>
-                                    <input aria-label="N Drone V" type="number" id="n-drone-v" class="num-inp" min="0" max="10" value="0"
+                                    <input aria-label="Flight Ops / Locations" type="number" id="n-drone-v" class="num-inp" min="0" max="10" value="0"
                                         oninput="sync('n-drone-v', 'r-drone-v')">
                                 </div>
-                                <input aria-label="R Drone V" type="range" id="r-drone-v" min="0" max="10" value="0"
+                                <input aria-label="Flight Ops / Locations (slider)" type="range" id="r-drone-v" min="0" max="10" value="0"
                                     oninput="sync('r-drone-v', 'n-drone-v')">
                             </div>
                         </div>
@@ -1019,18 +1039,18 @@
 
                     <!-- HDR -->
                     <div class="svc-card" id="card-hdr">
-                        <div class="svc-head" onclick="toggleCard('card-hdr')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-hdr-body" onclick="toggleCard('card-hdr')">
                             <span><i class="fas fa-camera" style="color:orange" aria-hidden="true"></i> HDR Photo</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-hdr-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Still Images</span>
-                                    <input aria-label="N Hdr" type="number" id="n-hdr" class="num-inp" min="0" max="100" value="0"
+                                    <input aria-label="Still Images" type="number" id="n-hdr" class="num-inp" min="0" max="100" value="0"
                                         oninput="sync('n-hdr', 'r-hdr')">
                                 </div>
-                                <input aria-label="R Hdr" type="range" id="r-hdr" min="0" max="100" value="0"
+                                <input aria-label="Still Images (slider)" type="range" id="r-hdr" min="0" max="100" value="0"
                                     oninput="sync('r-hdr', 'n-hdr')">
                             </div>
                         </div>
@@ -1043,7 +1063,7 @@
                         <div class="svc-head"><span><i class="fas fa-globe" aria-hidden="true"></i> Digital Presence</span></div>
                         <div class="svc-body" style="max-height:800px; opacity:1;">
                             <label class="inp-label">Website Development</label>
-                            <select aria-label="Sel Web" id="sel-web" class="inp" onchange="render()">
+                            <select aria-label="Website package" id="sel-web" class="inp" onchange="render()">
                                 <option value="0">None</option>
                                 <option value="1800">Landing Page ($1,800)</option>
                                 <option value="5000">Corporate Site ($5,000)</option>
@@ -1052,7 +1072,7 @@
                             </select>
 
                             <label class="inp-label" style="margin-top:10px;">Mobile Application</label>
-                            <select aria-label="Sel App" id="sel-app" class="inp" onchange="render()">
+                            <select aria-label="App package" id="sel-app" class="inp" onchange="render()">
                                 <option value="0">None</option>
                                 <option value="4000">PWA (Progressive Web App)</option>
                                 <option value="12000">Venue Companion App</option>
@@ -1060,39 +1080,39 @@
                             </select>
 
                             <label class="chk-wrap" style="margin-top:20px;">
-                                <input aria-label="Chk Gbp" type="checkbox" id="chk-gbp" onchange="render()">
+                                <input type="checkbox" id="chk-gbp" onchange="render()">
                                 <span>Google Business Profile Optimization ($400)</span>
                             </label>
 
                             <label class="chk-wrap">
-                                <input aria-label="Chk Logo" type="checkbox" id="chk-logo" onchange="render()">
+                                <input type="checkbox" id="chk-logo" onchange="render()">
                                 <span>Logo / Branding Kit ($500)</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="svc-card" id="card-ota">
-                        <div class="svc-head" onclick="toggleCard('card-ota')">
+                        <button type="button" class="svc-head" aria-expanded="false" aria-controls="card-ota-body" onclick="toggleCard('card-ota')">
                             <span><i class="fas fa-sync" aria-hidden="true"></i> OTA & Channels</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                        <div class="svc-body">
+                        </button>
+                        <div class="svc-body" id="card-ota-body">
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Room Types</span>
-                                    <input aria-label="N Ota R" type="number" id="n-ota-r" class="num-inp" min="0" max="30" value="0"
+                                    <input aria-label="Room Types" type="number" id="n-ota-r" class="num-inp" min="0" max="30" value="0"
                                         oninput="sync('n-ota-r', 'r-ota-r')">
                                 </div>
-                                <input aria-label="R Ota R" type="range" id="r-ota-r" min="0" max="30" value="0"
+                                <input aria-label="Room Types (slider)" type="range" id="r-ota-r" min="0" max="30" value="0"
                                     oninput="sync('r-ota-r', 'n-ota-r')">
                             </div>
                             <div class="range-group">
                                 <div class="range-header">
                                     <span>Channels</span>
-                                    <input aria-label="N Ota C" type="number" id="n-ota-c" class="num-inp" min="0" max="10" value="0"
+                                    <input aria-label="Channels" type="number" id="n-ota-c" class="num-inp" min="0" max="10" value="0"
                                         oninput="sync('n-ota-c', 'r-ota-c')">
                                 </div>
-                                <input aria-label="R Ota C" type="range" id="r-ota-c" min="0" max="10" value="0"
+                                <input aria-label="Channels (slider)" type="range" id="r-ota-c" min="0" max="10" value="0"
                                     oninput="sync('r-ota-c', 'n-ota-c')">
                             </div>
                         </div>
@@ -1104,18 +1124,18 @@
                     <div
                         style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:20px;">
                         <label class="inp-label">Travel / Logistics Cost ($)</label>
-                        <input aria-label="Inp Travel" type="number" id="inp-travel" class="inp" value="0" oninput="render()">
+                        <input aria-label="Travel cost (USD)" type="number" id="inp-travel" class="inp" value="0" oninput="render()">
                     </div>
 
                     <div
                         style="background:rgba(255,0,0,0.05); padding:20px; border-radius:12px; border:1px solid rgba(255,0,0,0.2);">
                         <label class="inp-label" style="color:#ff6b6b;">Discount / Adjustment (%)</label>
-                        <input aria-label="Inp Disc" type="number" id="inp-disc" class="inp" value="0" oninput="render()">
+                        <input aria-label="Discount (%)" type="number" id="inp-disc" class="inp" value="0" oninput="render()">
                     </div>
 
                     <label class="chk-wrap"
                         style="margin-top:20px; background:rgba(255, 165, 0, 0.1); padding:10px; border-radius:8px;">
-                        <input aria-label="Chk Rush" type="checkbox" id="chk-rush" onchange="render()">
+                        <input type="checkbox" id="chk-rush" onchange="render()">
                         <span style="color:orange; font-weight:600;">RUSH DELIVERY (48hr) - +25%</span>
                     </label>
                 </div>
@@ -1217,7 +1237,7 @@
             <div class="rate-panel">
                 <div class="rate-head">
                     <div style="font-weight:700;">EDIT BASE RATES</div>
-                    <div onclick="closeRateEditor()" style="cursor:pointer;"><i class="fas fa-times" aria-hidden="true"></i></div>
+                    <button type="button" onclick="closeRateEditor()" aria-label="Close rate editor" style="cursor:pointer;background:none;border:0;color:inherit;font:inherit;padding:0;"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="rate-body" id="rate-list">
                     <!-- Injected via JS -->
@@ -1277,8 +1297,19 @@
         function toggleCard(id) {
             // FIXED: Ensure we target the element by ID cleanly
             const el = document.getElementById(id);
-            if (el) el.classList.toggle('active');
+            if (!el) return;
+            const open = el.classList.toggle('active');
+            const head = el.querySelector('.svc-head');
+            if (head) head.setAttribute('aria-expanded', String(open));
         }
+
+        // Cards that start expanded must say so.
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.svc-card').forEach(function (card) {
+                const head = card.querySelector('.svc-head[aria-expanded]');
+                if (head) head.setAttribute('aria-expanded', String(card.classList.contains('active')));
+            });
+        });
 
         function resetApp() {
             if (confirm("Reset quote and clear saved data?")) {
@@ -1368,8 +1399,8 @@
                     for (const [subKey, subVal] of Object.entries(val)) {
                         list.innerHTML += `
                             <div class="rate-item">
-                                <label>${key} ${subKey}</label>
-                                <input aria-label="Edit ${Key} ${Sub Key}" type="number" id="edit-${key}-${subKey}" value="${subVal}">
+                                <label for="edit-${key}-${subKey}">${key} ${subKey}</label>
+                                <input type="number" id="edit-${key}-${subKey}" value="${subVal}">
                             </div>
                         `;
                     }
@@ -1377,8 +1408,8 @@
                     // Simple value
                     list.innerHTML += `
                         <div class="rate-item">
-                            <label>${key}</label>
-                            <input aria-label="Edit ${Key}" type="number" id="edit-${key}" value="${val}">
+                            <label for="edit-${key}">${key}</label>
+                            <input type="number" id="edit-${key}" value="${val}">
                         </div>
                     `;
                 }
@@ -1747,14 +1778,14 @@
             } catch (e) { console.error("Load error", e); }
         }
     </script>
-  <script src="js/mobile.js?v=20260814u" defer></script>
-  <script src="js/wow.js?v=20260814u" defer></script>
-  <script src="js/v2-extras.js?v=20260814u" defer></script>
-  <script src="js/motion.js?v=20260814u" defer></script>
-  <script src="js/pwa.js?v=20260814u" defer></script>
-  <script src="js/three-loader.js?v=20260814u" data-three-src="js/three.min.js?v=20260827" defer></script>
-  <script src="js/aurora.js?v=20260814u" defer></script>
-  <script src="js/sidenav.js?v=20260814u" defer></script>
+  <script src="js/mobile.js?v=20260829a" defer></script>
+  <script src="js/wow.js?v=20260829a" defer></script>
+  <script src="js/v2-extras.js?v=20260829a" defer></script>
+  <script src="js/motion.js?v=20260829a" defer></script>
+  <script src="js/pwa.js?v=20260829a" defer></script>
+  <script src="js/three-loader.js?v=20260829a" data-three-src="js/three.min.js?v=20260829a" defer></script>
+  <script src="js/aurora.js?v=20260829a" defer></script>
+  <script src="js/sidenav.js?v=20260829a" defer></script>
 </body>
 
 </html>

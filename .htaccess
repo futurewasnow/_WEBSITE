@@ -122,6 +122,16 @@ DirectoryIndex index.html
     Header set Cache-Control "public, max-age=3600, must-revalidate"
   </FilesMatch>
 
+  # The service worker is the one script fetched from a fixed URL with no
+  # ?v= stamp, so the rule above would pin it for a year as "immutable" —
+  # and it is what invalidates every other cached asset. Never cache it.
+  <Files "sw.js">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </Files>
+  <Files "manifest.webmanifest">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </Files>
+
   # ============================================================
   # 4. SECURITY HEADERS
   # ============================================================
@@ -182,5 +192,15 @@ ErrorDocument 404 /404.html
 <FilesMatch "(^\.|composer\.|package\.|README|\.env|\.git)">
   Require all denied
 </FilesMatch>
+
+# Build tooling and internal notes are not part of the site. They have been
+# uploaded in the past, and nothing above stops them being read, so deny the
+# extensions outright.
+<FilesMatch "\.(py|ps1|md|bak|log|sql|yml|yaml|ini|sh)$">
+  Require all denied
+</FilesMatch>
+<Files "FTP-UPLOAD.txt">
+  Require all denied
+</Files>
 
 Options -Indexes

@@ -3,7 +3,7 @@
    Offline support + smart caching for repeat visits.
    Cache strategy: stale-while-revalidate for HTML, cache-first for assets.
    ============================================================ */
-const CACHE_VERSION = 'ys360-v2026-05-14';
+const CACHE_VERSION = 'ys360-v2026-08-28';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 

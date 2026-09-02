@@ -1649,7 +1649,7 @@ body.aurora-on .ys-footer-social a {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   color: var(--aurora-text-muted);
-  transition: all .3s var(--ease-aurora);
+  transition: transform .3s var(--ease-aurora), opacity .3s var(--ease-aurora), color .3s var(--ease-aurora), background-color .3s var(--ease-aurora), border-color .3s var(--ease-aurora), box-shadow .3s var(--ease-aurora);
 }
 body.aurora-on .ys-footer-social a:hover {
   color: #04120c;
@@ -3091,6 +3091,84 @@ h1.sexy-heading,
   visibility: visible !important;
 }
 
+/* ============================================================
+   COMPACT PAGE HEADER
+   Content pages (pricing, guides, comparisons, hubs) were reusing
+   .hero-section + .hero-subheading, which are sized for the homepage's
+   full-screen video hero. On a 812px phone that produced a header exactly
+   812px tall -- a whole screen of title before a single price or paragraph,
+   with the intro line alone running to 399px (674px in Spanish).
+
+   This is a title block, not a hero: it clears the fixed nav, states the
+   page, and gets out of the way.
+   ============================================================ */
+.ys-page-header {
+  /* mobile.css carries `section { padding: 56px 0 !important }` on a bare
+     element selector, so a plain class rule here loses. */
+  padding: 116px 16px 28px !important;
+  text-align: center;
+  background: var(--ys-bg-soft, #0a0c12);
+  border-bottom: 1px solid var(--ys-border, rgba(255,255,255,0.08));
+}
+/* A legacy Webflow rule sets .container { height: 600px } and later
+   { min-height: 100%; height: 100% !important }, which inflated this title
+   block to a full 913px regardless of its own padding. Inside the page header
+   the container is just a width constraint. */
+.ys-page-header .container {
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.ys-page-header .section-tag {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.ys-page-header h1,
+.ys-page-header h1.apple-heading,
+.ys-page-header h1.apple-heading.white-text {
+  /* .apple-heading sets font-size/line-height from --fs-display with
+     !important, so a page-header headline rendered at full hero scale (41px on
+     a 375px screen). Spanish headlines, which run longer, wrapped to five
+     lines. These need !important to win. */
+  font-size: clamp(2rem, 4vw + 1rem, 2.6rem) !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 auto 14px;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+/* Beat the hero-scale type these pages were inheriting. */
+/* .hero-subheading carries text-transform:uppercase and hero positioning, so a
+   140-character intro became ten lines of shouting overlapping the H1. These
+   headers use their own paragraph class instead. */
+.ys-page-header .ys-page-header-sub,
+.ys-page-header p {
+  text-transform: none !important;
+  position: static !important;
+  font-size: 1.02rem !important;
+  line-height: 1.6 !important;
+  letter-spacing: normal !important;
+  max-width: 58ch !important;
+  margin: 0 auto !important;
+  color: var(--ys-text-muted, rgba(255,255,255,0.68));
+}
+.ys-page-header .ys-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+}
+.ys-page-header .ys-trust-badge {
+  font-size: 0.78rem;
+  padding: 6px 12px;
+}
+@media (min-width: 768px) {
+  .ys-page-header { padding: 132px 24px 36px !important; }
+}
+
 /* ===== a11y-fixes.css ===== */
 /* ============================================================
    ACCESSIBILITY & INTERACTION FIXES
@@ -3255,4 +3333,73 @@ input[type="radio"],
 
 .hero-video-toggle[hidden] {
   display: none;
+}
+
+/* --- Inline field errors (see js/form-a11y.js) ----------------------------- */
+.ys-field-error {
+  margin: 6px 0 10px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #ff8a94;
+}
+
+.ys-field-error[hidden] {
+  display: none;
+}
+
+[aria-invalid="true"] {
+  border-color: #ff5e69 !important;
+}
+
+/* --- Accordion triggers ---------------------------------------------------
+   These were <div>s with click handlers; as real <button>s they need the UA
+   button chrome stripped back to what the original markup looked like. */
+.ys-faq-question {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ============================================================
+   HERO LAYOUT
+   The nav clearance itself lives on #Hero in design-system.css and
+   mobile.css, which lock the section with !important. This is the
+   measure fix that goes with it.
+   ============================================================ */
+/* The measure that forced the subheading onto five lines. A little
+   wider keeps it to three without hurting readability (~72ch). */
+#Hero .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+/* The Spanish homepage hero is <section class="hero hero-section"> with no
+   id="Hero", so the clearance rule in design-system.css misses it. Same
+   overlap: measured -61px against the nav at 1280x720. */
+.hero.hero-section {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(80px + 1.5rem);
+  padding-bottom: 2.5rem;
+  box-sizing: border-box;
+}
+
+.hero.hero-section .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  .hero.hero-section {
+    padding-top: calc(64px + 1rem);
+    padding-bottom: 2rem;
+  }
 }

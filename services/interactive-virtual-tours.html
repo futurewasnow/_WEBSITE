@@ -27,7 +27,7 @@
     <meta name="title" content="Interactive Virtual Tours Costa Rica | Custom Hotspots & UX | YouSee360">
     <meta name="description" content="Custom interactive 360° virtual tours with hotspots, floor plans, and audio narration. Used by Costa Rica's leading hotels, resorts, and real estate brokers.">
 
-    <link href="../css/bundle-4f6e6daf.css?v=4f6e6daf" rel="stylesheet" type="text/css">
+    <link href="../css/bundle-613c6fc2.css?v=20260829a" rel="stylesheet" type="text/css">
     <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
@@ -133,7 +133,7 @@
   <meta name="theme-color" content="#06070a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="../css/bundle-180b4518.css?v=180b4518" rel="stylesheet" type="text/css">
+  <link href="../css/bundle-f24d09a3.css?v=20260829a" rel="stylesheet" type="text/css">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
   <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
@@ -566,24 +566,24 @@
     <div class="ys-faq-inner">
       <h2>Common questions</h2>
       <div class="ys-faq-item">
-        <div class="ys-faq-question">Can the tour have multiple floors / buildings?</div>
-        <div class="ys-faq-answer"><p>Yes — unlimited scenes, linked via floor plans, maps, or scene-selector menus. We've built tours with 80+ scenes.</p></div>
+        <button type="button" class="ys-faq-question" id="interactive-virtual-tours-faq-q1" aria-expanded="false" aria-controls="interactive-virtual-tours-faq-a1">Can the tour have multiple floors / buildings?</button>
+        <div class="ys-faq-answer" id="interactive-virtual-tours-faq-a1" role="region" aria-labelledby="interactive-virtual-tours-faq-q1"><p>Yes — unlimited scenes, linked via floor plans, maps, or scene-selector menus. We've built tours with 80+ scenes.</p></div>
       </div>
       <div class="ys-faq-item">
-        <div class="ys-faq-question">How do visitors navigate between scenes?</div>
-        <div class="ys-faq-answer"><p>Three ways: click hotspot arrows (most intuitive), tap a thumbnail in the scene-selector, or click a location on the embedded floor plan. They choose what feels natural.</p></div>
+        <button type="button" class="ys-faq-question" id="interactive-virtual-tours-faq-q2" aria-expanded="false" aria-controls="interactive-virtual-tours-faq-a2">How do visitors navigate between scenes?</button>
+        <div class="ys-faq-answer" id="interactive-virtual-tours-faq-a2" role="region" aria-labelledby="interactive-virtual-tours-faq-q2"><p>Three ways: click hotspot arrows (most intuitive), tap a thumbnail in the scene-selector, or click a location on the embedded floor plan. They choose what feels natural.</p></div>
       </div>
       <div class="ys-faq-item">
-        <div class="ys-faq-question">Can I update the tour after delivery?</div>
-        <div class="ys-faq-answer"><p>Yes — we offer a self-service editor where you can swap text, photos, and hotspot links yourself. For new scenes you'd schedule a re-shoot.</p></div>
+        <button type="button" class="ys-faq-question" id="interactive-virtual-tours-faq-q3" aria-expanded="false" aria-controls="interactive-virtual-tours-faq-a3">Can I update the tour after delivery?</button>
+        <div class="ys-faq-answer" id="interactive-virtual-tours-faq-a3" role="region" aria-labelledby="interactive-virtual-tours-faq-q3"><p>Yes — we offer a self-service editor where you can swap text, photos, and hotspot links yourself. For new scenes you'd schedule a re-shoot.</p></div>
       </div>
       <div class="ys-faq-item">
-        <div class="ys-faq-question">How fast does the tour load?</div>
-        <div class="ys-faq-answer"><p>First scene loads in 1-3 seconds even on slow 3G. Subsequent scenes pre-fetch in the background so transitions are instant.</p></div>
+        <button type="button" class="ys-faq-question" id="interactive-virtual-tours-faq-q4" aria-expanded="false" aria-controls="interactive-virtual-tours-faq-a4">How fast does the tour load?</button>
+        <div class="ys-faq-answer" id="interactive-virtual-tours-faq-a4" role="region" aria-labelledby="interactive-virtual-tours-faq-q4"><p>First scene loads in 1-3 seconds even on slow 3G. Subsequent scenes pre-fetch in the background so transitions are instant.</p></div>
       </div>
       <div class="ys-faq-item">
-        <div class="ys-faq-question">Does this work in VR headsets?</div>
-        <div class="ys-faq-answer"><p>Yes — Meta Quest, Vision Pro, and any WebXR-compatible headset can load the tour directly from your URL. No app install needed.</p></div>
+        <button type="button" class="ys-faq-question" id="interactive-virtual-tours-faq-q5" aria-expanded="false" aria-controls="interactive-virtual-tours-faq-a5">Does this work in VR headsets?</button>
+        <div class="ys-faq-answer" id="interactive-virtual-tours-faq-a5" role="region" aria-labelledby="interactive-virtual-tours-faq-q5"><p>Yes — Meta Quest, Vision Pro, and any WebXR-compatible headset can load the tour directly from your URL. No app install needed.</p></div>
       </div>
     </div>
   </section>
@@ -799,22 +799,23 @@
 
     <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js"
         type="text/javascript" defer></script>
-    <script src="../js/webflow.js?v=20260814u" type="text/javascript" defer></script>
-    <script src="../js/gsap.min.js?v=20260827" defer></script>
-    <script src="../js/particles.min.js?v=20260827" defer></script>
-    <script src="../js/animations.js?v=20260814u" type="text/javascript" defer></script>
-    <script src="../js/contact-modal.js?v=20260814u" type="text/javascript" defer></script>
-  <script src="../js/polish.js?v=20260814u" defer></script>
-  <script src="../js/mobile.js?v=20260814u" defer></script>
-  <script src="../js/wow.js?v=20260814u" defer></script>
+    <script src="../js/webflow.js?v=20260829a" type="text/javascript" defer></script>
+    <script src="../js/gsap.min.js?v=20260829a" defer></script>
+    <script src="../js/particles.min.js?v=20260829a" defer></script>
+    <script src="../js/animations.js?v=20260829a" type="text/javascript" defer></script>
+    <script src="../js/form-a11y.js?v=20260829a" defer></script>
+    <script src="../js/contact-modal.js?v=20260829a" type="text/javascript" defer></script>
+  <script src="../js/polish.js?v=20260829a" defer></script>
+  <script src="../js/mobile.js?v=20260829a" defer></script>
+  <script src="../js/wow.js?v=20260829a" defer></script>
   <!-- Hero particle network: deferred so it never blocks first paint -->
-  <script src="../js/three-loader.js?v=20260814u" data-three-src="../js/three.min.js?v=20260814u" defer></script>
-  <script src="../js/aurora.js?v=20260814u" defer></script>
-  <script src="../js/sidenav.js?v=20260814u" defer></script>
-  <script src="../js/hero-particles.js?v=20260814u" defer></script>
-  <script src="../js/v2-extras.js?v=20260814u" defer></script>
-  <script src="../js/motion.js?v=20260814u" defer></script>
-  <script src="../js/pwa.js?v=20260814u" defer></script>
+  <script src="../js/three-loader.js?v=20260829a" data-three-src="../js/three.min.js?v=20260829a" defer></script>
+  <script src="../js/aurora.js?v=20260829a" defer></script>
+  <script src="../js/sidenav.js?v=20260829a" defer></script>
+  <script src="../js/hero-particles.js?v=20260829a" defer></script>
+  <script src="../js/v2-extras.js?v=20260829a" defer></script>
+  <script src="../js/motion.js?v=20260829a" defer></script>
+  <script src="../js/pwa.js?v=20260829a" defer></script>
 </body>
 
 </html>

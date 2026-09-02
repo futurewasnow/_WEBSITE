@@ -279,21 +279,40 @@ function initProcessTabs() {
 
     if (!tabButtons.length || !tabPanels.length) return;
 
-    tabButtons.forEach(btn => {
+    const activate = (btn, moveFocus) => {
+        tabButtons.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+            b.setAttribute('tabindex', '-1');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('tabindex', '0');
+        if (moveFocus) btn.focus();
+    };
+
+    tabButtons.forEach((btn, i) => {
+        // A tablist is one tab stop; arrows move between the tabs inside it.
+        btn.addEventListener('keydown', (e) => {
+            let next = null;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % tabButtons.length;
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + tabButtons.length) % tabButtons.length;
+            else if (e.key === 'Home') next = 0;
+            else if (e.key === 'End') next = tabButtons.length - 1;
+            if (next === null) return;
+            e.preventDefault();
+            tabButtons[next].click();
+            activate(tabButtons[next], true);
+        });
+
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = btn.getAttribute('data-tab');
 
             // Deactivate all
-            tabButtons.forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
+            activate(btn, false);
             tabPanels.forEach(p => p.classList.remove('active'));
 
-            // Activate current
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
 
             const targetPanel = document.getElementById(targetId);
             if (targetPanel) {

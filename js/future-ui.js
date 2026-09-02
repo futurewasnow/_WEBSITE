@@ -4,6 +4,10 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // The custom cursor is a rAF-driven follower — decorative motion that
+    // reduced-motion visitors opt out of.
+    if (window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // initElegantReveal(); // Disabled - was causing hero to be invisible
     initCustomCursor(); // Re-enabled per user request
     // initSmoothScroll(); // Disabled per user request (too heavy)

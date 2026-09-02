@@ -5730,10 +5730,6 @@ p {
     object-fit: contain;
   }
 
-  .white-text {
-    float: left;
-  }
-
   .spc {
     margin-bottom: 30px;
   }
@@ -6622,7 +6618,6 @@ p {
   }
 
   .white-text {
-    float: left;
     text-align: center;
   }
 

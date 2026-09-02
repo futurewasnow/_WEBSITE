@@ -44,11 +44,11 @@
           
           <!-- Services Selection -->
           <div class="modal-form-section">
-            <label class="modal-section-label">
+            <div class="modal-section-label" role="heading" aria-level="4">
               <i class="fas fa-check-circle" aria-hidden="true"></i>
               SELECT YOUR SERVICES
               <span class="label-hint">(Select all that apply)</span>
-            </label>
+            </div>
             <div class="modal-checkbox-grid" id="modalServicesGrid">
               <label class="modal-checkbox" data-service="360-photo">
                 <input type="checkbox" name="services[]" value="360 Photo">
@@ -79,28 +79,28 @@
 
           <!-- Contact Details -->
           <div class="modal-form-section">
-            <label class="modal-section-label">
+            <div class="modal-section-label" role="heading" aria-level="4">
               <i class="fas fa-user" aria-hidden="true"></i>
               YOUR DETAILS
-            </label>
-            <div class="modal-form-row">
-              <input type="text" name="fullName" placeholder="Full Name *" required class="modal-input">
-              <input type="text" name="company" placeholder="Company / Business Name" class="modal-input">
             </div>
             <div class="modal-form-row">
-              <input type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input">
-              <input type="email" name="email" placeholder="Email Address *" required class="modal-input" id="modalEmail">
+              <input type="text" name="fullName" placeholder="Full Name *" required class="modal-input" autocomplete="name">
+              <input type="text" name="company" placeholder="Company / Business Name" class="modal-input" autocomplete="organization">
+            </div>
+            <div class="modal-form-row">
+              <input type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input" autocomplete="tel" inputmode="tel">
+              <input type="email" name="email" placeholder="Email Address *" required class="modal-input" id="modalEmail" autocomplete="email" inputmode="email" spellcheck="false">
             </div>
             <textarea name="message" placeholder="Tell us about your project, location, and goals…" required class="modal-textarea" id="modalMessage"></textarea>
           </div>
 
           <!-- Budget Selection -->
           <div class="modal-form-section">
-            <label class="modal-section-label">
+            <div class="modal-section-label" role="heading" aria-level="4">
               <i class="fas fa-dollar-sign" aria-hidden="true"></i>
               PROJECT BUDGET (USD)
               <span class="label-hint">(Helps us tailor your quote)</span>
-            </label>
+            </div>
             <div class="modal-radio-grid">
               <label class="modal-radio">
                 <input type="radio" name="budget" value="Less than $5k">
@@ -144,7 +144,7 @@
         </form>
 
         <!-- Success Message -->
-        <div class="modal-success" id="modalSuccess" style="display: none;">
+        <div class="modal-success" id="modalSuccess" style="display: none;" role="status" aria-live="polite">
           <div class="success-icon">
             <i class="fas fa-check-circle" aria-hidden="true"></i>
           </div>
@@ -158,7 +158,7 @@
         </div>
 
         <!-- Error Message -->
-        <div class="modal-error" id="modalError" style="display: none;">
+        <div class="modal-error" id="modalError" style="display: none;" role="alert" aria-live="assertive">
           <div class="error-icon">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
           </div>
@@ -308,6 +308,7 @@
     });
 
     // Form submission
+    if (window.YSForms) window.YSForms.init(form);
     form.addEventListener('submit', handleFormSubmit);
 
     // Success close button
@@ -487,6 +488,7 @@
     e.preventDefault();
 
     const form = e.target;
+    if (window.YSForms && !window.YSForms.validate(form)) return;
     const submitBtn = document.getElementById('modalSubmitBtn');
     const btnText = submitBtn.querySelector('.btn-text');
     const btnLoading = submitBtn.querySelector('.btn-loading');
@@ -512,6 +514,7 @@
         // Show success
         form.style.display = 'none';
         successDiv.style.display = 'block';
+        if (window.YSForms) window.YSForms.focusPanel(successDiv);
       } else {
         throw new Error('Form submission failed');
       }
@@ -519,6 +522,7 @@
       console.error('Form submission error:', error);
       form.style.display = 'none';
       errorDiv.style.display = 'block';
+      if (window.YSForms) window.YSForms.focusPanel(errorDiv);
     } finally {
       // Reset button state
       btnText.style.display = 'inline';

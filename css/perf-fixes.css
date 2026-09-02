@@ -55,11 +55,15 @@ section, .ys-section, .ds-section,
   content-visibility: auto;
   contain-intrinsic-size: auto 800px;
 }
-/* Don't apply to hero — first paint matters there */
+/* Don't apply to anything that opens a page — first paint matters there, and a
+   skipped section reports its 800px contain-intrinsic-size placeholder instead
+   of its real height, which reserves ~600px of empty space above the fold. */
 .hero-section, section.hero-section,
 .about-hero, .portfolio-hero,
+.ys-page-header, section.ys-page-header,
 section[id="Hero"], #Hero {
   content-visibility: visible;
+  contain-intrinsic-size: auto none;
   contain-intrinsic-size: auto;
 }
 

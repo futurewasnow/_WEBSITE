@@ -118,7 +118,7 @@
   <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
   <meta name="geo.position" content="10.4678;-84.6433">
   <meta name="ICBM" content="10.4678, -84.6433">
-  <link href="css/bundle-ec3341b9.css?v=ec3341b9" rel="stylesheet" type="text/css">
+  <link href="css/bundle-e8ce94da.css?v=20260829a" rel="stylesheet" type="text/css">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <!-- Preload critical fonts for better performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,11 +142,12 @@
     type="text/javascript">window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('set', 'developer_id.dZGVlNj', true); gtag('config', 'G-E5XY5F8V2N');</script>
 
   <!-- Custom Vanilla JS -->
-  <script src="js/vanilla-main.js?v=20260814u" defer></script>
+  <script src="js/form-a11y.js?v=20260829a" defer></script>
+  <script src="js/vanilla-main.js?v=20260829a" defer></script>
 
   <!-- Animations CSS (defer non-critical) -->
-  <link rel="stylesheet" href="css/animations.css?v=20260814u" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="css/animations.css?v=20260814u"></noscript>
+  <link rel="stylesheet" href="css/animations.css?v=20260829a" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="css/animations.css?v=20260829a"></noscript>
 
   <!-- three.js / lenis / pannellum REMOVED from homepage — unused above-the-fold.
        Loaded only on pages that actually need them. -->
@@ -159,7 +160,7 @@
   <meta name="theme-color" content="#06070a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="css/bundle-180b4518.css?v=180b4518" rel="stylesheet" type="text/css">
+  <link href="css/bundle-f24d09a3.css?v=20260829a" rel="stylesheet" type="text/css">
   <!-- Pannellum removed from the homepage — the Experience section now embeds the
        real, full 3DVista client tour instead of a single low-res panorama. -->
   <link rel="preconnect" href="https://tours.yousee360.com">
@@ -207,8 +208,6 @@
 
 <body class="body">
   <a class="skip-link" href="#What">Skip to content</a>
-  <!-- Skip to content for accessibility -->
-  <a href="#What" class="skip-to-content">Skip to main content</a>
 
   <div data-collapse="tiny" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
     role="banner" class="navigation-bar w-nav">
@@ -290,14 +289,18 @@
              data-src-mp4="videos/website30mb-transcode.mp4"
              data-src-webm="videos/website30mb-transcode.webm"
              aria-hidden="true"></video>
+      <button type="button" class="hero-video-toggle" id="heroVideoToggle" hidden
+              aria-label="Pause background video" aria-pressed="false">
+        <i class="fas fa-pause" aria-hidden="true"></i>
+      </button>
     </div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
       <span class="hero-eyebrow"><i class="fas fa-circle-check" aria-hidden="true"></i> Google Street View Trusted · Costa Rica's 360° Studio</span>
       <h1 class="hero-heading">VIRTUAL TOUR EXPERTS <br> <span class="highlight">IN COSTA RICA</span></h1>
-      <p class="hero-subheading">Let guests walk your hotel, restaurant or property before they book &mdash;
-        12K&nbsp;HDR 360&deg; tours, live on your site and inside Google Maps.</p>
+      <p class="hero-subheading">Let guests walk your property before they book &mdash;
+        12K&nbsp;HDR 360&deg; tours, live on your site and in Google&nbsp;Maps.</p>
 
       <div class="hero-buttons">
         <a href="#Contact" class="btn-primary">Get a Free Quote</a>
@@ -573,17 +576,16 @@
       </div>
 
       <div class="process-tabs">
-        <div class="process-tab-buttons" role="tablist">
-          <button class="process-tab-btn active" data-tab="process-tab-1" role="tab"
-            aria-selected="true">Consultation</button>
-          <button class="process-tab-btn" data-tab="process-tab-2" role="tab" aria-selected="false">Capture</button>
-          <button class="process-tab-btn" data-tab="process-tab-3" role="tab" aria-selected="false">Processing</button>
-          <button class="process-tab-btn" data-tab="process-tab-4" role="tab" aria-selected="false">Curation</button>
-          <button class="process-tab-btn" data-tab="process-tab-5" role="tab" aria-selected="false">Delivery</button>
+        <div class="process-tab-buttons" role="tablist" aria-label="Our process">
+          <button class="process-tab-btn active" data-tab="process-tab-1" role="tab" id="process-tab-1-label" aria-controls="process-tab-1" aria-selected="true" tabindex="0">Consultation</button>
+          <button class="process-tab-btn" data-tab="process-tab-2" role="tab" id="process-tab-2-label" aria-controls="process-tab-2" aria-selected="false" tabindex="-1">Capture</button>
+          <button class="process-tab-btn" data-tab="process-tab-3" role="tab" id="process-tab-3-label" aria-controls="process-tab-3" aria-selected="false" tabindex="-1">Processing</button>
+          <button class="process-tab-btn" data-tab="process-tab-4" role="tab" id="process-tab-4-label" aria-controls="process-tab-4" aria-selected="false" tabindex="-1">Curation</button>
+          <button class="process-tab-btn" data-tab="process-tab-5" role="tab" id="process-tab-5-label" aria-controls="process-tab-5" aria-selected="false" tabindex="-1">Delivery</button>
         </div>
 
         <div class="process-tab-panels">
-          <div class="process-tab-panel active" id="process-tab-1" role="tabpanel">
+          <div class="process-tab-panel active" id="process-tab-1" role="tabpanel" aria-labelledby="process-tab-1-label" tabindex="0">
             <div class="process-tab-content">
               <div class="process-tab-text">
                 <span class="step-number">Step 01</span>
@@ -597,7 +599,7 @@
             </div>
           </div>
 
-          <div class="process-tab-panel" id="process-tab-2" role="tabpanel">
+          <div class="process-tab-panel" id="process-tab-2" role="tabpanel" aria-labelledby="process-tab-2-label" tabindex="0">
             <div class="process-tab-content">
               <div class="process-tab-text">
                 <span class="step-number">Step 02</span>
@@ -611,7 +613,7 @@
             </div>
           </div>
 
-          <div class="process-tab-panel" id="process-tab-3" role="tabpanel">
+          <div class="process-tab-panel" id="process-tab-3" role="tabpanel" aria-labelledby="process-tab-3-label" tabindex="0">
             <div class="process-tab-content">
               <div class="process-tab-text">
                 <span class="step-number">Step 03</span>
@@ -625,7 +627,7 @@
             </div>
           </div>
 
-          <div class="process-tab-panel" id="process-tab-4" role="tabpanel">
+          <div class="process-tab-panel" id="process-tab-4" role="tabpanel" aria-labelledby="process-tab-4-label" tabindex="0">
             <div class="process-tab-content">
               <div class="process-tab-text">
                 <span class="step-number">Step 04</span>
@@ -640,7 +642,7 @@
             </div>
           </div>
 
-          <div class="process-tab-panel" id="process-tab-5" role="tabpanel">
+          <div class="process-tab-panel" id="process-tab-5" role="tabpanel" aria-labelledby="process-tab-5-label" tabindex="0">
             <div class="process-tab-content">
               <div class="process-tab-text">
                 <span class="step-number">Step 05</span>
@@ -921,32 +923,32 @@
           <div class="ys-estimator-panel is-active" data-step="type">
             <h3>What kind of business do you have?</h3>
             <div class="ys-estimator-grid">
-              <button type="button" class="ys-estimator-option" data-value="hotel">
+              <button type="button" class="ys-estimator-option" data-value="hotel" aria-pressed="false">
                 <span class="opt-emoji">🏨</span>
                 <span class="opt-title">Hotel / Resort</span>
                 <span class="opt-desc">Boutique to large property</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="real-estate">
+              <button type="button" class="ys-estimator-option" data-value="real-estate" aria-pressed="false">
                 <span class="opt-emoji">🏡</span>
                 <span class="opt-title">Real Estate</span>
                 <span class="opt-desc">Listings, developments</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="restaurant">
+              <button type="button" class="ys-estimator-option" data-value="restaurant" aria-pressed="false">
                 <span class="opt-emoji">🍽️</span>
                 <span class="opt-title">Restaurant</span>
                 <span class="opt-desc">Dining, cafes, bars</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="adventure">
+              <button type="button" class="ys-estimator-option" data-value="adventure" aria-pressed="false">
                 <span class="opt-emoji">🏞️</span>
                 <span class="opt-title">Adventure / Tour</span>
                 <span class="opt-desc">Tours, outdoors</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="wellness">
+              <button type="button" class="ys-estimator-option" data-value="wellness" aria-pressed="false">
                 <span class="opt-emoji">🧘</span>
                 <span class="opt-title">Retreat / Wellness</span>
                 <span class="opt-desc">Yoga, therapy spaces</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="other">
+              <button type="button" class="ys-estimator-option" data-value="other" aria-pressed="false">
                 <span class="opt-emoji">✨</span>
                 <span class="opt-title">Other</span>
                 <span class="opt-desc">Tell us more</span>
@@ -958,17 +960,17 @@
           <div class="ys-estimator-panel" data-step="size">
             <h3>How big is the space we're capturing?</h3>
             <div class="ys-estimator-grid">
-              <button type="button" class="ys-estimator-option" data-value="small">
+              <button type="button" class="ys-estimator-option" data-value="small" aria-pressed="false">
                 <span class="opt-emoji">📍</span>
                 <span class="opt-title">Small</span>
                 <span class="opt-desc">Up to 5 scenes / a few rooms</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="medium">
+              <button type="button" class="ys-estimator-option" data-value="medium" aria-pressed="false">
                 <span class="opt-emoji">🏘️</span>
                 <span class="opt-title">Medium</span>
                 <span class="opt-desc">6–12 scenes / one floor</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="large">
+              <button type="button" class="ys-estimator-option" data-value="large" aria-pressed="false">
                 <span class="opt-emoji">🌆</span>
                 <span class="opt-title">Large</span>
                 <span class="opt-desc">13+ scenes / multi-building</span>
@@ -980,27 +982,27 @@
           <div class="ys-estimator-panel" data-step="addons">
             <h3>Any extras? (pick any that apply)</h3>
             <div class="ys-estimator-grid">
-              <button type="button" class="ys-estimator-option" data-value="drone" data-multi="1">
+              <button type="button" class="ys-estimator-option" data-value="drone" data-multi="1" aria-pressed="false">
                 <span class="opt-emoji">🛸</span>
                 <span class="opt-title">Drone aerials</span>
                 <span class="opt-desc">+$650</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="streetview" data-multi="1">
+              <button type="button" class="ys-estimator-option" data-value="streetview" data-multi="1" aria-pressed="false">
                 <span class="opt-emoji">🗺️</span>
                 <span class="opt-title">Google StreetView</span>
                 <span class="opt-desc">+$400</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="video" data-multi="1">
+              <button type="button" class="ys-estimator-option" data-value="video" data-multi="1" aria-pressed="false">
                 <span class="opt-emoji">🎥</span>
                 <span class="opt-title">360° video</span>
                 <span class="opt-desc">+$1,100</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="ar" data-multi="1">
+              <button type="button" class="ys-estimator-option" data-value="ar" data-multi="1" aria-pressed="false">
                 <span class="opt-emoji">✨</span>
                 <span class="opt-title">AR experience</span>
                 <span class="opt-desc">+$900</span>
               </button>
-              <button type="button" class="ys-estimator-option" data-value="hotspots" data-multi="1">
+              <button type="button" class="ys-estimator-option" data-value="hotspots" data-multi="1" aria-pressed="false">
                 <span class="opt-emoji">🔄</span>
                 <span class="opt-title">Custom hotspots</span>
                 <span class="opt-desc">+$350</span>
@@ -1009,7 +1011,7 @@
           </div>
 
           <!-- Step 4: result -->
-          <div class="ys-estimator-panel ys-estimator-result"></div>
+          <div class="ys-estimator-panel ys-estimator-result" role="status" aria-live="polite"></div>
         </div>
 
         <div class="ys-estimator-nav">
@@ -1233,11 +1235,11 @@
 
       <div class="faq-grid">
         <div class="faq-item">
-          <button class="faq-question">
+          <button type="button" class="faq-question" id="index-faqq1" aria-expanded="false" aria-controls="index-faqp1">
             How long does it take to create a virtual tour?
             <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="index-faqp1" role="region" aria-labelledby="index-faqq1">
             <div class="faq-answer-content">
               It depends on the size and complexity of the property and the services included. We confirm a delivery
               date with you before the shoot, and larger multi-building properties are scheduled accordingly.
@@ -1246,11 +1248,11 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
+          <button type="button" class="faq-question" id="index-faqq2" aria-expanded="false" aria-controls="index-faqp2">
             What areas in Costa Rica do you serve?
             <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="index-faqp2" role="region" aria-labelledby="index-faqq2">
             <div class="faq-answer-content">
               We serve all of Costa Rica! Our primary areas include San José, Guanacaste, La Fortuna, Manuel Antonio,
               and the Caribbean coast. We travel nationwide for projects.
@@ -1259,11 +1261,11 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
+          <button type="button" class="faq-question" id="index-faqq3" aria-expanded="false" aria-controls="index-faqp3">
             How much does a 360° virtual tour cost?
             <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="index-faqp3" role="region" aria-labelledby="index-faqq3">
             <div class="faq-answer-content">
               Pricing depends on the size of your property and the services you need. Projects start at $650 USD and
               scale with the number of panoramas. Contact us for a free custom quote.
@@ -1272,11 +1274,11 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
+          <button type="button" class="faq-question" id="index-faqq4" aria-expanded="false" aria-controls="index-faqp4">
             Can I embed the tour on my website?
             <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="index-faqp4" role="region" aria-labelledby="index-faqq4">
             <div class="faq-answer-content">
               Absolutely! We provide embed codes that work on any website. We can also help you integrate the tour with
               Airbnb, Booking.com, Google Maps, and other platforms.
@@ -1360,34 +1362,34 @@
 
               <!-- Services Selection -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-check-circle" aria-hidden="true"></i>
                   SELECT YOUR SERVICES
                   <span class="label-hint">PICK MULTIPLE</span>
-                </label>
+                </div>
                 <div class="modal-checkbox-grid" id="inlineServicesGrid">
                   <label class="modal-checkbox" data-service="360-photo">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="360 Photo">
+                    <input type="checkbox" name="services[]" value="360 Photo">
                     <span class="checkbox-label">360° Photography</span>
                   </label>
                   <label class="modal-checkbox" data-service="360-video">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="360 Video">
+                    <input type="checkbox" name="services[]" value="360 Video">
                     <span class="checkbox-label">360° Videography</span>
                   </label>
                   <label class="modal-checkbox" data-service="drone">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Drone Media">
+                    <input type="checkbox" name="services[]" value="Drone Media">
                     <span class="checkbox-label">Drone 360° Media</span>
                   </label>
                   <label class="modal-checkbox" data-service="branded-tour">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Branded Virtual Tour">
+                    <input type="checkbox" name="services[]" value="Branded Virtual Tour">
                     <span class="checkbox-label">Interactive Virtual Tour</span>
                   </label>
                   <label class="modal-checkbox" data-service="streetview">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Google Streetview">
+                    <input type="checkbox" name="services[]" value="Google Streetview">
                     <span class="checkbox-label">Google Street View</span>
                   </label>
                   <label class="modal-checkbox" data-service="ar">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Augmented Reality">
+                    <input type="checkbox" name="services[]" value="Augmented Reality">
                     <span class="checkbox-label">Augmented Reality</span>
                   </label>
                 </div>
@@ -1395,18 +1397,18 @@
 
               <!-- Contact Details -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-user" aria-hidden="true"></i>
                   YOUR DETAILS
-                </label>
-                <div class="modal-form-row">
-                  <input aria-label="Full Name (required)" type="text" name="fullName" placeholder="Full Name *" required class="modal-input">
-                  <input aria-label="Company / Business Name" type="text" name="company" placeholder="Company / Business Name" class="modal-input">
                 </div>
                 <div class="modal-form-row">
-                  <input aria-label="Phone (WhatsApp preferred)" type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input">
+                  <input aria-label="Full Name (required)" type="text" name="fullName" placeholder="Full Name *" required class="modal-input" autocomplete="name">
+                  <input aria-label="Company / Business Name" type="text" name="company" placeholder="Company / Business Name" class="modal-input" autocomplete="organization">
+                </div>
+                <div class="modal-form-row">
+                  <input aria-label="Phone (WhatsApp preferred)" type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input" autocomplete="tel" inputmode="tel">
                   <input aria-label="Email Address (required)" type="email" name="email" placeholder="Email Address *" required class="modal-input"
-                    id="inlineEmail">
+                    id="inlineEmail" autocomplete="email" inputmode="email" spellcheck="false">
                 </div>
                 <textarea aria-label="Tell us about your project, location, and goals (required)" name="message" placeholder="Tell us about your project, location, and goals…" required
                   class="modal-textarea"></textarea>
@@ -1414,30 +1416,30 @@
 
               <!-- Budget Selection -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                   PROJECT BUDGET (USD)
                   <span class="label-hint">(Helps us tailor your quote)</span>
-                </label>
+                </div>
                 <div class="modal-radio-grid">
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="Less than $5k">
+                    <input type="radio" name="budget" value="Less than $5k">
                     <span class="radio-label">&lt;$5k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$5-10k">
+                    <input type="radio" name="budget" value="$5-10k">
                     <span class="radio-label">$5-10k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$10-25k">
+                    <input type="radio" name="budget" value="$10-25k">
                     <span class="radio-label">$10-25k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$25-50k">
+                    <input type="radio" name="budget" value="$25-50k">
                     <span class="radio-label">$25-50k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$50k+">
+                    <input type="radio" name="budget" value="$50k+">
                     <span class="radio-label">$50k+</span>
                   </label>
                 </div>
@@ -1463,7 +1465,7 @@
 
             <!-- Success Message -->
             <div class="inline-form-success" id="inlineFormSuccess"
-              style="display: none; text-align: center; padding: 40px 20px;">
+              style="display: none; text-align: center; padding: 40px 20px;" role="status" aria-live="polite">
               <div style="font-size: 50px; color: var(--color-primary); margin-bottom: 20px;">
                 <i class="fas fa-check-circle" aria-hidden="true"></i>
               </div>
@@ -1474,16 +1476,15 @@
 
             <!-- Error Message -->
             <div class="inline-form-error" id="inlineFormError"
-              style="display: none; text-align: center; padding: 40px 20px;">
+              style="display: none; text-align: center; padding: 40px 20px;" role="alert" aria-live="assertive">
               <div style="font-size: 50px; color: #ff5e69; margin-bottom: 20px;">
                 <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
               </div>
               <p style="color: rgba(255,255,255,0.8);">Oops! Something went wrong.</p>
               <p style="color: rgba(255,255,255,0.6); font-size: 14px;">Please try again or email us at <a
                   href="mailto:info@yousee360.com" style="color: var(--color-primary);">info@yousee360.com</a></p>
-              <button class="modal-retry-btn"
-                onclick="document.getElementById('inlineFormError').style.display='none';document.getElementById('inlineContactForm').style.display='block';">Try
-                Again</button>
+              <button type="button" class="modal-retry-btn" data-retry-form="inlineContactForm"
+                data-retry-panel="inlineFormError">Try Again</button>
             </div>
           </div>
         </div>
@@ -1583,7 +1584,7 @@
 
   <!-- jQuery + 3d-effects + hero-particles + future-ui REMOVED on homepage.
        They were 200KB+ of unused JS blocking the main thread (~250ms each). -->
-  <script src="js/future-ui.js?v=20260814u" defer></script>
+  <script src="js/future-ui.js?v=20260829a" defer></script>
 
   <!-- Experience section: tap-to-load the real Casa del Rio tour. We keep the heavy
        3DVista/WebGL iframe off the initial page load and mount it on first intent. -->
@@ -1630,20 +1631,38 @@
       const tabButtons = document.querySelectorAll('.process-tab-btn');
       const tabPanels = document.querySelectorAll('.process-tab-panel');
 
-      tabButtons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          // Remove active class from all buttons and panels
-          tabButtons.forEach(function (b) {
-            b.classList.remove('active');
-            b.setAttribute('aria-selected', 'false');
-          });
-          tabPanels.forEach(function (p) { p.classList.remove('active'); });
+      function selectTab(btn, moveFocus) {
+        // Remove active class from all buttons and panels
+        tabButtons.forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('tabindex', '-1');
+        });
+        tabPanels.forEach(function (p) { p.classList.remove('active'); });
 
-          // Add active class to clicked button and corresponding panel
-          btn.classList.add('active');
-          btn.setAttribute('aria-selected', 'true');
-          var panel = document.getElementById(btn.dataset.tab);
-          if (panel) panel.classList.add('active');
+        // Add active class to selected button and corresponding panel
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('tabindex', '0');
+        var panel = document.getElementById(btn.dataset.tab);
+        if (panel) panel.classList.add('active');
+        if (moveFocus) btn.focus();
+      }
+
+      tabButtons.forEach(function (btn, i) {
+        btn.addEventListener('click', function () { selectTab(btn, false); });
+
+        // A tablist is a single tab stop; Left/Right (and Home/End) move
+        // between the tabs inside it.
+        btn.addEventListener('keydown', function (e) {
+          var next = null;
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % tabButtons.length;
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + tabButtons.length) % tabButtons.length;
+          else if (e.key === 'Home') next = 0;
+          else if (e.key === 'End') next = tabButtons.length - 1;
+          if (next === null) return;
+          e.preventDefault();
+          selectTab(tabButtons[next], true);
         });
       });
     });
@@ -1664,12 +1683,15 @@
           // Close all other items
           faqItems.forEach(function (otherItem) {
             otherItem.classList.remove('active');
+            const other = otherItem.querySelector('.faq-question');
+            if (other) other.setAttribute('aria-expanded', 'false');
           });
 
           // If this item wasn't active, open it
           if (!isActive) {
             item.classList.add('active');
           }
+          question.setAttribute('aria-expanded', String(!isActive));
         });
       });
     });
@@ -1677,7 +1699,7 @@
 
 
   <!-- Contact Form JS -->
-  <script src="js/contact-modal.js?v=20260814u" type="text/javascript" defer></script>
+  <script src="js/contact-modal.js?v=20260829a" type="text/javascript" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       // Inline form submission handler
@@ -1714,8 +1736,11 @@
       });
 
       if (inlineForm) {
+        if (window.YSForms) window.YSForms.init(inlineForm);
+
         inlineForm.addEventListener('submit', async function (e) {
           e.preventDefault();
+          if (window.YSForms && !window.YSForms.validate(inlineForm)) return;
           var submitBtn = document.getElementById('inlineSubmitBtn');
           var btnText = submitBtn.querySelector('.btn-text');
           var btnLoading = submitBtn.querySelector('.btn-loading');
@@ -1734,13 +1759,17 @@
 
             if (response.ok) {
               inlineForm.style.display = 'none';
-              document.getElementById('inlineFormSuccess').style.display = 'block';
+              var ok = document.getElementById('inlineFormSuccess');
+              ok.style.display = 'block';
+              if (window.YSForms) window.YSForms.focusPanel(ok);
             } else {
               throw new Error('Submission failed');
             }
           } catch (err) {
             inlineForm.style.display = 'none';
-            document.getElementById('inlineFormError').style.display = 'block';
+            var failed = document.getElementById('inlineFormError');
+            failed.style.display = 'block';
+            if (window.YSForms) window.YSForms.focusPanel(failed);
           } finally {
             btnText.style.display = 'inline';
             btnLoading.style.display = 'none';
@@ -1752,9 +1781,9 @@
   </script>
 
   <!-- premium-animations / gsap / particles REMOVED — unused or duplicated by polish/wow. -->
-  <script src="js/polish.js?v=20260814u" defer></script>
-  <script src="js/mobile.js?v=20260814u" defer></script>
-  <script src="js/wow.js?v=20260814u" defer></script>
+  <script src="js/polish.js?v=20260829a" defer></script>
+  <script src="js/mobile.js?v=20260829a" defer></script>
+  <script src="js/wow.js?v=20260829a" defer></script>
 
   <!-- Hero video lazy-mount — phones/tablets get the small mobile encode
        (videos/website30mb-mobile.mp4, ~3.7MB, faststart) instead of the 19MB
@@ -1790,18 +1819,47 @@
         var p = v.play();
         if (p && p.catch) p.catch(function () {});
       }
+      function reducedMotion() {
+        return window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      }
+      // The loop runs longer than five seconds next to the headline, so it
+      // needs a control that stops it — and it must not start at all for
+      // someone who asked for reduced motion. The poster stays either way.
+      function wireToggle(v, shouldPlay) {
+        var btn = document.getElementById('heroVideoToggle');
+        if (!btn) return;
+        btn.hidden = false;
+        function paint(playing) {
+          btn.setAttribute('aria-pressed', playing ? 'false' : 'true');
+          btn.setAttribute('aria-label', playing ? 'Pause background video' : 'Play background video');
+          var icon = btn.querySelector('i');
+          if (icon) icon.className = playing ? 'fas fa-pause' : 'fas fa-play';
+        }
+        btn.addEventListener('click', function () {
+          if (v.paused) playIt(v);
+          else v.pause();
+        });
+        // play() resolves asynchronously, so track the element rather than
+        // guessing at the state right after mount.
+        v.addEventListener('play', function () { paint(true); });
+        v.addEventListener('pause', function () { paint(false); });
+        paint(shouldPlay);
+      }
       function mountHeroVideo() {
         var v = document.getElementById('heroVideo');
         if (!v || v.dataset.mounted === '1') return;
         v.dataset.mounted = '1';
         var mobile = isMobile();
         attachSource(v, srcFor(v, mobile));
-        playIt(v);
+        var shouldPlay = !reducedMotion();
+        if (shouldPlay) playIt(v);
+        wireToggle(v, shouldPlay);
         // If the chosen encode fails, fall back to the other one once.
         v.addEventListener('error', function onErr() {
           v.removeEventListener('error', onErr);
           attachSource(v, srcFor(v, !mobile));
-          playIt(v);
+          if (!reducedMotion()) playIt(v);
         });
       }
       if ('requestIdleCallback' in window) requestIdleCallback(mountHeroVideo, { timeout: 2500 });
@@ -1809,13 +1867,13 @@
     })();
   </script>
   <!-- Hero particle network + immersive aurora stage: deferred -->
-  <script src="js/three-loader.js?v=20260814u" data-three-src="js/three.min.js?v=20260814u" defer></script>
-  <script src="js/hero-particles.js?v=20260814u" defer></script>
-  <script src="js/aurora.js?v=20260814u" defer></script>
-  <script src="js/sidenav.js?v=20260814u" defer></script>
-  <script src="js/v2-extras.js?v=20260814u" defer></script>
-  <script src="js/motion.js?v=20260814u" defer></script>
-  <script src="js/pwa.js?v=20260814u" defer></script>
+  <script src="js/three-loader.js?v=20260829a" data-three-src="js/three.min.js?v=20260829a" defer></script>
+  <script src="js/hero-particles.js?v=20260829a" defer></script>
+  <script src="js/aurora.js?v=20260829a" defer></script>
+  <script src="js/sidenav.js?v=20260829a" defer></script>
+  <script src="js/v2-extras.js?v=20260829a" defer></script>
+  <script src="js/motion.js?v=20260829a" defer></script>
+  <script src="js/pwa.js?v=20260829a" defer></script>
 </body>
 
 </html>

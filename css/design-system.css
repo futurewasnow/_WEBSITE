@@ -685,14 +685,19 @@ h1 strong, h2 strong, h3 strong {
 section#Hero.hero-section {
   position: relative !important;
   width: 100% !important;
-  height: 100vh !important;
-  min-height: 600px !important;
+  /* Grow past the viewport rather than centre-overflow when the copy is
+     tall — with align-items: center, content taller than the box spills
+     equally top and bottom, which slid the eyebrow under the fixed nav. */
+  height: auto !important;
+  min-height: 100vh !important;
   max-height: none !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
-  padding: 0 !important;
+  /* Reserve the fixed nav's 80px (nav-v2.css pins it with !important). */
+  padding: calc(80px + 1.5rem) 0 2.5rem !important;
+  box-sizing: border-box !important;
   background: #000 !important;
 }
 #Hero .hero-video-wrapper {

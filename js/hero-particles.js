@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('hero-particles');
     if (!container) return;
 
+    // Decorative, perpetual motion: skip the whole WebGL loop (and its Three.js
+    // download) when the visitor has asked for reduced motion. CSS can't stop
+    // a canvas, so the gate has to live here.
+    if (window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     // Wait for Three.js to load
     const checkThree = setInterval(() => {
         if (window.THREE) {

@@ -608,3 +608,81 @@ h1.sexy-heading,
   opacity: 1 !important;
   visibility: visible !important;
 }
+
+/* ============================================================
+   COMPACT PAGE HEADER
+   Content pages (pricing, guides, comparisons, hubs) were reusing
+   .hero-section + .hero-subheading, which are sized for the homepage's
+   full-screen video hero. On a 812px phone that produced a header exactly
+   812px tall -- a whole screen of title before a single price or paragraph,
+   with the intro line alone running to 399px (674px in Spanish).
+
+   This is a title block, not a hero: it clears the fixed nav, states the
+   page, and gets out of the way.
+   ============================================================ */
+.ys-page-header {
+  /* mobile.css carries `section { padding: 56px 0 !important }` on a bare
+     element selector, so a plain class rule here loses. */
+  padding: 116px 16px 28px !important;
+  text-align: center;
+  background: var(--ys-bg-soft, #0a0c12);
+  border-bottom: 1px solid var(--ys-border, rgba(255,255,255,0.08));
+}
+/* A legacy Webflow rule sets .container { height: 600px } and later
+   { min-height: 100%; height: 100% !important }, which inflated this title
+   block to a full 913px regardless of its own padding. Inside the page header
+   the container is just a width constraint. */
+.ys-page-header .container {
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.ys-page-header .section-tag {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.ys-page-header h1,
+.ys-page-header h1.apple-heading,
+.ys-page-header h1.apple-heading.white-text {
+  /* .apple-heading sets font-size/line-height from --fs-display with
+     !important, so a page-header headline rendered at full hero scale (41px on
+     a 375px screen). Spanish headlines, which run longer, wrapped to five
+     lines. These need !important to win. */
+  font-size: clamp(2rem, 4vw + 1rem, 2.6rem) !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 auto 14px;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+/* Beat the hero-scale type these pages were inheriting. */
+/* .hero-subheading carries text-transform:uppercase and hero positioning, so a
+   140-character intro became ten lines of shouting overlapping the H1. These
+   headers use their own paragraph class instead. */
+.ys-page-header .ys-page-header-sub,
+.ys-page-header p {
+  text-transform: none !important;
+  position: static !important;
+  font-size: 1.02rem !important;
+  line-height: 1.6 !important;
+  letter-spacing: normal !important;
+  max-width: 58ch !important;
+  margin: 0 auto !important;
+  color: var(--ys-text-muted, rgba(255,255,255,0.68));
+}
+.ys-page-header .ys-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+}
+.ys-page-header .ys-trust-badge {
+  font-size: 0.78rem;
+  padding: 6px 12px;
+}
+@media (min-width: 768px) {
+  .ys-page-header { padding: 132px 24px 36px !important; }
+}

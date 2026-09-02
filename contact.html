@@ -28,11 +28,11 @@
   <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
   <meta name="geo.position" content="10.4678;-84.6433">
   <meta name="ICBM" content="10.4678, -84.6433">
-  <link href="css/bundle-ec3341b9.css?v=ec3341b9" rel="stylesheet" type="text/css">
+  <link href="css/bundle-e8ce94da.css?v=20260829a" rel="stylesheet" type="text/css">
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
-  <link href="css/animations.css?v=20260814u" rel="stylesheet" type="text/css">
+  <link href="css/animations.css?v=20260829a" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
   
@@ -119,7 +119,7 @@
   <meta name="theme-color" content="#06070a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="css/bundle-180b4518.css?v=180b4518" rel="stylesheet" type="text/css">
+  <link href="css/bundle-f24d09a3.css?v=20260829a" rel="stylesheet" type="text/css">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
   <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
@@ -275,34 +275,34 @@
 
               <!-- Services Selection -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-check-circle" aria-hidden="true"></i>
                   SELECT YOUR SERVICES
                   <span class="label-hint">PICK MULTIPLE</span>
-                </label>
+                </div>
                 <div class="modal-checkbox-grid" id="contactServicesGrid">
                   <label class="modal-checkbox" data-service="360-photo">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="360 Photo">
+                    <input type="checkbox" name="services[]" value="360 Photo">
                     <span class="checkbox-label">360° Photography</span>
                   </label>
                   <label class="modal-checkbox" data-service="360-video">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="360 Video">
+                    <input type="checkbox" name="services[]" value="360 Video">
                     <span class="checkbox-label">360° Videography</span>
                   </label>
                   <label class="modal-checkbox" data-service="drone">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Drone Media">
+                    <input type="checkbox" name="services[]" value="Drone Media">
                     <span class="checkbox-label">Drone 360° Media</span>
                   </label>
                   <label class="modal-checkbox" data-service="branded-tour">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Branded Virtual Tour">
+                    <input type="checkbox" name="services[]" value="Branded Virtual Tour">
                     <span class="checkbox-label">Interactive Virtual Tour</span>
                   </label>
                   <label class="modal-checkbox" data-service="streetview">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Google Streetview">
+                    <input type="checkbox" name="services[]" value="Google Streetview">
                     <span class="checkbox-label">Google Street View</span>
                   </label>
                   <label class="modal-checkbox" data-service="ar">
-                    <input aria-label="Services[]" type="checkbox" name="services[]" value="Augmented Reality">
+                    <input type="checkbox" name="services[]" value="Augmented Reality">
                     <span class="checkbox-label">Augmented Reality</span>
                   </label>
                 </div>
@@ -310,18 +310,18 @@
 
               <!-- Contact Details -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-user" aria-hidden="true"></i>
                   YOUR DETAILS
-                </label>
-                <div class="modal-form-row">
-                  <input aria-label="Full Name (required)" type="text" name="fullName" placeholder="Full Name *" required class="modal-input">
-                  <input aria-label="Company / Business Name" type="text" name="company" placeholder="Company / Business Name" class="modal-input">
                 </div>
                 <div class="modal-form-row">
-                  <input aria-label="Phone (WhatsApp preferred)" type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input">
+                  <input aria-label="Full Name (required)" type="text" name="fullName" placeholder="Full Name *" required class="modal-input" autocomplete="name">
+                  <input aria-label="Company / Business Name" type="text" name="company" placeholder="Company / Business Name" class="modal-input" autocomplete="organization">
+                </div>
+                <div class="modal-form-row">
+                  <input aria-label="Phone (WhatsApp preferred)" type="tel" name="phone" placeholder="Phone (WhatsApp preferred)" class="modal-input" autocomplete="tel" inputmode="tel">
                   <input aria-label="Email Address (required)" type="email" name="email" placeholder="Email Address *" required class="modal-input"
-                    id="contactEmail">
+                    id="contactEmail" autocomplete="email" inputmode="email" spellcheck="false">
                 </div>
                 <textarea aria-label="Tell us about your project, location, and goals (required)" name="message" placeholder="Tell us about your project, location, and goals…" required
                   class="modal-textarea"></textarea>
@@ -329,30 +329,30 @@
 
               <!-- Budget Selection -->
               <div class="modal-form-section">
-                <label class="modal-section-label">
+                <div class="modal-section-label" role="heading" aria-level="4">
                   <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                   PROJECT BUDGET (USD)
                   <span class="label-hint">(Helps us tailor your quote)</span>
-                </label>
+                </div>
                 <div class="modal-radio-grid">
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="Less than $5k">
+                    <input type="radio" name="budget" value="Less than $5k">
                     <span class="radio-label">&lt;$5k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$5-10k">
+                    <input type="radio" name="budget" value="$5-10k">
                     <span class="radio-label">$5-10k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$10-25k">
+                    <input type="radio" name="budget" value="$10-25k">
                     <span class="radio-label">$10-25k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$25-50k">
+                    <input type="radio" name="budget" value="$25-50k">
                     <span class="radio-label">$25-50k</span>
                   </label>
                   <label class="modal-radio">
-                    <input aria-label="Budget" type="radio" name="budget" value="$50k+">
+                    <input type="radio" name="budget" value="$50k+">
                     <span class="radio-label">$50k+</span>
                   </label>
                 </div>
@@ -378,7 +378,7 @@
 
             <!-- Success Message -->
             <div class="inline-form-success" id="contactFormSuccess"
-              style="display: none; text-align: center; padding: 40px 20px;">
+              style="display: none; text-align: center; padding: 40px 20px;" role="status" aria-live="polite">
               <div style="font-size: 50px; color: var(--color-primary); margin-bottom: 20px;">
                 <i class="fas fa-check-circle" aria-hidden="true"></i>
               </div>
@@ -389,16 +389,15 @@
 
             <!-- Error Message -->
             <div class="inline-form-error" id="contactFormError"
-              style="display: none; text-align: center; padding: 40px 20px;">
+              style="display: none; text-align: center; padding: 40px 20px;" role="alert" aria-live="assertive">
               <div style="font-size: 50px; color: #ff5e69; margin-bottom: 20px;">
                 <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
               </div>
               <p style="color: rgba(255,255,255,0.8);">Oops! Something went wrong.</p>
               <p style="color: rgba(255,255,255,0.6); font-size: 14px;">Please try again or email us at <a
                   href="mailto:info@yousee360.com" style="color: var(--color-primary);">info@yousee360.com</a></p>
-              <button class="modal-retry-btn"
-                onclick="document.getElementById('contactFormError').style.display='none';document.getElementById('contactPageForm').style.display='block';">Try
-                Again</button>
+              <button type="button" class="modal-retry-btn" data-retry-form="contactPageForm"
+                data-retry-panel="contactFormError">Try Again</button>
             </div>
           </div>
         </div>
@@ -516,10 +515,11 @@
       </div>
     </div>
   </footer>
-  <script src="js/vanilla-main.js?v=20260814u" type="text/javascript" defer></script>
-  <script src="js/animations.js?v=20260814u" type="text/javascript" defer></script>
-  <script src="js/interactive-elements.js?v=20260814u" type="text/javascript" defer></script>
-  <script src="js/contact-modal.js?v=20260814u" type="text/javascript" defer></script>
+  <script src="js/form-a11y.js?v=20260829a" defer></script>
+  <script src="js/vanilla-main.js?v=20260829a" type="text/javascript" defer></script>
+  <script src="js/animations.js?v=20260829a" type="text/javascript" defer></script>
+  <script src="js/interactive-elements.js?v=20260829a" type="text/javascript" defer></script>
+  <script src="js/contact-modal.js?v=20260829a" type="text/javascript" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var form = document.getElementById('contactPageForm');
@@ -554,8 +554,11 @@
       });
 
       if (form) {
+        if (window.YSForms) window.YSForms.init(form);
+
         form.addEventListener('submit', async function (e) {
           e.preventDefault();
+          if (window.YSForms && !window.YSForms.validate(form)) return;
           var submitBtn = document.getElementById('contactSubmitBtn');
           var btnText = submitBtn.querySelector('.btn-text');
           var btnLoading = submitBtn.querySelector('.btn-loading');
@@ -574,13 +577,17 @@
 
             if (response.ok) {
               form.style.display = 'none';
-              document.getElementById('contactFormSuccess').style.display = 'block';
+              var ok = document.getElementById('contactFormSuccess');
+              ok.style.display = 'block';
+              if (window.YSForms) window.YSForms.focusPanel(ok);
             } else {
               throw new Error('Submission failed');
             }
           } catch (err) {
             form.style.display = 'none';
-            document.getElementById('contactFormError').style.display = 'block';
+            var failed = document.getElementById('contactFormError');
+            failed.style.display = 'block';
+            if (window.YSForms) window.YSForms.focusPanel(failed);
           } finally {
             btnText.style.display = 'inline';
             btnLoading.style.display = 'none';
@@ -590,15 +597,15 @@
       }
     });
   </script>
-  <script src="js/polish.js?v=20260814u" defer></script>
-  <script src="js/mobile.js?v=20260814u" defer></script>
-  <script src="js/wow.js?v=20260814u" defer></script>
-  <script src="js/v2-extras.js?v=20260814u" defer></script>
-  <script src="js/motion.js?v=20260814u" defer></script>
-  <script src="js/pwa.js?v=20260814u" defer></script>
-  <script src="js/three-loader.js?v=20260814u" data-three-src="js/three.min.js?v=20260827" defer></script>
-  <script src="js/aurora.js?v=20260814u" defer></script>
-  <script src="js/sidenav.js?v=20260814u" defer></script>
+  <script src="js/polish.js?v=20260829a" defer></script>
+  <script src="js/mobile.js?v=20260829a" defer></script>
+  <script src="js/wow.js?v=20260829a" defer></script>
+  <script src="js/v2-extras.js?v=20260829a" defer></script>
+  <script src="js/motion.js?v=20260829a" defer></script>
+  <script src="js/pwa.js?v=20260829a" defer></script>
+  <script src="js/three-loader.js?v=20260829a" data-three-src="js/three.min.js?v=20260829a" defer></script>
+  <script src="js/aurora.js?v=20260829a" defer></script>
+  <script src="js/sidenav.js?v=20260829a" defer></script>
 </body>
 
 </html>

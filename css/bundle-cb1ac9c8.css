@@ -1641,8 +1641,8 @@ textarea.w-select {
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  -webkit-transition: transform 0.3s, opacity 0.3s, color 0.3s, background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, opacity 0.3s, color 0.3s, background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 .w-lightbox-left {
   display: none;
@@ -2417,7 +2417,7 @@ p {
   background-color: #22b2c900;
   border-radius: 21px;
   margin-top: 0;
-  transition: all .3s ease-in-out;
+  transition: transform .3s ease-in-out, opacity .3s ease-in-out, color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out, text-shadow .3s ease-in-out;
   transform: scale(.8);
 }
 
@@ -4031,7 +4031,7 @@ p {
   font-weight: 600;
   line-height: 1.5;
   text-decoration: none;
-  transition: all .3s;
+  transition: transform .3s, opacity .3s, color .3s, background-color .3s, border-color .3s, box-shadow .3s;
   display: flex;
   box-shadow: 0 1px 2px #1018280d;
 }
@@ -4597,7 +4597,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .2s;
+  transition: transform .2s, opacity .2s, color .2s, background-color .2s, border-color .2s, box-shadow .2s;
   display: flex;
 }
 
@@ -4616,7 +4616,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .35s;
+  transition: transform .35s, opacity .35s, color .35s, background-color .35s, border-color .35s, box-shadow .35s;
 }
 
 .f-navigation-link:hover {
@@ -4787,7 +4787,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .2s;
+  transition: transform .2s, opacity .2s, color .2s, background-color .2s, border-color .2s, box-shadow .2s;
   display: flex;
 }
 
@@ -4806,7 +4806,7 @@ p {
   font-weight: 500;
   line-height: 24px;
   text-decoration: none;
-  transition: all .35s;
+  transition: transform .35s, opacity .35s, color .35s, background-color .35s, border-color .35s, box-shadow .35s;
 }
 
 .f-navigation-link-2:hover {
@@ -7893,10 +7893,6 @@ p {
     object-fit: contain;
   }
 
-  .white-text {
-    float: left;
-  }
-
   .spc {
     margin-bottom: 30px;
   }
@@ -8785,7 +8781,6 @@ p {
   }
 
   .white-text {
-    float: left;
     text-align: center;
   }
 
@@ -9659,7 +9654,7 @@ p {
   color: var(--color-text-muted);
   font-size: 2.5rem;
   /* Icon size */
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, text-shadow 0.3s ease;
   opacity: 0.6;
 }
 
@@ -9724,7 +9719,7 @@ p {
   object-fit: contain;
   filter: grayscale(100%) brightness(0.7);
   opacity: 0.5;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .client-logo:hover .client-logo-img {
@@ -9776,7 +9771,7 @@ p {
   padding: 10px 24px;
 
   /* Transitions */
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1), color 0.3s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1), filter 0.3s cubic-bezier(0.23, 1, 0.32, 1), text-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   overflow: hidden;
 }
 
@@ -9834,7 +9829,7 @@ p {
   border-left: 3px solid #01e4e4;
   /* Cyan Accent */
 
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease, color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease, text-shadow 0.4s ease, width 0.4s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -9967,7 +9962,7 @@ p {
     0 0 0 1px rgba(1, 228, 228, 0.03);
 
   padding: 12px 24px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navigation-bar:hover {
@@ -9985,7 +9980,7 @@ p {
   letter-spacing: 0.5px;
   padding: 10px 16px;
   border-radius: 25px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
 }
 
 .navigation-link.w-nav-link:hover,
@@ -10143,7 +10138,7 @@ body {
     0 0 30px rgba(1, 228, 228, 0.08);
   /* Stronger Cyan Glow */
 
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   /* Flex Config - Note: Flex usually goes on container, but ensuring wrapper behaves */
   display: block;
@@ -10213,7 +10208,7 @@ body {
   color: #fff !important;
   padding: 12px 24px;
   display: block;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   font-weight: 500;
 }
 
@@ -10235,7 +10230,7 @@ body {
   width: 100%;
   z-index: 1000;
   background: transparent;
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease, color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, padding 0.4s ease;
   padding: 15px 0;
   border-bottom: 1px solid transparent;
 }
@@ -10294,7 +10289,7 @@ body {
   padding: 10px 18px !important;
   margin: 0 2px;
   border-radius: 50px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), text-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   background: transparent;
   border: 1px solid transparent;
@@ -10359,7 +10354,7 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1100;
   margin-top: 15px;
 }
@@ -10380,7 +10375,7 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   text-align: left;
   /* Reset alignment */
 }
@@ -10449,7 +10444,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-20px);
-    transition: all 0.4s ease;
+    transition: transform 0.4s ease, opacity 0.4s ease, color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     box-sizing: border-box;
     overflow-y: auto;
     /* Scrollable if tall */
@@ -10584,7 +10579,7 @@ body {
   padding: 15px;
   text-align: center;
   border-radius: 13px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 
   /* Initial State for Animation */
@@ -10756,7 +10751,7 @@ h6 {
 
 a {
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Utility Classes */
@@ -10794,7 +10789,7 @@ a {
   border-radius: 21px;
   padding: 40px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .glass-card:hover {
@@ -10991,7 +10986,7 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -11011,7 +11006,7 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-hollow:hover {
@@ -11179,7 +11174,7 @@ a {
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
   position: relative;
   text-decoration: none;
   transform-style: preserve-3d;
@@ -11221,7 +11216,7 @@ a {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-  transition: all 0.35s ease;
+  transition: transform 0.35s ease, opacity 0.35s ease, color 0.35s ease, background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
   position: relative;
 }
 
@@ -11236,7 +11231,7 @@ a {
   font-size: 2.5rem;
   color: var(--color-text-main);
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
-  transition: all 0.35s ease;
+  transition: transform 0.35s ease, opacity 0.35s ease, color 0.35s ease, background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
 }
 
 .modern-service-card:hover .service-icon-circle i {
@@ -11283,7 +11278,7 @@ a {
   cursor: pointer;
   border-radius: 21px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .slider-button:hover {
@@ -11305,7 +11300,7 @@ a {
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid var(--color-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pagination-dot.active {
@@ -11355,7 +11350,7 @@ a {
   justify-content: flex-start;
   text-decoration: none;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .bento-card::after {
@@ -11426,7 +11421,7 @@ a {
   color: rgba(255, 255, 255, 0.5);
   /* Muted initial state */
   margin-bottom: var(--space-md);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .bento-title {
@@ -11488,7 +11483,7 @@ a {
 .slider-container img {
   filter: grayscale(100%) brightness(200%);
   opacity: 0.7;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .slider-container img:hover {
@@ -11726,7 +11721,7 @@ a {
   border: 1px solid var(--color-glass-border);
   border-radius: var(--glass-border-radius);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, max-height 0.3s ease, padding 0.3s ease, padding-top 0.3s ease;
 }
 
 .faq-question {
@@ -11784,7 +11779,7 @@ a {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   backdrop-filter: blur(10px);
 }
 
@@ -11798,7 +11793,7 @@ a {
 .neon-border {
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
 }
 
 .neon-border:hover {
@@ -11864,7 +11859,7 @@ a {
 .footer-column ul li a {
   color: var(--color-text-muted);
   font-size: 0.95rem;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
   display: inline-block;
   position: relative;
 }
@@ -11898,7 +11893,7 @@ a {
   align-items: center;
   justify-content: center;
   color: #fff;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .social-links a:hover {
@@ -11996,7 +11991,7 @@ a {
   width: auto;
   filter: grayscale(100%) brightness(180%);
   opacity: 0.5;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .brand-logo:hover {
@@ -12028,7 +12023,7 @@ a {
   width: 10px;
   height: 10px;
   color: var(--color-text-muted);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 10px;
   display: inline-flex;
   align-items: center;
@@ -12095,7 +12090,7 @@ a {
   border-radius: 34px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -12328,7 +12323,7 @@ a {
   border-radius: var(--glass-border-radius);
   padding: var(--space-lg);
   text-align: center;
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease, color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .benefit-card:hover {
@@ -12521,7 +12516,7 @@ a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   backdrop-filter: blur(10px);
   z-index: 3;
 }
@@ -12689,7 +12684,7 @@ a {
 
 /* Enhanced Checkbox Styles */
 .cf-checkbox-field {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
   border: 1px solid rgba(1, 228, 228, 0.3);
 }
 
@@ -12785,7 +12780,7 @@ a {
   height: auto;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   background-image: linear-gradient(90deg, var(--uc-blue, #23bad1), var(--ys-green, #00ff88));
   border: none;
   color: #fff;
@@ -13096,7 +13091,7 @@ a {
   position: relative;
   z-index: 2;
   /* Sits on top of the mask */
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease, color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* Glowing Border Container - applies to wrapper divs */
@@ -13115,7 +13110,7 @@ a {
   border-radius: 13px;
   color: #fff !important;
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cf-contact-form-field:hover {
@@ -13242,7 +13237,7 @@ a {
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -13303,7 +13298,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   z-index: 10;
 }
 
@@ -13402,7 +13397,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 13px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 }
 
@@ -13460,7 +13455,7 @@ a {
   color: #fff;
   font-size: 15px;
   font-family: inherit;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -13498,7 +13493,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 13px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 }
 
@@ -13553,7 +13548,7 @@ a {
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -13639,7 +13634,7 @@ a {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .modal-close-success:hover {
@@ -13684,7 +13679,7 @@ a {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .modal-retry-btn:hover {
@@ -13765,7 +13760,7 @@ a {
   cursor: pointer;
   z-index: 9998;
   box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none;
 }
 
@@ -13814,7 +13809,7 @@ a {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   transform: translateX(10px);
 }
 
@@ -13874,7 +13869,7 @@ a {
 
 /* Service & Budget Selection Highlighting */
 .cf-checkbox-field {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 12px 16px;
@@ -13905,7 +13900,7 @@ a {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cf-contact-form-field:focus {
@@ -13973,7 +13968,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 21px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, max-height 0.3s ease, padding 0.3s ease, padding-top 0.3s ease;
 }
 
 .faq-item:hover {
@@ -13993,7 +13988,7 @@ a {
   color: #fff;
   font-size: 1.1rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .faq-question:hover {
@@ -15305,14 +15300,19 @@ h1 strong, h2 strong, h3 strong {
 section#Hero.hero-section {
   position: relative !important;
   width: 100% !important;
-  height: 100vh !important;
-  min-height: 600px !important;
+  /* Grow past the viewport rather than centre-overflow when the copy is
+     tall — with align-items: center, content taller than the box spills
+     equally top and bottom, which slid the eyebrow under the fixed nav. */
+  height: auto !important;
+  min-height: 100vh !important;
   max-height: none !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
-  padding: 0 !important;
+  /* Reserve the fixed nav's 80px (nav-v2.css pins it with !important). */
+  padding: calc(80px + 1.5rem) 0 2.5rem !important;
+  box-sizing: border-box !important;
   background: #000 !important;
 }
 #Hero .hero-video-wrapper {
@@ -17844,11 +17844,15 @@ section, .ys-section, .ds-section,
   content-visibility: auto;
   contain-intrinsic-size: auto 800px;
 }
-/* Don't apply to hero — first paint matters there */
+/* Don't apply to anything that opens a page — first paint matters there, and a
+   skipped section reports its 800px contain-intrinsic-size placeholder instead
+   of its real height, which reserves ~600px of empty space above the fold. */
 .hero-section, section.hero-section,
 .about-hero, .portfolio-hero,
+.ys-page-header, section.ys-page-header,
 section[id="Hero"], #Hero {
   content-visibility: visible;
+  contain-intrinsic-size: auto none;
   contain-intrinsic-size: auto;
 }
 
@@ -18492,9 +18496,11 @@ body { overflow-x: hidden; }
     padding: 100px 16px 40px !important;
   }
   #Hero.hero-section {
-    height: 100vh !important;
-    min-height: 560px !important;
-    padding: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    /* nav-v2.css pins the mobile bar to 64px */
+    padding: calc(64px + 1rem) 0 2rem !important;
   }
   .about-hero, .portfolio-hero {
     min-height: auto !important;
@@ -19589,4 +19595,73 @@ input[type="radio"],
 
 .hero-video-toggle[hidden] {
   display: none;
+}
+
+/* --- Inline field errors (see js/form-a11y.js) ----------------------------- */
+.ys-field-error {
+  margin: 6px 0 10px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #ff8a94;
+}
+
+.ys-field-error[hidden] {
+  display: none;
+}
+
+[aria-invalid="true"] {
+  border-color: #ff5e69 !important;
+}
+
+/* --- Accordion triggers ---------------------------------------------------
+   These were <div>s with click handlers; as real <button>s they need the UA
+   button chrome stripped back to what the original markup looked like. */
+.ys-faq-question {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ============================================================
+   HERO LAYOUT
+   The nav clearance itself lives on #Hero in design-system.css and
+   mobile.css, which lock the section with !important. This is the
+   measure fix that goes with it.
+   ============================================================ */
+/* The measure that forced the subheading onto five lines. A little
+   wider keeps it to three without hurting readability (~72ch). */
+#Hero .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+/* The Spanish homepage hero is <section class="hero hero-section"> with no
+   id="Hero", so the clearance rule in design-system.css misses it. Same
+   overlap: measured -61px against the nav at 1280x720. */
+.hero.hero-section {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(80px + 1.5rem);
+  padding-bottom: 2.5rem;
+  box-sizing: border-box;
+}
+
+.hero.hero-section .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  .hero.hero-section {
+    padding-top: calc(64px + 1rem);
+    padding-bottom: 2rem;
+  }
 }

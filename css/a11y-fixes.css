@@ -162,3 +162,72 @@ input[type="radio"],
 .hero-video-toggle[hidden] {
   display: none;
 }
+
+/* --- Inline field errors (see js/form-a11y.js) ----------------------------- */
+.ys-field-error {
+  margin: 6px 0 10px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #ff8a94;
+}
+
+.ys-field-error[hidden] {
+  display: none;
+}
+
+[aria-invalid="true"] {
+  border-color: #ff5e69 !important;
+}
+
+/* --- Accordion triggers ---------------------------------------------------
+   These were <div>s with click handlers; as real <button>s they need the UA
+   button chrome stripped back to what the original markup looked like. */
+.ys-faq-question {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ============================================================
+   HERO LAYOUT
+   The nav clearance itself lives on #Hero in design-system.css and
+   mobile.css, which lock the section with !important. This is the
+   measure fix that goes with it.
+   ============================================================ */
+/* The measure that forced the subheading onto five lines. A little
+   wider keeps it to three without hurting readability (~72ch). */
+#Hero .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+/* The Spanish homepage hero is <section class="hero hero-section"> with no
+   id="Hero", so the clearance rule in design-system.css misses it. Same
+   overlap: measured -61px against the nav at 1280x720. */
+.hero.hero-section {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(80px + 1.5rem);
+  padding-bottom: 2.5rem;
+  box-sizing: border-box;
+}
+
+.hero.hero-section .hero-subheading[class] {
+  max-width: 40rem;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  .hero.hero-section {
+    padding-top: calc(64px + 1rem);
+    padding-bottom: 2rem;
+  }
+}

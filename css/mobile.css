@@ -502,9 +502,11 @@
     padding: 100px 16px 40px !important;
   }
   #Hero.hero-section {
-    height: 100vh !important;
-    min-height: 560px !important;
-    padding: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    /* nav-v2.css pins the mobile bar to 64px */
+    padding: calc(64px + 1rem) 0 2rem !important;
   }
   .about-hero, .portfolio-hero {
     min-height: auto !important;

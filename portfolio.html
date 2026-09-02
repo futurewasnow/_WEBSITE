@@ -27,11 +27,11 @@
   <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
   <meta name="geo.position" content="10.4678;-84.6433">
   <meta name="ICBM" content="10.4678, -84.6433">
-    <link href="css/bundle-ec3341b9.css?v=ec3341b9" rel="stylesheet" type="text/css">
+    <link href="css/bundle-e8ce94da.css?v=20260829a" rel="stylesheet" type="text/css">
     <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
-    <link href="css/animations.css?v=20260814u" rel="stylesheet" type="text/css">
+    <link href="css/animations.css?v=20260829a" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     
@@ -143,7 +143,7 @@
   <meta name="theme-color" content="#06070a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="css/bundle-180b4518.css?v=180b4518" rel="stylesheet" type="text/css">
+  <link href="css/bundle-f24d09a3.css?v=20260829a" rel="stylesheet" type="text/css">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
   <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
@@ -242,17 +242,17 @@
     <!-- Portfolio Filter -->
     <section class="section portfolio-filter-section">
         <div class="container w-container">
-            <div class="portfolio-filter-bar">
-                <button class="portfolio-filter-btn active" data-filter="all">
+            <div class="portfolio-filter-bar" role="group" aria-label="Filter projects by industry">
+                <button type="button" class="portfolio-filter-btn active" data-filter="all" aria-pressed="true">
                     <i class="fas fa-th-large" aria-hidden="true"></i> All Projects
                 </button>
-                <button class="portfolio-filter-btn" data-filter="hospitality">
+                <button type="button" class="portfolio-filter-btn" data-filter="hospitality" aria-pressed="false">
                     <i class="fas fa-hotel" aria-hidden="true"></i> Hospitality
                 </button>
-                <button class="portfolio-filter-btn" data-filter="retreat">
+                <button type="button" class="portfolio-filter-btn" data-filter="retreat" aria-pressed="false">
                     <i class="fas fa-spa" aria-hidden="true"></i> Retreat Centers
                 </button>
-                <button class="portfolio-filter-btn" data-filter="adventure">
+                <button type="button" class="portfolio-filter-btn" data-filter="adventure" aria-pressed="false">
                     <i class="fas fa-mountain" aria-hidden="true"></i> Adventure
                 </button>
             </div>
@@ -880,9 +880,9 @@
             </div>
         </div>
     </div>
-    <script src="js/vanilla-main.js?v=20260814u" type="text/javascript" defer></script>
-    <script src="js/animations.js?v=20260814u" type="text/javascript" defer></script>
-    <script src="js/interactive-elements.js?v=20260814u" type="text/javascript" defer></script>
+    <script src="js/vanilla-main.js?v=20260829a" type="text/javascript" defer></script>
+    <script src="js/animations.js?v=20260829a" type="text/javascript" defer></script>
+    <script src="js/interactive-elements.js?v=20260829a" type="text/javascript" defer></script>
 
     <!-- Portfolio Functionality -->
     <script>
@@ -952,7 +952,7 @@
 
                 // Inject iframe after a brief delay
                 setTimeout(() => {
-                    lightboxFrame.innerHTML = '<iframe src="' + tour.url + '" allowfullscreen allow="xr-spatial-tracking; gyroscope; accelerometer; fullscreen"></iframe>';
+                    lightboxFrame.innerHTML = '<iframe src="' + tour.url + '" title="' + tour.title + ' — interactive 360° virtual tour" loading="lazy" allowfullscreen allow="xr-spatial-tracking; gyroscope; accelerometer; fullscreen"></iframe>';
                 }, 100);
             }
 
@@ -1008,31 +1008,59 @@
             const filterButtons = document.querySelectorAll('.portfolio-filter-btn');
             const portfolioCards = document.querySelectorAll('.portfolio-card');
 
+            function applyFilter(filter, pushState) {
+                const btn = Array.from(filterButtons)
+                    .find(b => b.dataset.filter === filter) || filterButtons[0];
+                if (!btn) return;
+                filter = btn.dataset.filter;
+
+                // Update active button
+                filterButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+                btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
+
+                if (pushState) {
+                    // Keep the filter in the URL so the view can be shared,
+                    // bookmarked and restored by the back button.
+                    const url = new URL(window.location.href);
+                    if (filter === 'all') url.searchParams.delete('filter');
+                    else url.searchParams.set('filter', filter);
+                    history.pushState({ filter: filter }, '', url);
+                }
+
+                portfolioCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            if (card.style.opacity === '0') {
+                                card.style.display = 'none';
+                            }
+                        }, 300);
+                    }
+                });
+            }
+
             filterButtons.forEach(btn => {
                 btn.addEventListener('click', function () {
-                    // Update active button
-                    filterButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-
-                    const filter = this.dataset.filter;
-
-                    portfolioCards.forEach(card => {
-                        if (filter === 'all' || card.dataset.category === filter) {
-                            card.style.display = 'block';
-                            card.style.opacity = '1';
-                            card.style.transform = 'scale(1)';
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'scale(0.9)';
-                            setTimeout(() => {
-                                if (card.style.opacity === '0') {
-                                    card.style.display = 'none';
-                                }
-                            }, 300);
-                        }
-                    });
+                    applyFilter(this.dataset.filter, true);
                 });
             });
+
+            window.addEventListener('popstate', function () {
+                applyFilter(new URLSearchParams(window.location.search).get('filter') || 'all', false);
+            });
+
+            // Restore the filter named in the URL on first paint.
+            const initialFilter = new URLSearchParams(window.location.search).get('filter');
+            if (initialFilter) applyFilter(initialFilter, false);
             // NOTE: whole-card click-to-lightbox removed — cards are now live
             // draggable 360 previews (see js/live-tours.js). Fullscreen is via
             // the corner expand button and the "Fullscreen Tour" link.
@@ -2130,18 +2158,18 @@
             cursor: pointer;
         }
     </style>
-    <script src="js/three-loader.js?v=20260814u" data-three-src="js/three.min.js?v=20260827" defer></script>
-  <script src="js/aurora.js?v=20260814u" defer></script>
-  <script src="js/sidenav.js?v=20260814u" defer></script>
-  <script src="js/live-tours.js?v=20260814u" defer></script>
-    <script src="js/gsap.min.js?v=20260827" defer></script>
-    <script src="js/portal-effect.js?v=20260814u" defer></script>
-  <script src="js/polish.js?v=20260814u" defer></script>
-  <script src="js/mobile.js?v=20260814u" defer></script>
-  <script src="js/wow.js?v=20260814u" defer></script>
-  <script src="js/v2-extras.js?v=20260814u" defer></script>
-  <script src="js/motion.js?v=20260814u" defer></script>
-  <script src="js/pwa.js?v=20260814u" defer></script>
+    <script src="js/three-loader.js?v=20260829a" data-three-src="js/three.min.js?v=20260829a" defer></script>
+  <script src="js/aurora.js?v=20260829a" defer></script>
+  <script src="js/sidenav.js?v=20260829a" defer></script>
+  <script src="js/live-tours.js?v=20260829a" defer></script>
+    <script src="js/gsap.min.js?v=20260829a" defer></script>
+    <script src="js/portal-effect.js?v=20260829a" defer></script>
+  <script src="js/polish.js?v=20260829a" defer></script>
+  <script src="js/mobile.js?v=20260829a" defer></script>
+  <script src="js/wow.js?v=20260829a" defer></script>
+  <script src="js/v2-extras.js?v=20260829a" defer></script>
+  <script src="js/motion.js?v=20260829a" defer></script>
+  <script src="js/pwa.js?v=20260829a" defer></script>
 </body>
 
 </html>
