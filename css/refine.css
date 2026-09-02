@@ -610,6 +610,38 @@ h1.sexy-heading,
 }
 
 /* ============================================================
+   HERO INTRO LINE — legibility
+   The Webflow base sets .hero-subheading in uppercase with 3px of tracking,
+   a 0.25px text stroke and a hard 4px shadow. Wide tracking pushes the
+   letters inside a word nearly as far apart as the spaces between words, so
+   at phone widths the sentence reads as one unbroken run of capitals. It is
+   worst in Spanish, whose words are longer and wrap sooner. Sentence case,
+   normal tracking, no stroke, and a soft shadow that still holds contrast
+   over the video.
+   ============================================================ */
+.hero-subheading,
+#Hero .hero-subheading,
+body.aurora-on #Hero .hero-subheading {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  word-spacing: normal !important;
+  -webkit-text-stroke-width: 0 !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6) !important;
+  font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.25rem) !important;
+  line-height: 1.6 !important;
+  max-width: 46ch !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* The fixed nav is ~79px tall and the hero centres its content in the full
+   viewport, which left the headline sitting ~25px under the bar on a phone.
+   Reserve the bar plus breathing room so the first line always clears it. */
+#Hero .hero-content {
+  padding-top: clamp(28px, 5vh, 56px);
+}
+
+/* ============================================================
    COMPACT PAGE HEADER
    Content pages (pricing, guides, comparisons, hubs) were reusing
    .hero-section + .hero-subheading, which are sized for the homepage's

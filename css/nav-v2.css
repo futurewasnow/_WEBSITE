@@ -248,12 +248,17 @@
   color: #001a10 !important;
   text-decoration: none !important;
   box-shadow: 0 6px 18px -6px rgba(0,255,136,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
-  transition: transform .25s cubic-bezier(0.16,1,0.3,1), box-shadow .25s ease;
+  transition: box-shadow .25s ease, filter .25s ease;
   white-space: nowrap;
 }
+/* The bar stays put. This button used to lift 2px on hover while two separate
+   magnetic-cursor scripts also dragged it toward the pointer, so the whole
+   nav appeared to twitch. Hover now only brightens the glow -- nothing in the
+   bar changes position. The arrow still slides, which is contained and reads
+   as deliberate. */
 .nav-cta:hover {
-  transform: translateY(-2px);
   box-shadow: 0 10px 26px -6px rgba(0,255,136,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+  filter: brightness(1.05);
   color: #001a10 !important;
 }
 .nav-cta::after {

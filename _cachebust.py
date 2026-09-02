@@ -1,7 +1,7 @@
 import re, pathlib
 
 ROOT = pathlib.Path(".")
-VER = "20260829a"
+VER = "20260902a"
 # match href/src of local css/*.css or js/*.js (with optional ../ prefixes),
 # stripping any pre-existing ?v=... query so we can re-stamp.
 pat = re.compile(r'((?:href|src)=")((?:\.\./)*(?:css|js)/[A-Za-z0-9_.-]+\.(?:css|js))(\?v=[^"]*)?(")')

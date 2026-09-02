@@ -64,8 +64,13 @@
      ================================================================= */
   function initMagnetic() {
     if (!finePointer || reducedMotion) return;
-    const targets = document.querySelectorAll('.ds-btn-primary, .nav-cta, .pkg-btn, .ds-btn-arrow, .ys-fab-trigger, button.ys-form-submit');
+    const targets = document.querySelectorAll('.ds-btn-primary, .pkg-btn, .ds-btn-arrow, .ys-fab-trigger, button.ys-form-submit');
     targets.forEach(el => {
+      /* motion.js runs the same effect over an overlapping selector list and
+         writes style.transform directly, which beats the class-based transform
+         below. Both bound to one element meant two different offsets fighting
+         each frame. Whichever script gets there first owns the element. */
+      if (el.classList.contains('ys-magnetic')) return;
       el.classList.add('ys-magnetic');
       let raf = null;
       const r = () => el.getBoundingClientRect();

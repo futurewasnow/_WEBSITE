@@ -96,7 +96,9 @@
   function magneticCTAs() {
     if (!fine || reduced) return;
     const targets = document.querySelectorAll(
-      '.nav-cta, .ds-btn-primary, .pkg-btn, .ys-fab-trigger, .ys-form-submit, .ys-estimator-next, .ys-mob-bar a.btn-quote'
+      /* .nav-cta is deliberately absent: a nav that drifts under the cursor
+         reads as unsteady, not premium. */
+      '.ds-btn-primary, .pkg-btn, .ys-fab-trigger, .ys-form-submit, .ys-estimator-next, .ys-mob-bar a.btn-quote'
     );
     targets.forEach(el => {
       el.classList.add('ys-magnetic');

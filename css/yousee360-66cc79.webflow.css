@@ -6561,19 +6561,7 @@ p {
   }
 
   .hero-heading {
-    clear: right;
     text-align: center;
-    letter-spacing: 1px;
-    flex-flow: wrap;
-    flex: none;
-    order: -1;
-    justify-content: center;
-    align-self: center;
-    align-items: center;
-    font-size: 4vw;
-    font-weight: 700;
-    line-height: 16px;
-    display: flex;
   }
 
   .hollow-button.all-caps {
