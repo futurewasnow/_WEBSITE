@@ -641,6 +641,28 @@ body.aurora-on #Hero .hero-subheading {
   padding-top: clamp(28px, 5vh, 56px);
 }
 
+/* On a phone the hero centres five elements in the full viewport, but the top
+   ~79px is the fixed nav and the bottom ~90px is the fixed call bar, with the
+   floating action button sitting above that from ~670px down. The trust strip
+   ran under all three -- covered outright by the call bar in Spanish, whose
+   longer headline pushes the stack lower. Reserve the bottom furniture and
+   tighten the gaps so the whole hero lands in the band that is actually
+   visible. */
+@media (max-width: 600px) {
+  /* The gap is set by `body.aurora-on #Hero .hero-content` (1,2,1) and the
+     padding by `#Hero .hero-content { padding: 0 24px !important }`, so both
+     need matching weight here. */
+  body.aurora-on #Hero .hero-content,
+  #Hero .hero-content {
+    gap: 14px !important;
+    row-gap: 14px !important;
+    padding-bottom: 84px !important;
+  }
+  #Hero .hero-trust-strip {
+    margin-top: 4px !important;
+  }
+}
+
 /* ============================================================
    COMPACT PAGE HEADER
    Content pages (pricing, guides, comparisons, hubs) were reusing

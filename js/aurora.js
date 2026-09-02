@@ -216,7 +216,11 @@
       if (!document.querySelector('.ys-aurora-hint')) {
         const hint = document.createElement('div');
         hint.className = 'ys-aurora-hint';
-        hint.textContent = 'Drag to explore';
+        /* The hint is injected on every page, including the Spanish ones, so
+           it has to follow the document language rather than be hardcoded. */
+        hint.textContent = (document.documentElement.lang || 'en').startsWith('es')
+          ? 'Arrastra para explorar'
+          : 'Drag to explore';
         document.body.appendChild(hint);
         setTimeout(() => {
           document.body.classList.add('ys-aurora-hint-dismissed');
