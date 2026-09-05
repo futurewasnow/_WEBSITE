@@ -212,8 +212,12 @@
         state.my = -(e.clientY / window.innerHeight) * 2 + 1;
       }, { passive: true });
 
-      // Mount a hint
-      if (!document.querySelector('.ys-aurora-hint')) {
+      // Mount a hint -- but only where the aurora canvas backs a hero. The
+      // hint is position:fixed, so on an interior page it parks itself over
+      // whatever happens to sit at that spot (it was landing on a heading on
+      // the pricing page and over the FAQ grid in Spanish). Dragging the
+      // background is only a discoverable gesture on the homepage hero.
+      if (document.querySelector('#Hero') && !document.querySelector('.ys-aurora-hint')) {
         const hint = document.createElement('div');
         hint.className = 'ys-aurora-hint';
         /* The hint is injected on every page, including the Spanish ones, so

@@ -733,6 +733,23 @@ body.aurora-on #Hero .hero-subheading {
   justify-content: center;
   margin-top: 18px;
 }
+/* The green gradient for primary buttons is scoped to `body.aurora-on #Hero
+   .btn-primary`, so a CTA inside a page header rendered in the plain dark base
+   style and read as disabled. Page headers are the top of their page; their
+   call to action should look like one. */
+body.aurora-on .ys-page-header .btn-primary,
+.ys-page-header .btn-primary {
+  background: linear-gradient(135deg, var(--ys-green, #00ff88), var(--ys-cyan, #22d3ee)) !important;
+  color: #04120c !important;
+  border: 0 !important;
+  box-shadow: 0 16px 40px -12px rgba(0, 255, 136, 0.55);
+}
+.ys-page-header .hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
 .ys-page-header .ys-trust-badge {
   font-size: 0.78rem;
   padding: 6px 12px;

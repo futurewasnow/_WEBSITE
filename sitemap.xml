@@ -497,6 +497,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://yousee360.com/industries/airbnb-photography.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/industries/airbnb-photography.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yousee360.com/industries/airbnb-photography.html"/>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://yousee360.com/industries/real-estate.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://yousee360.com/industries/real-estate.html"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://yousee360.com/es/industrias/bienes-raices.html"/>
