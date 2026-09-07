@@ -1,7 +1,7 @@
 /**
- * YouSee360 WebAR Multi-Portal Engine (Three.js + WebXR / Gyro)
- * Supports placing MULTIPLE 3D portals on floor pins simultaneously,
- * multi-scene 360 panorama switching inside portals, and 3D navigation.
+ * YouSee360 Universal WebAR 3D Portal Engine
+ * Universal Mobile Compatibility for iOS Safari & Android Chrome
+ * Instantly launches AR camera for any selected tour with 3D portal auto-placed in front of user
  */
 
 (function() {
@@ -229,24 +229,23 @@
   let activeSceneIndex = 0;
 
   let scene, camera, renderer;
-  let skyboxMesh, particlesMesh, reticleMesh;
-  let placedPortals = []; // Array of multiple 3D portals on the floor!
+  let skyboxMesh, reticleMesh;
+  let placedPortals = [];
   let activePortalObj = null;
 
   let textureLoader;
   let loadedTextures = {};
 
-  // Interactive controls state
+  // Touch & Device Motion State
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
   let targetRotation = { x: 0, y: 0 };
   let currentRotation = { x: 0, y: 0 };
   let isInsidePortal = false;
+  let isCameraARActive = false;
 
-  // Raycaster for 3D Hotspots & Portal selection
+  // Raycasting
   let raycaster, mouseVector;
-
-  // WebAR camera stream state
   let arVideoStream = null;
 
   // DOM Elements
@@ -282,7 +281,7 @@
     camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.set(0, 1.2, 3.8);
 
-    // 3. WebGL Renderer with sRGB Color Space & Stencil Buffer Enabled
+    // 3. WebGL Renderer with sRGB Color Space & Alpha Support
     renderer = new THREE.WebGLRenderer({
       canvas: arCanvas,
       antialias: true,
@@ -316,7 +315,7 @@
     // 5. Texture Loader
     textureLoader = new THREE.TextureLoader();
 
-    // 6. Build 360 Environment Sphere Chamber (Shared room viewer)
+    // 6. Build 360 Environment Sphere Chamber
     const skyGeo = new THREE.SphereGeometry(15, 64, 64);
     skyGeo.scale(-1, 1, 1);
 
@@ -333,30 +332,24 @@
 
     buildFloorReticle();
 
-    // Spawn Initial Portals Side-by-Side on the Floor!
+    // Spawn Initial Portals Side-by-Side on Floor
     spawnFloorPortal('junglo', new THREE.Vector3(-1.8, 0, -2));
-    spawnFloorPortal('arenal', new THREE.Vector3(0, 0, -2.5));
+    spawnFloorPortal('arenal', new THREE.Vector3(0, 0, -2.4));
     spawnFloorPortal('casadelrio', new THREE.Vector3(1.8, 0, -2));
 
-    // Select middle portal as active
     if (placedPortals.length > 1) {
       activePortalObj = placedPortals[1];
     }
 
-    // Load initial tour data
     loadTourSceneData(activeTourKey, activeSceneIndex);
-
-    // Event listeners for dragging & touch
     setupCanvasControls();
+    setupDeviceGyroscope();
 
-    // Window resize
     window.addEventListener('resize', onWindowResize);
-
-    // Animation Loop
     animate();
   }
 
-  // Spawn a 3D Glowing Portal Doorway on the Floor with Pin Badge
+  // Spawn a 3D Glowing Portal Doorway on Floor
   function spawnFloorPortal(tourKey, position) {
     const data = TOUR_DATA[tourKey];
     if (!data) return;
@@ -406,7 +399,7 @@
     holePath.moveTo(-1.0, 0);
     holePath.lineTo(-1.0, 1.8);
     holePath.absarc(0, 1.8, 1.0, Math.PI, 0, true);
-    holePath.lineTo(1.0, 0);
+    holePath.lineTo(1.1, 0);
     holePath.lineTo(-1.0, 0);
     outerShape.holes.push(holePath);
 
@@ -414,7 +407,7 @@
     const archMat = new THREE.MeshStandardMaterial({
       color: 0x00f2fe,
       emissive: 0x00f2fe,
-      emissiveIntensity: 0.8,
+      emissiveIntensity: 0.85,
       roughness: 0.2,
       metalness: 0.8
     });
@@ -422,7 +415,7 @@
     archMesh.position.z = -0.06;
     portalGroup.add(archMesh);
 
-    // 3. Floor Pin Base Ring & Glowing Badge
+    // 3. Floor Pin Base Ring & Title Badge
     const pinRingGeo = new THREE.RingGeometry(0.9, 1.1, 32);
     const pinRingMat = new THREE.MeshBasicMaterial({
       color: 0x00f2fe,
@@ -435,7 +428,7 @@
     pinRingMesh.position.y = 0.01;
     portalGroup.add(pinRingMesh);
 
-    // 2D Canvas Title Badge floating above Portal Arch
+    // Title Badge
     const canvas = document.createElement('canvas');
     canvas.width = 340;
     canvas.height = 80;
@@ -462,7 +455,7 @@
     badgeSprite.scale.set(1.8, 0.45, 1);
     portalGroup.add(badgeSprite);
 
-    // 4. Hotspots Group for inside room
+    // Hotspots Group
     const hotspotGroup = new THREE.Group();
     portalGroup.add(hotspotGroup);
 
@@ -483,7 +476,6 @@
     return portalObj;
   }
 
-  // Floor Reticle Target Indicator
   function buildFloorReticle() {
     const ringGeo = new THREE.RingGeometry(1.0, 1.25, 32);
     const ringMat = new THREE.MeshBasicMaterial({
@@ -514,7 +506,6 @@
     }
   }
 
-  // Load Scene Panorama Texture & 3D Interactive Hotspots
   function loadTourSceneData(tourKey, sceneIdx) {
     const tour = TOUR_DATA[tourKey];
     if (!tour || !tour.scenes[sceneIdx]) return;
@@ -536,21 +527,17 @@
       });
     }
 
-    // Update active portal hotspots
     if (activePortalObj && activePortalObj.hotspotGroup) {
       buildInteractive3DHotspots(activePortalObj.hotspotGroup, sceneData.hotspots);
     }
 
-    // Update In-Portal Scene UI Pills
     updateScenePillsUI(tour, sceneIdx);
 
-    // Update Info DOM text
     if (activeTourTitleEl) activeTourTitleEl.textContent = `${tour.name} — ${sceneData.title}`;
     if (activeTourCategoryEl) activeTourCategoryEl.textContent = tour.category;
     if (activeTourDescEl) activeTourDescEl.textContent = tour.desc;
   }
 
-  // Update Mini Scene Pills UI in DOM
   function updateScenePillsUI(tour, currentIdx) {
     let container = document.getElementById('scenePillsContainer');
     if (!container) return;
@@ -559,8 +546,8 @@
     tour.scenes.forEach((sc, idx) => {
       const pill = document.createElement('button');
       pill.className = `tour-pill ${idx === currentIdx ? 'active' : ''}`;
-      pill.style.padding = '6px 14px';
-      pill.style.fontSize = '0.8rem';
+      pill.style.padding = '5px 12px';
+      pill.style.fontSize = '0.78rem';
       pill.innerHTML = `<i class="fas fa-eye"></i> ${sc.title}`;
       pill.addEventListener('click', () => {
         loadTourSceneData(tour.id, idx);
@@ -569,7 +556,6 @@
     });
   }
 
-  // Build Floating 3D Glowing Hotspots inside Active Portal
   function buildInteractive3DHotspots(hotspotGroupObj, hotspotsList) {
     while (hotspotGroupObj.children.length > 0) {
       const obj = hotspotGroupObj.children[0];
@@ -582,7 +568,6 @@
       const group = new THREE.Group();
       group.position.set(spot.pos[0], spot.pos[1], spot.pos[2]);
 
-      // Glowing Sphere Core
       const sphereGeo = new THREE.SphereGeometry(0.2, 32, 32);
       const sphereMat = new THREE.MeshStandardMaterial({
         color: spot.type === 'next_scene' ? 0x00f5a0 : 0x00f2fe,
@@ -597,7 +582,6 @@
       const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
       group.add(sphereMesh);
 
-      // Outer Glowing Pulse Ring
       const ringGeo = new THREE.RingGeometry(0.25, 0.35, 32);
       const ringMat = new THREE.MeshBasicMaterial({
         color: 0x4facfe,
@@ -611,7 +595,6 @@
       const ringMesh = new THREE.Mesh(ringGeo, ringMat);
       group.add(ringMesh);
 
-      // 2D Text Badge Sprite Overlay
       const canvas = document.createElement('canvas');
       canvas.width = 320;
       canvas.height = 80;
@@ -649,53 +632,27 @@
     });
   }
 
-  // Canvas Mouse & Touch Drag Controls with Raycasting
+  // Device Gyroscope Orientation for iPhone & Mobile Phones
+  function setupDeviceGyroscope() {
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        if (!isDragging && (e.beta || e.gamma)) {
+          // Map phone tilt to rotation
+          targetRotation.y = (e.gamma / 45) * (Math.PI / 4);
+          targetRotation.x = ((e.beta - 45) / 45) * (Math.PI / 4);
+        }
+      }, true);
+    }
+  }
+
+  // Touch & Mouse Drag Controls
   function setupCanvasControls() {
     arCanvas.addEventListener('mousedown', (e) => {
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
     });
 
-    arCanvas.addEventListener('click', (e) => {
-      const rect = arCanvas.getBoundingClientRect();
-      mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouseVector, camera);
-
-      // 1. Raycast Hotspots in Active Portal
-      if (activePortalObj && activePortalObj.hotspotGroup) {
-        const hotspotIntersects = raycaster.intersectObjects(activePortalObj.hotspotGroup.children, true);
-        if (hotspotIntersects.length > 0) {
-          let hitObj = hotspotIntersects[0].object;
-          while (hitObj.parent && !hitObj.userData.label) hitObj = hitObj.parent;
-          if (hitObj.userData && hitObj.userData.label) {
-            triggerHotspotAction(hitObj.userData);
-            return;
-          }
-        }
-      }
-
-      // 2. Raycast Placed Portals on Floor
-      const portalGroups = placedPortals.map(p => p.group);
-      const portalIntersects = raycaster.intersectObjects(portalGroups, true);
-      if (portalIntersects.length > 0) {
-        let hitGroup = portalIntersects[0].object;
-        while (hitGroup.parent && !hitGroup.userData.tourKey) hitGroup = hitGroup.parent;
-
-        if (hitGroup.userData && hitGroup.userData.tourKey) {
-          activePortalObj = hitGroup.userData;
-          activeTourKey = activePortalObj.tourKey;
-          loadTourSceneData(activeTourKey, 0);
-
-          // Animate camera toward clicked portal
-          const targetPos = activePortalObj.position.clone();
-          targetPos.y = 1.2;
-          targetPos.z += 1.5;
-          GSAPOrTweenCamera(camera.position, targetPos, 800);
-        }
-      }
-    });
+    arCanvas.addEventListener('click', handleScreenTap);
 
     window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
@@ -711,15 +668,15 @@
 
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // Touch events for mobile phone
+    // Touch Event Listeners for iPhone / Mobile
     arCanvas.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         isDragging = true;
         previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       }
-    });
+    }, { passive: true });
 
-    window.addEventListener('touchmove', (e) => {
+    arCanvas.addEventListener('touchmove', (e) => {
       if (!isDragging || e.touches.length !== 1) return;
       const deltaX = e.touches[0].clientX - previousMousePosition.x;
       const deltaY = e.touches[0].clientY - previousMousePosition.y;
@@ -727,9 +684,78 @@
       targetRotation.y += deltaX * 0.006;
       targetRotation.x += deltaY * 0.006;
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    });
+    }, { passive: true });
 
-    window.addEventListener('touchend', () => { isDragging = false; });
+    arCanvas.addEventListener('touchend', (e) => {
+      isDragging = false;
+      if (e.changedTouches && e.changedTouches.length === 1) {
+        handleScreenTap(e.changedTouches[0]);
+      }
+    });
+  }
+
+  // Handle Screen Tap & WebAR Camera Placement
+  function handleScreenTap(e) {
+    const rect = arCanvas.getBoundingClientRect();
+    const clientX = e.clientX || (e.pageX - rect.left);
+    const clientY = e.clientY || (e.pageY - rect.top);
+
+    mouseVector.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    mouseVector.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouseVector, camera);
+
+    // 1. Raycast Hotspots in Active Portal
+    if (activePortalObj && activePortalObj.hotspotGroup) {
+      const hotspotIntersects = raycaster.intersectObjects(activePortalObj.hotspotGroup.children, true);
+      if (hotspotIntersects.length > 0) {
+        let hitObj = hotspotIntersects[0].object;
+        while (hitObj.parent && !hitObj.userData.label) hitObj = hitObj.parent;
+        if (hitObj.userData && hitObj.userData.label) {
+          triggerHotspotAction(hitObj.userData);
+          return;
+        }
+      }
+    }
+
+    // 2. Raycast Placed Portals on Floor
+    const portalGroups = placedPortals.map(p => p.group);
+    const portalIntersects = raycaster.intersectObjects(portalGroups, true);
+    if (portalIntersects.length > 0) {
+      let hitGroup = portalIntersects[0].object;
+      while (hitGroup.parent && !hitGroup.userData.tourKey) hitGroup = hitGroup.parent;
+
+      if (hitGroup.userData && hitGroup.userData.tourKey) {
+        activePortalObj = hitGroup.userData;
+        activeTourKey = activePortalObj.tourKey;
+        loadTourSceneData(activeTourKey, 0);
+
+        const targetPos = activePortalObj.position.clone();
+        targetPos.y = 1.2;
+        targetPos.z += 1.5;
+        GSAPOrTweenCamera(camera.position, targetPos, 800);
+        return;
+      }
+    }
+
+    // 3. Tap to Place New Portal in WebAR Camera View
+    if (isCameraARActive) {
+      const planeY = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      const floorPoint = new THREE.Vector3();
+      raycaster.ray.intersectPlane(planeY, floorPoint);
+
+      if (floorPoint) {
+        if (floorPoint.length() > 8) floorPoint.normalize().multiplyScalar(4);
+        
+        const newPortal = spawnFloorPortal(activeTourKey, floorPoint);
+        activePortalObj = newPortal;
+        
+        const navPill = document.querySelector('.webar-hud-bottom .canvas-instruction');
+        if (navPill) {
+          navPill.innerHTML = `<i class="fas fa-check-circle" style="color: var(--accent-emerald);"></i> <span>Portal Placed! Walk into archway to step inside</span>`;
+        }
+      }
+    }
   }
 
   function triggerHotspotAction(spotData) {
@@ -753,22 +779,19 @@
 
   function onWindowResize() {
     if (!canvasContainer || !camera || !renderer) return;
-    const width = canvasContainer.clientWidth;
-    const height = canvasContainer.clientHeight;
+    const width = isCameraARActive ? window.innerWidth : canvasContainer.clientWidth;
+    const height = isCameraARActive ? window.innerHeight : canvasContainer.clientHeight;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
   }
 
-  // Main Render Animation Loop
   function animate() {
     requestAnimationFrame(animate);
 
-    // Smooth rotation dampening
     currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
     currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
 
-    // Check distance to active portal doorway
     if (activePortalObj) {
       const portalZ = activePortalObj.position.z;
       const distZ = camera.position.z - portalZ;
@@ -790,9 +813,6 @@
       camera.rotation.y = currentRotation.y;
       camera.rotation.x = currentRotation.x;
     }
-
-    // Animate particles & floor reticle
-    if (particlesMesh) particlesMesh.rotation.y += 0.003;
 
     if (reticleMesh) {
       reticleMesh.rotation.z += 0.01;
@@ -830,7 +850,73 @@
     }
   }
 
-  // Tour Switcher & Multi-Portal Placement Buttons
+  // Launch Universal AR Camera for Any Selected Tour
+  async function launchARCameraForTour(tourKey) {
+    if (tourKey && TOUR_DATA[tourKey]) {
+      activeTourKey = tourKey;
+    }
+
+    const arOverlay = document.getElementById('webarOverlay');
+    const arVideo = document.getElementById('webarVideo');
+
+    try {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        arVideoStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        if (arVideo) {
+          arVideo.srcObject = arVideoStream;
+          await arVideo.play();
+        }
+
+        if (arOverlay && arCanvas) {
+          arOverlay.appendChild(arCanvas);
+          arCanvas.classList.add('ar-camera-mode');
+          isCameraARActive = true;
+
+          if (renderer) {
+            renderer.setClearColor(0x000000, 0); // Transparent for camera stream
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          }
+          if (camera) {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.position.set(0, 1.2, 0.5);
+            camera.updateProjectionMatrix();
+          }
+
+          // Auto-spawn active tour portal right in front of user in AR space
+          loadTourSceneData(activeTourKey, 0);
+          
+          let existing = placedPortals.find(p => p.tourKey === activeTourKey);
+          if (!existing) {
+            existing = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2.0));
+          } else {
+            existing.position.set(0, 0, -2.0);
+          }
+          activePortalObj = existing;
+
+          arOverlay.classList.add('active');
+        }
+      } else {
+        alert('WebAR camera access is not supported on this browser device. Launching 3D Portal Simulator!');
+      }
+    } catch (err) {
+      console.warn('Camera permission denied or HTTP connection:', err);
+      // Fallback: Launch 3D Simulator with portal positioned right in front
+      loadTourSceneData(activeTourKey, 0);
+      let existing = placedPortals.find(p => p.tourKey === activeTourKey);
+      if (!existing) {
+        existing = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2.0));
+      }
+      activePortalObj = existing;
+      
+      // Scroll smoothly to simulator card
+      const simCard = document.getElementById('canvasCard');
+      if (simCard) simCard.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   function setupTourSwitchers() {
     const pills = document.querySelectorAll('.tour-pill');
     pills.forEach(pill => {
@@ -841,16 +927,13 @@
         const key = pill.getAttribute('data-tour');
         if (key && TOUR_DATA[key]) {
           activeTourKey = key;
-          // Spawn or activate portal for this tour
+          loadTourSceneData(key, 0);
           let existing = placedPortals.find(p => p.tourKey === key);
           if (!existing) {
-            const newX = (placedPortals.length % 2 === 0 ? 1 : -1) * (1.5 + Math.random() * 0.8);
-            existing = spawnFloorPortal(key, new THREE.Vector3(newX, 0, -2.2));
+            existing = spawnFloorPortal(key, new THREE.Vector3(0, 0, -2.0));
           }
           activePortalObj = existing;
-          loadTourSceneData(key, 0);
 
-          // Move camera towards active portal
           const targetPos = activePortalObj.position.clone();
           targetPos.y = 1.2;
           targetPos.z += 1.6;
@@ -907,35 +990,25 @@
     step();
   }
 
-  // WebAR Camera Mode
+  // WebAR Camera Mode Setup & Portfolio Card Launchers
   function setupWebARMode() {
     const btnLaunchAR = document.getElementById('btnLaunchAR');
     const arOverlay = document.getElementById('webarOverlay');
     const btnCloseAR = document.getElementById('btnCloseAR');
-    const arVideo = document.getElementById('webarVideo');
 
     if (btnLaunchAR) {
-      btnLaunchAR.addEventListener('click', async () => {
-        try {
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            arVideoStream = await navigator.mediaDevices.getUserMedia({
-              video: { facingMode: 'environment' },
-              audio: false
-            });
-            if (arVideo) {
-              arVideo.srcObject = arVideoStream;
-              await arVideo.play();
-            }
-            if (arOverlay) arOverlay.classList.add('active');
-          } else {
-            alert('WebAR camera access is not supported on this browser device. Switching to 3D Simulator Mode!');
-          }
-        } catch (err) {
-          console.warn('Camera permission denied or unavailable:', err);
-          alert('Camera permission denied or unavailable. You can explore the 3D Portal interactive simulator right on screen!');
-        }
+      btnLaunchAR.addEventListener('click', () => {
+        launchARCameraForTour(activeTourKey);
       });
     }
+
+    // Attach to all portfolio card "Launch AR Portal" buttons
+    document.querySelectorAll('.btn-launch-ar-tour').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const key = e.currentTarget.getAttribute('data-tour-key');
+        if (key) launchARCameraForTour(key);
+      });
+    });
 
     if (btnCloseAR) {
       btnCloseAR.addEventListener('click', () => {
@@ -943,12 +1016,27 @@
           arVideoStream.getTracks().forEach(track => track.stop());
           arVideoStream = null;
         }
+
+        if (canvasContainer && arCanvas) {
+          canvasContainer.appendChild(arCanvas);
+          arCanvas.classList.remove('ar-camera-mode');
+          isCameraARActive = false;
+
+          if (renderer) {
+            renderer.setClearColor(0x000000, 1);
+            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+          }
+          if (camera) {
+            camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
+            camera.updateProjectionMatrix();
+          }
+        }
+
         if (arOverlay) arOverlay.classList.remove('active');
       });
     }
   }
 
-  // Modals: Fullscreen Tour Embed & QR Code Handoff
   function setupModals() {
     const tourModal = document.getElementById('tourModal');
     const tourIframe = document.getElementById('tourIframe');
@@ -985,7 +1073,7 @@
       });
     }
 
-    // QR Code Handoff Modal
+    // QR Code Modal
     const qrModal = document.getElementById('qrModal');
     const btnShowQR = document.getElementById('btnShowQR');
     const btnCloseQR = document.getElementById('btnCloseQR');
