@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>WebAR World Portals | YouSee360 Virtual Tours Costa Rica</title>
+  <meta name="description" content="Place interactive 360° virtual tour portals directly into the physical world around you using WebAR on your mobile phone. No app download required.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <link rel="canonical" href="https://yousee360.com/AR%20Version/">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="WebAR World Portals | YouSee360 Costa Rica">
+  <meta property="og:description" content="Step inside luxury resorts, retreat centers, and real estate from your phone camera in WebAR.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yousee360.com/AR%20Version/">
+  <meta property="og:image" content="../images/og-card.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/ar-style.css">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Client-Side QRCode Library -->
+  <script src="js/qrcode.min.js"></script>
+
+  <!-- Custom WebAR Engine Script -->
+  <script src="js/ar-portal.js" defer></script>
+</head>
+<body>
+
+  <!-- Ambient Grid Background & Orbs -->
+  <div class="bg-grid-overlay"></div>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+
+  <!-- Navigation Bar -->
+  <header class="ar-nav">
+    <div class="ar-container ar-nav-inner">
+      <a href="../" class="ar-brand" aria-label="YouSee360 Home">
+        <span>YouSee<span style="color: var(--accent-cyan);">360</span></span>
+        <span class="ar-badge">WebAR</span>
+      </a>
+
+      <nav>
+        <ul class="ar-nav-links">
+          <li><a href="#simulator" class="ar-nav-link">3D Simulator</a></li>
+          <li><a href="#how-it-works" class="ar-nav-link">How WebAR Works</a></li>
+          <li><a href="#portfolio" class="ar-nav-link">Portfolio Portals</a></li>
+          <li><a href="#business" class="ar-nav-link">ROI & Benefits</a></li>
+          <li><a href="#contact" class="ar-nav-link">Request WebAR</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button id="btnShowQR" class="btn-secondary" title="Scan with phone camera">
+          <i class="fas fa-qrcode"></i> Scan QR
+        </button>
+        <button id="btnLaunchAR" class="btn-glow">
+          <i class="fas fa-vr-cardboard"></i> Launch AR Camera
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="ar-hero" id="simulator">
+      <div class="ar-container">
+        <div class="ar-hero-grid">
+          
+          <!-- Hero Text -->
+          <div class="ar-hero-content">
+            <span class="section-tag">
+              <i class="fas fa-sparkles"></i> Next-Gen WebAR Experience
+            </span>
+            <h1 class="apple-heading">
+              Place 360° Virtual Tour Portals <span class="highlight">In Your World</span>
+            </h1>
+            <p>
+              No app download required. Open portals directly from your smartphone camera into Costa Rica’s top luxury resorts, rainforest retreat centers, and real estate properties.
+            </p>
+
+            <div class="ar-hero-cta-group">
+              <button id="btnLaunchAR" class="btn-glow" style="padding: 14px 32px; font-size: 1.05rem;">
+                <i class="fas fa-camera"></i> Launch AR Camera
+              </button>
+              <button id="btnStepInside" class="btn-secondary" style="padding: 14px 28px;">
+                <i class="fas fa-walking"></i> Walk Into Portal
+              </button>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: var(--text-muted);">
+              <span><i class="fas fa-check-circle" style="color: var(--accent-cyan);"></i> Zero App Install</span>
+              <span><i class="fas fa-check-circle" style="color: var(--accent-cyan);"></i> iOS & Android Compatible</span>
+              <span><i class="fas fa-check-circle" style="color: var(--accent-cyan);"></i> 6DOF Stencil Portal Tracking</span>
+            </div>
+          </div>
+
+          <!-- 3D Interactive Canvas Card -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="ar-canvas-card" id="canvasCard">
+              
+              <!-- HUD Header -->
+              <div class="canvas-hud">
+                <div class="hud-pill">
+                  <span class="status-dot"></span> 3D WebAR Portal Simulator
+                </div>
+                <button id="btnOpenFullTour" class="hud-pill" style="cursor: pointer; background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.3);">
+                  <i class="fas fa-expand-alt" style="color: var(--accent-cyan);"></i> Open Full Tour
+                </button>
+              </div>
+
+              <!-- WebGL Canvas -->
+              <canvas id="arCanvas"></canvas>
+
+              <!-- Instruction Floating Tag -->
+              <div class="canvas-instruction">
+                <i class="fas fa-walking" style="color: var(--accent-cyan);"></i>
+                <span>Drag to look into portal · Click Walk Into Portal or tap 3D Hotspots inside</span>
+              </div>
+            </div>
+
+            <!-- Active Tour Info Banner -->
+            <div class="active-portal-info" style="max-width: 100%;">
+              <span id="activeTourCategory" style="color: var(--accent-cyan); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;">
+                Hospitality & Spa
+              </span>
+              <h3 id="activeTourTitle">Junglo Resort & Spa</h3>
+              <p id="activeTourDesc">Step into luxury in the Costa Rican rainforest with pristine spa facilities and lush green vistas.</p>
+              
+              <!-- In-Portal 360 Scene Switcher -->
+              <div style="margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">
+                  Switch 360 Scenes Inside Active Portal
+                </p>
+                <div id="scenePillsContainer" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Tour Selection Carousel -->
+        <div style="margin-top: 40px; text-align: center;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">
+            Select Destination Portal
+          </p>
+          <div class="tour-selector-bar" style="justify-content: center;">
+            <button class="tour-pill active" data-tour="junglo">
+              <i class="fas fa-hotel"></i> Junglo Resort
+            </button>
+            <button class="tour-pill" data-tour="arenal">
+              <i class="fas fa-butterfly"></i> Arenal Butterfly
+            </button>
+            <button class="tour-pill" data-tour="casadelrio">
+              <i class="fas fa-water"></i> Casa del Rio
+            </button>
+            <button class="tour-pill" data-tour="dragonfly">
+              <i class="fas fa-spa"></i> Dragonfly Retreat
+            </button>
+            <button class="tour-pill" data-tour="arboeden">
+              <i class="fas fa-tree"></i> Arboeden Eco
+            </button>
+            <button class="tour-pill" data-tour="elgenio">
+              <i class="fas fa-home"></i> El Genio Estate
+            </button>
+            <button class="tour-pill" data-tour="kenko">
+              <i class="fas fa-utensils"></i> Kenko Restaurant
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How WebAR Works Section -->
+    <section class="ar-section" id="how-it-works">
+      <div class="ar-container">
+        <div class="section-header">
+          <span class="section-tag">Spatial Immersion</span>
+          <h2 class="apple-heading">How WebAR Portals <span class="highlight">Transform Tours</span></h2>
+          <p>WebAR brings physical 3D portals into the real world. Visitors drop a doorway into their living room, office, or patio, then physically walk right through.</p>
+        </div>
+
+        <div class="features-grid">
+          
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>1. Instant Camera Access</h3>
+            <p>Users tap a link or scan a QR code. Your WebAR experience launches directly in Safari or Chrome without downloading any app.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <h3>2. Surface Floor Detection</h3>
+            <p>Advanced SLAM surface tracking detects the ground plane in real time, displaying a targeting reticle to anchor your 3D portal doorway.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i class="fas fa-door-open"></i>
+            </div>
+            <h3>3. Step Through the Archway</h3>
+            <p>Walk towards the glowing 3D portal in 6DOF spatial freedom. As you pass through the doorway threshold, you enter the 360° virtual tour environment.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i class="fas fa-compass"></i>
+            </div>
+            <h3>4. Full Gyroscope Exploration</h3>
+            <p>Turn around 360 degrees using your phone’s internal gyroscope sensors to inspect high-resolution HDR details, amenities, and room layouts.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Showcase Grid -->
+    <section class="ar-section" id="portfolio" style="background: rgba(12, 16, 23, 0.5);">
+      <div class="ar-container">
+        <div class="section-header">
+          <span class="section-tag">Interactive Collection</span>
+          <h2 class="apple-heading">Featured <span class="highlight">AR Portals</span></h2>
+          <p>Explore our live portfolio of Costa Rica virtual tours available in WebAR. Click any project to open the 3D portal or full tour view.</p>
+        </div>
+
+        <div class="portal-portfolio-grid">
+          
+          <!-- Project 1: Junglo -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/junglo.jpg" alt="Junglo Resort & Spa">
+              <span class="portal-badge-tag">Hospitality</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Junglo Resort & Spa</h3>
+              <p>Luxury resort walkthrough with pristine jungle surroundings, spa villas, and pool deck.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="junglo" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://tours.yousee360.com/Junglo" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2: Arenal Oasis -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/arenal.jpg" alt="Arenal Oasis Butterfly Dome">
+              <span class="portal-badge-tag">Wildlife</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Arenal Oasis Butterfly Dome</h3>
+              <p>Tropical rainforest sanctuary featuring native Costa Rican butterflies and educational domes.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="arenal" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://arenaloasis.yousee360.com/" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3: Casa del Rio -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/casadelrio.jpg" alt="Casa del Rio Boutique Hotel">
+              <span class="portal-badge-tag">Boutique</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Casa del Rio Boutique Hotel</h3>
+              <p>Charming boutique accommodations captured with custom interactive hot spots and navigation.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="casadelrio" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://tours.yousee360.com/casadelrio" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 4: Dragonfly -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/dragonfly.jpg" alt="Dragonfly Awakening">
+              <span class="portal-badge-tag">Retreat</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Dragonfly Awakening</h3>
+              <p>Spiritual wellness retreat center surrounded by serene Costa Rican mountain views.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="dragonfly" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://tours.yousee360.com/dragonfly" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 5: Arboeden -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/arboeden.jpg" alt="Arboeden Eco Retreat">
+              <span class="portal-badge-tag">Eco Lodge</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Arboeden Eco Retreat</h3>
+              <p>Eco-conscious treehouse and retreat architecture integrated into lush tropical jungle canopy.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="arboeden" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://tours.yousee360.com/arboreden" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 6: Kenko -->
+          <article class="portal-item-card">
+            <div class="portal-img-wrapper">
+              <img src="../images/tours/kenko.jpg" alt="Kenko Restaurant">
+              <span class="portal-badge-tag">Dining</span>
+            </div>
+            <div class="portal-card-body">
+              <h3>Kenko Restaurant & Street View</h3>
+              <p>Top rated La Fortuna dining destination rendered in 360° and published live on Google Maps.</p>
+              <div class="portal-card-actions">
+                <button class="btn-glow btn-launch-tour" data-tour-key="kenko" style="padding: 8px 18px; font-size: 0.85rem;">
+                  <i class="fas fa-expand"></i> Launch Tour
+                </button>
+                <a href="https://yousee360.com/Kenko/Tour/index.htm" target="_blank" rel="noopener" class="ar-nav-link" style="font-size: 0.85rem;">
+                  Direct Link <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Value & ROI Section -->
+    <section class="ar-section" id="business">
+      <div class="ar-container">
+        <div class="section-header">
+          <span class="section-tag">Business Advantage</span>
+          <h2 class="apple-heading">Why Leading Brands Choose <span class="highlight">WebAR Portals</span></h2>
+          <p>Deliver unforgettable spatial marketing experiences that turn casual web visitors into direct bookings.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; text-align: center;">
+          <div style="background: var(--bg-card); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <h3 style="font-size: 2.8rem; color: var(--accent-cyan); font-weight: 800;">+180%</h3>
+            <p style="color: var(--text-main); font-weight: 700; margin-top: 8px;">Increase in Time-on-Site</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Spatial interaction keeps visitors engaged 3x longer than traditional photo galleries.</p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <h3 style="font-size: 2.8rem; color: var(--accent-emerald); font-weight: 800;">67%</h3>
+            <p style="color: var(--text-main); font-weight: 700; margin-top: 8px;">Higher Booking Intent</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Travelers build confidence when they physically inspect room layouts in AR before arrival.</p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <h3 style="font-size: 2.8rem; color: var(--accent-teal); font-weight: 800;">0</h3>
+            <p style="color: var(--text-main); font-weight: 700; margin-top: 8px;">App Install Friction</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Zero barrier to entry. Runs natively inside mobile WebKit and Chrome browsers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WebAR Contact & Quote Form Section -->
+    <section class="ar-section" id="contact">
+      <div class="ar-container">
+        <div class="ar-quote-card">
+          <div style="text-align: center; margin-bottom: 32px;">
+            <span class="section-tag">Get Started</span>
+            <h2 class="apple-heading" style="font-size: 2.2rem;">Bring WebAR Portals to <span class="highlight">Your Business</span></h2>
+            <p style="color: var(--text-muted); margin-top: 8px;">Let’s create a custom WebAR 3D portal experience for your resort, boutique hotel, or real estate project.</p>
+          </div>
+
+          <form action="../contact.php" method="POST">
+            <div class="form-grid">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Your Name</label>
+                <input type="text" name="name" class="form-input" placeholder="e.g. Maria Delgado" required>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Email Address</label>
+                <input type="email" name="email" class="form-input" placeholder="e.g. maria@resort.com" required>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Business / Property Name</label>
+                <input type="text" name="business" class="form-input" placeholder="e.g. Arenal Cloud Sanctuary">
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Industry</label>
+                <select name="industry" class="form-input" style="background: rgba(20, 26, 38, 0.9);">
+                  <option value="hospitality">Hospitality & Resort</option>
+                  <option value="realestate">Real Estate & Villas</option>
+                  <option value="retreat">Retreat & Wellness Center</option>
+                  <option value="adventure">Adventure Tour & Wildlife</option>
+                </select>
+              </div>
+
+              <div class="form-group-full">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Project Vision & Details</label>
+                <textarea name="message" class="form-input" rows="4" placeholder="Tell us about your property, location in Costa Rica, and timeline..."></textarea>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 28px;">
+              <button type="submit" class="btn-glow" style="padding: 14px 40px; font-size: 1rem;">
+                <i class="fas fa-paper-plane"></i> Request Custom WebAR Quote
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Fullscreen WebAR Camera Mode Overlay -->
+  <div class="webar-overlay" id="webarOverlay">
+    <video id="webarVideo" class="webar-video" playsinline muted></video>
+    <div class="webar-hud-top">
+      <div class="hud-pill" style="background: rgba(6, 7, 10, 0.85);">
+        <span class="status-dot"></span> AR Camera Active
+      </div>
+      <button class="btn-close-ar" id="btnCloseAR" aria-label="Close AR view">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="webar-hud-bottom">
+      <div class="canvas-instruction" style="position: static; transform: none;">
+        <i class="fas fa-hand-pointer" style="color: var(--accent-cyan);"></i>
+        <span>Tap screen to anchor portal ring to ground surface</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Mobile Handoff Modal -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-card">
+      <button class="qr-close-btn" id="btnCloseQR" aria-label="Close modal">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 style="color: #fff; font-size: 1.4rem;">Scan with Phone Camera</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">
+        Point your smartphone camera at the QR code below to instantly launch WebAR portals on your mobile device!
+      </p>
+      
+      <div class="qr-box" id="qrContainer"></div>
+
+      <p style="font-size: 0.75rem; color: var(--text-dim);">
+        <i class="fas fa-lock" style="color: var(--accent-cyan);"></i> Secure WebAR connection — No app download required
+      </p>
+    </div>
+  </div>
+
+  <!-- Fullscreen 360 Virtual Tour Modal -->
+  <div class="tour-modal" id="tourModal">
+    <div class="tour-modal-header">
+      <h3 id="tourModalTitle">Virtual Tour</h3>
+      <button class="btn-secondary" id="btnCloseTourModal" style="padding: 6px 16px; font-size: 0.85rem;">
+        <i class="fas fa-times"></i> Close Tour
+      </button>
+    </div>
+    <iframe id="tourIframe" class="tour-modal-iframe" allowfullscreen allow="gyroscope; accelerometer"></iframe>
+  </div>
+
+  <!-- Footer -->
+  <footer class="ar-footer">
+    <div class="ar-container">
+      <p>© 2026 YouSee360. All Rights Reserved. Premier 360° Virtual Tours & WebAR in Costa Rica.</p>
+      <p style="margin-top: 8px;">
+        <a href="../" class="ar-nav-link"><i class="fas fa-arrow-left"></i> Return to Main YouSee360 Website</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
