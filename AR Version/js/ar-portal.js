@@ -225,19 +225,34 @@
     }
   };
 
-  // 8th Wall is optional and only usable with a licensed app key. Set it in
-  // index.html (window.YOUSEE360_AR_CONFIG). With no key we never load the
-  // engine, so the launcher goes straight to WebXR or the camera fallback.
-  const AR_CONFIG = window.YOUSEE360_AR_CONFIG || {};
-  const EIGHTH_WALL_KEY = (AR_CONFIG.eighthWallAppKey || '').trim();
-  const EIGHTH_WALL_START_TIMEOUT_MS = 8000;
+  // The 8th Wall engine binary is free and keyless since the platform went open
+  // source, and it is the only way an iPhone gets real world tracking, because
+  // Safari has no WebXR. It loads async from a script tag in index.html.
+  const EIGHTH_WALL_START_TIMEOUT_MS = 9000;
+  const EIGHTH_WALL_LOAD_TIMEOUT_MS = 7000;
 
-  if (EIGHTH_WALL_KEY && !window.XR8) {
-    const engine = document.createElement('script');
-    engine.src = 'https://apps.8thwall.com/xrweb?appKey=' + encodeURIComponent(EIGHTH_WALL_KEY);
-    engine.async = true;
-    engine.crossOrigin = 'anonymous';
-    document.head.appendChild(engine);
+  // window.XR8 appears before the SLAM chunk finishes downloading. Calling
+  // XR8.run() in that window is what threw "No valid session manager to handle
+  // this session" -- there is no session manager registered yet. The engine
+  // fires xrloaded when it is genuinely ready.
+  function whenEighthWallReady(timeoutMs) {
+    return new Promise(resolve => {
+      if (window.XR8 && window.XR8.XrConfig) return resolve(window.XR8);
+      let settled = false;
+      const finish = (value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        window.removeEventListener('xrloaded', onLoaded);
+        resolve(value);
+      };
+      const onLoaded = () => finish(window.XR8 && window.XR8.XrConfig ? window.XR8 : null);
+      const timer = setTimeout(() => {
+        console.warn('8th Wall engine did not load within %dms.', timeoutMs);
+        finish(null);
+      }, timeoutMs);
+      window.addEventListener('xrloaded', onLoaded);
+    });
   }
 
   let activeTourKey = 'junglo';
@@ -1052,12 +1067,13 @@
     haptic(8);
 
     const canTryWebXR = !!(window.isSecureContext && navigator.xr && renderer);
-    const canTryEighthWall = !!(EIGHTH_WALL_KEY && window.XR8);
+    // 8th Wall handles its own camera permission flow, including the gesture
+    // rules on iOS, so it is safe to await the engine before starting it.
+    const canTryEighthWall = !!(window.isSecureContext && window.THREE && arCanvas);
 
-    // iOS Safari has no WebXR and no 8th Wall key, so it lands here. Reaching
-    // getUserMedia in the same task as the tap is what keeps Safari from
-    // silently refusing the camera, so do not await anything on this path.
     if (!canTryWebXR && !canTryEighthWall) {
+      // Nothing tracked is possible, so reach getUserMedia inside this same
+      // task -- Safari refuses it once the gesture has been awaited away.
       startCameraPreview();
       return;
     }
@@ -1142,9 +1158,11 @@
 
   async function startEighthWallARSession() {
     if (!window.THREE || !arCanvas) return false;
-    // Falling back immediately keeps the first click responsive if the optional
-    // engine download has not completed yet. A normal page load has XR8 ready.
-    if (!window.XR8) return false;
+
+    // Wait for the engine to actually finish loading rather than trusting the
+    // presence of window.XR8, which appears before the SLAM chunk lands.
+    const XR8 = await whenEighthWallReady(EIGHTH_WALL_LOAD_TIMEOUT_MS);
+    if (!XR8) return false;
 
     const overlay = document.getElementById('webarOverlay');
     try {
@@ -1205,8 +1223,22 @@
               console.warn('8th Wall AR could not start.', error);
               finish(false);
             },
+            onCameraStatusChange: ({status}) => {
+              if (status === 'failed') finish(false);
+            },
           },
         ]);
+
+        // The engine reports fatal problems on its own channel, not by throwing.
+        if (window.XR8.addCameraPipelineModule) {
+          window.XR8.addCameraPipelineModule({
+            name: 'yousee360-error-watch',
+            onException: (error) => {
+              console.warn('8th Wall engine error.', error);
+              finish(false);
+            }
+          });
+        }
 
         if (overlay) {
           overlay.appendChild(arCanvas);
@@ -1214,7 +1246,13 @@
         }
         arCanvas.classList.add('ar-camera-mode');
         try {
-          window.XR8.run({canvas: arCanvas});
+          // Without allowedDevices the engine accepts phones only and rejects
+          // everything else, which surfaces as "No valid session manager".
+          window.XR8.XrController.configure({disableWorldTracking: false});
+          window.XR8.run({
+            canvas: arCanvas,
+            allowedDevices: window.XR8.XrConfig.device().ANY
+          });
           eighthWallHasRun = true;
         } catch (error) {
           console.warn('8th Wall AR could not start.', error);

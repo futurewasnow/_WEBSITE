@@ -31,16 +31,19 @@
   <!-- Three.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <!-- Optional 8th Wall SLAM world tracking.
-       8th Wall always requires a licensed app key. The generic npm build that
-       used to load here has no key, so every session died with "No valid
-       session manager to handle this session" and the AR button appeared dead.
-       Paste a key below to enable it; the engine is only fetched when set.
-       Without a key the portal uses WebXR (Android) or the camera-preview
-       fallback (iOS Safari), both of which work today. -->
-  <script>
-    window.YOUSEE360_AR_CONFIG = { eighthWallAppKey: '' };
-  </script>
+  <!-- 8th Wall SLAM world tracking.
+       Since February 2026 the hosted platform is gone and the engine is
+       distributed as a free binary under a limited-use licence, commercial use
+       included, with no app key and no login. This is what gives iPhones real
+       floor tracking, since Safari still has no WebXR.
+
+       The engine loads async and its SLAM chunk arrives after window.XR8 does,
+       so nothing may call XR8.run() until the xrloaded event fires -- doing it
+       early is what produced "No valid session manager to handle this session".
+       XR8.run() also needs allowedDevices, or it refuses anything that is not
+       a phone. Both are handled in js/ar-portal.js. -->
+  <script src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js"
+          async crossorigin="anonymous" data-preload-chunks="slam"></script>
 
   <!-- Client-Side QRCode Library -->
   <script src="js/qrcode.min.js?v=20260908a"></script>
