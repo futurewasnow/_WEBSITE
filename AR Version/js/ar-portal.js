@@ -285,6 +285,27 @@
   let eighthWallHasRun = false;
   let portalMomentTimer = null;
 
+  // The doorway was modelled at roughly 2.0m wide by 2.8m tall. That reads fine
+  // in the desktop simulator, where the camera sits about 6m back, but anchored
+  // 1.5m away on a phone it swallows the whole viewport. 0.72 brings it to a
+  // walkable 1.44m x 2.02m. Everything in the portal is one group, so a single
+  // group scale keeps every proportion intact.
+  const PORTAL_SCALE = 0.72;
+  // Never anchor the portal on top of the visitor.
+  const PORTAL_MIN_DISTANCE = 1.6;
+
+  // Draw order for the stencil portal. The mask has to write the stencil buffer
+  // before the skybox tests it; with no explicit order three.js sorts opaque
+  // objects by depth, which put the skybox first once the camera came close and
+  // left the doorway showing nothing at all.
+  const ORDER_MASK = 0;
+  const ORDER_SKY = 1;
+  const ORDER_PROPS = 2;
+
+  // Set false when the GL context has no stencil bits, so we degrade to simply
+  // showing the scene once you are inside rather than rendering nothing.
+  let portalMaskingSupported = true;
+
   // DOM Elements
   let canvasContainer, arCanvas;
   let activeTourTitleEl, activeTourCategoryEl, activeTourDescEl;
@@ -364,8 +385,10 @@
       stencilRef: 1,
       stencilFunc: THREE.EqualStencilFunc
     });
+    skyMat.depthWrite = false;      // never occlude the arch drawn after it
     skyboxMesh = new THREE.Mesh(skyGeo, skyMat);
     skyboxMesh.position.set(0, 1.4, -0.5);
+    skyboxMesh.renderOrder = ORDER_SKY;
     scene.add(skyboxMesh);
 
     buildFloorReticle();
@@ -394,6 +417,7 @@
 
     const portalGroup = new THREE.Group();
     portalGroup.position.copy(position);
+    portalGroup.scale.setScalar(PORTAL_SCALE);
 
     // 1. Stencil Doorway Aperture Mask
     const doorShape = new THREE.Shape();
@@ -414,6 +438,7 @@
       stencilZPass: THREE.ReplaceStencilOp
     });
     const stencilMaskMesh = new THREE.Mesh(maskGeo, maskMat);
+    stencilMaskMesh.renderOrder = ORDER_MASK;
     portalGroup.add(stencilMaskMesh);
 
     // 2. Outer 3D Glowing Archway Frame
@@ -531,6 +556,15 @@
     };
 
     portalGroup.userData = portalObj;
+    // The mask writes the stencil, the skybox fills the doorway, then the
+    // frame and its furniture sit on top of both.
+    portalGroup.traverse(obj => {
+      if (obj.isMesh || obj.isPoints || obj.isSprite) {
+        if (obj.renderOrder === ORDER_MASK) return;
+        obj.renderOrder = ORDER_PROPS;
+      }
+    });
+
     scene.add(portalGroup);
     placedPortals.push(portalObj);
 
@@ -714,6 +748,7 @@
         stencilFunc: isInsidePortal ? THREE.AlwaysStencilFunc : THREE.EqualStencilFunc
       });
       const sprite = new THREE.Sprite(spriteMat);
+      sprite.renderOrder = ORDER_PROPS;
       sprite.position.y = 0.5;
       sprite.scale.set(1.6, 0.4, 1);
       group.add(sprite);
@@ -928,6 +963,26 @@
     });
   }
 
+  // 8th Wall supplies its own WebGLRenderer, and we cannot assume it asked for
+  // stencil bits. Without them every stencilFunc silently passes or fails and
+  // the doorway shows nothing, so check once and fall back to a plain reveal.
+  function refreshPortalMaskingSupport() {
+    portalMaskingSupported = true;
+    try {
+      const gl = renderer && renderer.getContext && renderer.getContext();
+      const attrs = gl && gl.getContextAttributes && gl.getContextAttributes();
+      if (attrs && attrs.stencil === false) portalMaskingSupported = false;
+      if (gl && gl.getParameter && gl.getParameter(gl.STENCIL_BITS) === 0) {
+        portalMaskingSupported = false;
+      }
+    } catch (e) { /* keep the optimistic default */ }
+    if (!portalMaskingSupported) {
+      console.warn('No stencil buffer available; showing the scene on entry ' +
+                   'instead of masking it to the doorway.');
+    }
+    setPortalInsideState(isInsidePortal);
+  }
+
   function setPortalInsideState(inside) {
     isInsidePortal = inside;
     const btn = document.getElementById('btnStepInside');
@@ -936,7 +991,15 @@
     const momentTitle = document.getElementById('arPortalMomentTitle');
 
     if (skyboxMesh) {
-      skyboxMesh.material.stencilFunc = inside ? THREE.AlwaysStencilFunc : THREE.EqualStencilFunc;
+      if (portalMaskingSupported) {
+        skyboxMesh.visible = true;
+        skyboxMesh.material.stencilWrite = true;
+        skyboxMesh.material.stencilFunc = inside ? THREE.AlwaysStencilFunc : THREE.EqualStencilFunc;
+      } else {
+        // No stencil: the doorway cannot be a window, so it becomes a threshold.
+        skyboxMesh.material.stencilWrite = false;
+        skyboxMesh.visible = inside;
+      }
       skyboxMesh.material.needsUpdate = true;
     }
 
@@ -1293,6 +1356,7 @@
               oldScene.children.slice().forEach(child => scene.add(child));
               isEighthWallActive = true;
               isCameraARActive = true;
+              refreshPortalMaskingSupport();
               if (reticleMesh) reticleMesh.visible = true;
 
               const existing = placedPortals.find(p => p.tourKey === activeTourKey) ||
@@ -1403,6 +1467,7 @@
       nativeARHitTestSource = await nativeARSession.requestHitTestSource({ space: viewerSpace });
       isNativeARActive = true;
       isCameraARActive = true;
+      refreshPortalMaskingSupport();
 
       if (overlay && arCanvas) {
         overlay.appendChild(arCanvas);
@@ -1443,10 +1508,32 @@
     renderer.render(scene, camera);
   }
 
+  // A doorway anchored a metre away fills the whole viewport and there is
+  // nowhere to stand back to. Push any closer hit out along the same bearing.
+  function standoffFromCamera(point) {
+    if (!camera) return point;
+    const eye = new THREE.Vector3().setFromMatrixPosition(camera.matrixWorld);
+    const flatEye = new THREE.Vector3(eye.x, point.y, eye.z);
+    const away = new THREE.Vector3().subVectors(point, flatEye);
+    const dist = away.length();
+    if (dist >= PORTAL_MIN_DISTANCE) return point;
+    if (dist < 1e-3) {
+      // Aimed straight down: put it in front of wherever the camera looks.
+      const fwd = new THREE.Vector3();
+      camera.getWorldDirection(fwd);
+      fwd.y = 0;
+      if (fwd.lengthSq() < 1e-6) fwd.set(0, 0, -1);
+      fwd.normalize();
+      return flatEye.clone().addScaledVector(fwd, PORTAL_MIN_DISTANCE);
+    }
+    return flatEye.clone().addScaledVector(away.normalize(), PORTAL_MIN_DISTANCE);
+  }
+
   function placePortalAtReticle() {
     if (!activePortalObj) activePortalObj = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2));
     if ((isNativeARActive || isEighthWallActive) && reticleMesh && reticleMesh.visible) {
-      movePortal(activePortalObj, reticleMesh.position, reticleMesh.quaternion);
+      movePortal(activePortalObj, standoffFromCamera(reticleMesh.position.clone()),
+                 reticleMesh.quaternion);
       haptic(18);
       setARState('placed');
       return;
