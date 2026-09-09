@@ -167,6 +167,12 @@ DirectoryIndex index.html
   AddType application/ld+json               .jsonld
   AddType video/mp4                         .mp4
   AddType video/webm                        .webm
+  # AR models. iOS only opens AR Quick Look when the .usdz arrives as
+  # model/vnd.usdz+zip -- served as octet-stream Safari just downloads it,
+  # which is the usual reason a portal link "does nothing" on an iPhone.
+  AddType model/vnd.usdz+zip                .usdz
+  AddType model/gltf-binary                 .glb
+  AddType model/gltf+json                   .gltf
 </IfModule>
 
 # ============================================================

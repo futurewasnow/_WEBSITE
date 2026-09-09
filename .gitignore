@@ -28,3 +28,6 @@ _REUPLOAD/
 
 # Round deploy package
 yousee360-round5.zip
+
+# Local 8th Wall project template (has its own node_modules; not part of the site)
+AR Version/portal/

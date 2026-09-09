@@ -295,6 +295,7 @@
     setupTourSwitchers();
     setupModals();
     setupWebARMode();
+    setupViewInYourRoom();
   });
 
   function initDOMReferences() {
@@ -1034,6 +1035,90 @@
     if (arState !== 'scanning' && arState !== 'starting') return;
     haptic(12);
     setARState('ready');
+  }
+
+  /* ============================================================
+     VIEW IN YOUR ROOM
+     Hands the portal to the AR viewer the device already ships with:
+     AR Quick Look on iOS, Scene Viewer on Android. Both are activated by a
+     plain anchor, which is the whole point -- awaiting a library first would
+     spend the user gesture that iOS requires, exactly as it does for
+     getUserMedia. So the hrefs are resolved once at load and the tap is
+     nothing but a link click.
+     ============================================================ */
+  function detectNativeAR() {
+    const ua = navigator.userAgent || '';
+    // iPadOS 13+ reports itself as a Mac, so touch points are the giveaway.
+    const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(ua);
+
+    // Every iOS device since iOS 12 has AR Quick Look, and Chrome and Firefox
+    // on iOS are WebKit underneath, so they get it too. Gating on
+    // relList.supports('ar') would hide the button on any engine that reports
+    // the capability badly -- and it is not needed: if rel="ar" is ignored the
+    // anchor simply navigates to the .usdz, which iOS still opens in Quick Look
+    // as long as the server sends model/vnd.usdz+zip. Either path works.
+    if (isIOS) return 'quicklook';
+    if (isAndroid) return 'sceneviewer';
+    return null;
+  }
+
+  function sceneViewerHref(glbUrl, title) {
+    // mode=ar_preferred still gives a 3D fallback if ARCore is unavailable.
+    return 'intent://arvr.google.com/scene-viewer/1.0' +
+      '?file=' + encodeURIComponent(glbUrl) +
+      '&mode=ar_preferred' +
+      '&title=' + encodeURIComponent(title) +
+      '#Intent;scheme=https;package=com.google.ar.core;' +
+      'action=android.intent.action.VIEW;' +
+      'S.browser_fallback_url=' + encodeURIComponent(window.location.href) + ';end;';
+  }
+
+  function setupViewInYourRoom() {
+    const links = document.querySelectorAll('.btn-view-room[data-tour-key]');
+    if (!links.length) return;
+
+    const mode = detectNativeAR();
+    if (!mode) {
+      // Desktop has nothing to hand off to. Leave the buttons hidden rather
+      // than offering something that cannot work, and point at the QR instead.
+      const hint = document.getElementById('viewRoomHint');
+      if (hint) hint.hidden = false;
+      return;
+    }
+
+    links.forEach(link => {
+      const key = link.getAttribute('data-tour-key');
+      const title = (TOUR_DATA[key] && TOUR_DATA[key].name) || 'YouSee360 portal';
+
+      if (mode === 'quicklook') {
+        link.setAttribute('rel', 'ar');
+        link.href = 'models/' + key + '-portal.usdz';
+        // Quick Look needs a child image; without one Safari treats the anchor
+        // as an ordinary link and navigates to the file instead of opening AR.
+        if (!link.querySelector('img')) {
+          const img = document.createElement('img');
+          img.src = '../images/tours/' + key + '.jpg';
+          img.alt = '';
+          img.width = 1;
+          img.height = 1;
+          img.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none';
+          link.appendChild(img);
+        }
+      } else {
+        const glb = new URL('models/' + key + '-portal.glb', window.location.href).href;
+        link.href = sceneViewerHref(glb, title);
+      }
+
+      link.hidden = false;
+      link.addEventListener('click', () => {
+        haptic(10);
+        if (window.gtag) {
+          window.gtag('event', 'ar_view_in_room', {tour: key, viewer: mode});
+        }
+      });
+    });
   }
 
   // Launch Universal AR Camera for Any Selected Tour

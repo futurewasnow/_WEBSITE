@@ -1213,3 +1213,45 @@ body {
     font-size: 1.9rem;
   }
 }
+
+/* ---------- Shareable portal files ---------- */
+.portal-file-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-top: 26px;
+}
+.portal-file {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-main);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.portal-file:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+.portal-file-name { font-weight: 600; font-size: 0.95rem; }
+.portal-file-meta {
+  flex: 0 0 auto;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+.portal-files-hint,
+.portal-files-note {
+  max-width: 60ch;
+  margin: 18px auto 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+.portal-files-hint { color: var(--accent-cyan); }

@@ -14,11 +14,16 @@ So each tour gets two files built from one piece of geometry:
   * an arch standing on the floor, which is what the visitor walks toward
   * an inverted sphere behind it, textured with that tour's panorama
 
-The sphere is single-sided with inward-facing normals, so from outside it is
-invisible and all you see is the arch in your room. Cross the threshold and the
-sphere's interior is suddenly all around you. That is the "step through" moment,
-achieved without a stencil buffer -- AR Quick Look has no portal masking, so the
-effect has to come from geometry and backface culling instead.
+The sphere is single-sided and wound to face inward, so its near wall is culled
+and you look straight past it into the far wall. From across the room that reads
+as a globe of somewhere else standing on your floor; walk through the arch and
+the scene closes around you.
+
+It is deliberately not a hard-edged portal. That needs stencil masking to hide
+the interior everywhere except the doorway, and neither AR Quick Look nor Scene
+Viewer exposes a stencil buffer or a depth-only occluder. The in-page WebGL
+portal does mask properly, so the two experiences differ by design rather than
+by oversight.
 
 Usage:  python _build_ar_portals.py
 """
@@ -48,6 +53,10 @@ TOURS = [
     ('elgenio',    'El Genio',              'images/tours/elgenio_360.jpg'),
     ('arboeden',   'Arboeden Eco Retreat',  'images/tours/arboeden_360.jpg'),
     ('arenal',     'Arenal Volcano',        'images/hero-360-arenal-4k.jpg'),
+    # Lower-resolution masters. Softer than the rest, but a shareable file for
+    # every tour beats a gap in the portfolio.
+    ('dragonfly',  'Dragonfly Awakening',   'images/tours/dragonfly_360.jpg'),
+    ('kenko',      'Kenko Street View',     'images/tours/kenko_360.jpg'),
 ]
 
 
@@ -66,9 +75,11 @@ def build_dome():
         for i in range(SEG_U + 1):
             u = i / SEG_U
             theta = u * 2.0 * math.pi
-            x = sp * math.sin(theta)
+            # u = 0.5 must land on -Z, the way the visitor walks in, so the
+            # stitch seam ends up behind them rather than dead ahead.
+            x = -sp * math.sin(theta)
             y = cp
-            z = -sp * math.cos(theta)
+            z = sp * math.cos(theta)
             pts.append((x * DOME_RADIUS, y * DOME_RADIUS, z * DOME_RADIUS))
             nrm.append((-x, -y, -z))           # inward
             # v is flipped: image row 0 is the top of the sky
@@ -80,9 +91,11 @@ def build_dome():
         for i in range(SEG_U):
             a = j * row + i
             b = a + row
-            # wound so the front face points inward
-            idx += [a, a + 1, b]
-            idx += [a + 1, b + 1, b]
+            # Wound counter-clockwise as seen from inside the sphere. Culling
+            # follows winding, not the normals array, so getting this backwards
+            # produces an ordinary ball: visible outside, invisible inside.
+            idx += [a, b, a + 1]
+            idx += [a + 1, b, b + 1]
 
     pts = np.array(pts, dtype=np.float32)
     # lift and push back so the sphere's near surface lands on the doorway

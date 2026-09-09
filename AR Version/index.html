@@ -271,6 +271,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="junglo" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="junglo" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -291,6 +295,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="arenal" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="arenal" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -311,6 +319,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="casadelrio" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="casadelrio" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -331,6 +343,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="dragonfly" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="dragonfly" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -351,6 +367,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="arboeden" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="arboeden" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -371,6 +391,10 @@
                 <button class="btn-secondary btn-launch-tour" data-tour-key="kenko" style="padding: 8px 14px; font-size: 0.82rem;">
                   <i class="fas fa-globe"></i> Web View
                 </button>
+                <a class="btn-secondary btn-view-room" data-tour-key="kenko" hidden
+                   style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;">
+                  <i class="fas fa-cube"></i> View in your room
+                </a>
               </div>
             </div>
           </article>
@@ -460,6 +484,58 @@
             </div>
           </form>
         </div>
+      </div>
+    </section>
+
+    <!-- Shareable portal files. A .usdz opens in AR Quick Look straight from
+         Messages or Mail, so a sales conversation can end with the client
+         standing the property in their own living room. -->
+    <section class="ar-section" id="portal-files">
+      <div class="ar-container">
+        <div class="section-header">
+          <span class="section-tag">Send it to a client</span>
+          <h2 class="apple-heading">Portal files you can <span class="highlight">text to anyone</span></h2>
+          <p>Each file stands a doorway on their floor and puts the property around them when they
+            walk through. Nothing to install &mdash; iPhones open these straight from a message.</p>
+        </div>
+        <p id="viewRoomHint" class="portal-files-hint" hidden>
+          <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+          You are on a desktop. Download a file and send it to a phone, or scan the QR code above
+          to open this page there.
+        </p>
+        <div class="portal-file-grid">
+          <a class="portal-file" href="models/casadelrio-portal.usdz" download>
+            <span class="portal-file-name">Casa del Rio</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/junglo-portal.usdz" download>
+            <span class="portal-file-name">Junglo Resort &amp; Spa</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/elgenio-portal.usdz" download>
+            <span class="portal-file-name">El Genio</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/arboeden-portal.usdz" download>
+            <span class="portal-file-name">Arboeden Eco Retreat</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/arenal-portal.usdz" download>
+            <span class="portal-file-name">Arenal Volcano</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/dragonfly-portal.usdz" download>
+            <span class="portal-file-name">Dragonfly Awakening</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+          <a class="portal-file" href="models/kenko-portal.usdz" download>
+            <span class="portal-file-name">Kenko Street View</span>
+            <span class="portal-file-meta">.usdz &middot; iPhone &amp; iPad</span>
+          </a>
+        </div>
+        <p class="portal-files-note">
+          Android opens the same portals through &ldquo;View in your room&rdquo; on any tour above.
+        </p>
       </div>
     </section>
   </main>
