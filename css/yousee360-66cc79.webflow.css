@@ -775,7 +775,7 @@ p {
   word-break: normal;
   -webkit-text-fill-color: inherit;
   object-fit: fill;
-  background-image: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png');
+  background-image: url('../images/logo-yousee360-lockup.svg');
   background-repeat: no-repeat;
   background-size: contain;
   background-attachment: scroll;
@@ -804,7 +804,7 @@ p {
   -webkit-text-fill-color: inherit;
   mix-blend-mode: normal;
   object-fit: fill;
-  background-image: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png');
+  background-image: url('../images/logo-yousee360-lockup.svg');
   background-position: 50%;
   background-size: contain;
   background-clip: border-box;

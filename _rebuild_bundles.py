@@ -13,6 +13,20 @@ import hashlib
 import io
 import os
 import re
+import time
+
+
+def write_text(path, text, tries=6):
+    """Write a file, retrying briefly if Windows has it momentarily locked."""
+    for n in range(tries):
+        try:
+            with io.open(path, 'w', encoding='utf-8') as fh:
+                fh.write(text)
+            return
+        except OSError:
+            if n == tries - 1:
+                raise
+            time.sleep(0.25 * (n + 1))
 
 HEADER = re.compile(
     r'/\*!\s*YouSee360 CSS bundle\s*[^\n]*\n(?P<list>(?:\s*\*\s*[^\n]+\n)+?)\s*\*/',
@@ -66,10 +80,9 @@ def main():
             continue
         content, digest = build(srcs)
         new_name = 'bundle-%s.css' % digest
-        io.open(os.path.join('css', new_name), 'w', encoding='utf-8').write(content)
+        write_text(os.path.join('css', new_name), content)
         if new_name != old_name:
             renames[old_name] = new_name
-            os.remove(path)
             print('  rebuilt %s -> %s  (%d sources)' % (old_name, new_name, len(srcs)))
         else:
             unchanged += 1
@@ -80,14 +93,23 @@ def main():
 
     touched = 0
     for f in html:
-        s = io.open(f, encoding='utf-8').read()
+        with io.open(f, encoding='utf-8') as fh:
+            s = fh.read()
         o = s
         for old, new in renames.items():
             s = s.replace(old + '?v=' + old[7:15], new + '?v=' + new[7:15])
             s = s.replace(old, new)
         if s != o:
-            io.open(f, 'w', encoding='utf-8').write(s)
+            write_text(f, s)
             touched += 1
+
+    # Only once every page points at the new bundles is it safe to drop the old
+    # ones. Deleting earlier meant a mid-run failure left pages with no CSS.
+    for old_name in renames:
+        old_path = os.path.join('css', old_name)
+        if os.path.exists(old_path):
+            os.remove(old_path)
+
     print('  %d bundles rebuilt, %d unchanged, %d HTML files re-pointed'
           % (len(renames), unchanged, touched))
 

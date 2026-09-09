@@ -22,7 +22,7 @@
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="geo.region" content="CR-A">
   <meta name="geo.placename" content="La Fortuna, Alajuela, Costa Rica">
-  <link href="../css/bundle-076541ae.css?v=20260904a" rel="stylesheet" type="text/css">
+  <link href="../css/bundle-006ba234.css?v=20260908a" rel="stylesheet" type="text/css">
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></noscript>
@@ -83,7 +83,7 @@
   "inLanguage": "en"
 }
   </script>
-  <link href="../css/bundle-0bb4e9b1.css?v=20260904a" rel="stylesheet" type="text/css">
+  <link href="../css/bundle-511b7fcb.css?v=20260908a" rel="stylesheet" type="text/css">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5XY5F8V2N"></script>
   <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-E5XY5F8V2N');</script>
@@ -143,6 +143,8 @@
             <a href="../services/drone-360-media.html" class="w-dropdown-link" data-desc="Aerial 360° perspectives" data-icon="🛸">Drone 360° Media</a>
             <a href="../services/google-streetview.html" class="w-dropdown-link" data-desc="Official Google Trusted Pro" data-icon="🗺️">Google StreetView</a>
             <a href="../services/augmented-reality.html" class="w-dropdown-link" data-desc="WebAR — no app required" data-icon="✨">Augmented Reality</a>
+            <a href="../services/ai-consulting.html" class="w-dropdown-link" data-desc="Audit, automate, then run it" data-icon="🤖">AI Consulting</a>
+            <a href="../services/website-design.html" class="w-dropdown-link" data-desc="Sites built to convert" data-icon="🖥️">Website Design</a>
             <a href="../services/interactive-virtual-tours.html" class="w-dropdown-link" data-desc="Hotspots, info, navigation" data-icon="🔄">Interactive Tours</a>
             <a href="../services/traditional-media.html" class="w-dropdown-link" data-desc="Photo & video, the classics" data-icon="🎞️">Traditional Media</a>
             <a href="../services/virtual-reality.html" class="w-dropdown-link" data-desc="Full immersive headset content" data-icon="🥽">Virtual Reality</a>
@@ -213,13 +215,56 @@
     </div>
   </section>
 
-  <section class="section">
+  <!-- The finished tour, embedded directly under the hero. Mounted on first tap
+       by js/live-tour.js so the WebGL iframe stays off the initial page load. -->
+  <section class="section virtual-tour-section">
     <div class="container">
-      <figure class="cs-shot">
-        <img src="../images/tours/arboeden.jpg" alt="Arboeden Eco Retreat 360° virtual tour by YouSee360"
-             width="760" height="950" loading="lazy" decoding="async">
-        <figcaption>Arboeden Eco Retreat — Costa Rica</figcaption>
-      </figure>
+      <div class="section-title-group centered">
+        <span class="section-tag">The finished tour</span>
+        <h2 class="apple-heading">Walk through <span class="highlight">Arboeden</span></h2>
+        <p class="section-subheading">The live tour exactly as it was delivered — cabins, grounds and
+          trails in one continuous walk.</p>
+      </div>
+
+      <div class="tour-container ys-live-tour-host">
+        <div class="ys-live-tour" id="ysLiveTourArboeden"
+             data-tour-url="https://tours.yousee360.com/arboreden/"
+             data-tour-title="Arboeden Eco Retreat — 360° virtual tour by YouSee360"
+             data-tour-id="arboeden" data-tour-context="case_study">
+          <button type="button" class="ys-live-tour-facade"
+                  aria-label="Load the Arboeden Eco Retreat 360° virtual tour">
+            <picture>
+              <source type="image/webp" srcset="../images/tours/arboeden-og.webp">
+              <img src="../images/tours/arboeden-og.jpg"
+                   width="1200" height="630" loading="lazy" decoding="async"
+                   class="ys-live-tour-poster"
+                   alt="Arboeden Eco Retreat in Costa Rica, from the 360° virtual tour by YouSee360">
+            </picture>
+            <span class="ys-live-tour-play" aria-hidden="true"><i class="fas fa-play" aria-hidden="true"></i></span>
+            <span class="ys-live-tour-meta">
+              <span class="ys-live-tour-name">Arboeden Eco Retreat</span>
+              <span class="ys-live-tour-sub">Cabins · Grounds · Trails · Surroundings</span>
+            </span>
+          </button>
+
+          <div class="ys-live-tour-frame"></div>
+
+          <div class="ys-live-tour-overlay">
+            <span class="ys-live-tour-badge">Live 360°</span>
+            <span class="ys-live-tour-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i> Tap to explore</span>
+          </div>
+          <a href="https://tours.yousee360.com/arboreden/" target="_blank" rel="noopener"
+             class="ys-live-tour-expand" aria-label="Open the Arboeden tour in a new tab">
+            <i class="fas fa-expand" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <p class="tour-caption">
+          <i class="fas fa-info-circle" aria-hidden="true"></i>
+          Tap to launch the full tour. Drag to look around, scroll to zoom, and use the menu to move
+          between areas.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -360,6 +405,8 @@
         <a href="../services/google-streetview.html">Google StreetView</a>
         <a href="../services/interactive-virtual-tours.html">Interactive Tours</a>
         <a href="../services/augmented-reality.html">Augmented Reality</a>
+        <a href="../services/ai-consulting.html">AI Consulting</a>
+        <a href="../services/website-design.html">Website Design</a>
         <a href="../services/virtual-reality.html">Virtual Reality</a>
       </div>
 
@@ -418,14 +465,14 @@
     <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=5e4b18feebfd1a09aec2f193"
         type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous" defer></script>
-    <script src="../js/webflow.js?v=20260904a" type="text/javascript" defer></script>
-    <script src="../js/gsap.min.js?v=20260904a" defer></script>
-    <script src="../js/particles.min.js?v=20260904a" defer></script>
+    <script src="../js/webflow.js?v=20260908a" type="text/javascript" defer></script>
+    <script src="../js/gsap.min.js?v=20260908a" defer></script>
+    <script src="../js/particles.min.js?v=20260908a" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@barba/core@2.9.7/dist/barba.umd.min.js" defer></script>
-    <script src="../js/animations.js?v=20260904a" type="text/javascript" defer></script>
-    <script src="../js/interactive-elements.js?v=20260904a" type="text/javascript" defer></script>
-    <script src="../js/form-a11y.js?v=20260904a" defer></script>
-    <script src="../js/contact-modal.js?v=20260904a" type="text/javascript" defer></script>
+    <script src="../js/animations.js?v=20260908a" type="text/javascript" defer></script>
+    <script src="../js/interactive-elements.js?v=20260908a" type="text/javascript" defer></script>
+    <script src="../js/form-a11y.js?v=20260908a" defer></script>
+    <script src="../js/contact-modal.js?v=20260908a" type="text/javascript" defer></script>
 
     <script>
         // Text reveal animation with GSAP
@@ -453,17 +500,18 @@
             });
         });
     </script>
-  <script src="../js/polish.js?v=20260904a" defer></script>
-  <script src="../js/mobile.js?v=20260904a" defer></script>
-  <script src="../js/wow.js?v=20260904a" defer></script>
+  <script src="../js/polish.js?v=20260908a" defer></script>
+  <script src="../js/mobile.js?v=20260908a" defer></script>
+  <script src="../js/wow.js?v=20260908a" defer></script>
   <!-- Hero particle network: deferred so it never blocks first paint -->
-  <script src="../js/three-loader.js?v=20260904a" data-three-src="../js/three.min.js?v=20260904a" defer></script>
-  <script src="../js/aurora.js?v=20260904a" defer></script>
-  <script src="../js/sidenav.js?v=20260904a" defer></script>
-  <script src="../js/hero-particles.js?v=20260904a" defer></script>
-  <script src="../js/v2-extras.js?v=20260904a" defer></script>
-  <script src="../js/motion.js?v=20260904a" defer></script>
-  <script src="../js/pwa.js?v=20260904a" defer></script>
+  <script src="../js/three-loader.js?v=20260908a" data-three-src="../js/three.min.js?v=20260908a" defer></script>
+  <script src="../js/aurora.js?v=20260908a" defer></script>
+  <script src="../js/sidenav.js?v=20260908a" defer></script>
+  <script src="../js/hero-particles.js?v=20260908a" defer></script>
+  <script src="../js/v2-extras.js?v=20260908a" defer></script>
+  <script src="../js/motion.js?v=20260908a" defer></script>
+  <script src="../js/live-tour.js?v=20260908a" defer></script>
+  <script src="../js/pwa.js?v=20260908a" defer></script>
 
 </body>
 

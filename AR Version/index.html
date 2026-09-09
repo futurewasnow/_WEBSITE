@@ -26,16 +26,27 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/ar-style.css">
+  <link rel="stylesheet" href="css/ar-style.css?v=20260908a">
 
   <!-- Three.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
+  <!-- Optional 8th Wall SLAM world tracking.
+       8th Wall always requires a licensed app key. The generic npm build that
+       used to load here has no key, so every session died with "No valid
+       session manager to handle this session" and the AR button appeared dead.
+       Paste a key below to enable it; the engine is only fetched when set.
+       Without a key the portal uses WebXR (Android) or the camera-preview
+       fallback (iOS Safari), both of which work today. -->
+  <script>
+    window.YOUSEE360_AR_CONFIG = { eighthWallAppKey: '' };
+  </script>
+
   <!-- Client-Side QRCode Library -->
-  <script src="js/qrcode.min.js"></script>
+  <script src="js/qrcode.min.js?v=20260908a"></script>
 
   <!-- Custom WebAR Engine Script -->
-  <script src="js/ar-portal.js" defer></script>
+  <script src="js/ar-portal.js?v=20260908a" defer></script>
 </head>
 <body>
 
@@ -66,7 +77,7 @@
         <button id="btnShowQR" class="btn-secondary btn-hide-mobile" title="Scan with phone camera">
           <i class="fas fa-qrcode"></i> Scan QR
         </button>
-        <button id="btnLaunchAR" class="btn-glow">
+        <button class="btn-glow btn-launch-ar">
           <i class="fas fa-vr-cardboard"></i> Launch AR Camera
         </button>
       </div>
@@ -92,7 +103,7 @@
             </p>
 
             <div class="ar-hero-cta-group">
-              <button id="btnLaunchAR" class="btn-glow" style="padding: 14px 32px; font-size: 1.05rem;">
+              <button class="btn-glow btn-launch-ar" style="padding: 14px 32px; font-size: 1.05rem;">
                 <i class="fas fa-camera"></i> Launch AR Camera
               </button>
               <button id="btnStepInside" class="btn-secondary" style="padding: 14px 28px;">
@@ -450,22 +461,91 @@
     </section>
   </main>
 
-  <!-- Fullscreen WebAR Camera Mode Overlay -->
-  <div class="webar-overlay" id="webarOverlay">
+  <!-- Fullscreen WebAR camera experience.
+       One surface, one primary action at a time. Everything visible is driven by
+       data-ar-state on the overlay: priming → starting → scanning → ready →
+       placed → inside, plus blocked. The CSS decides what each state shows, so
+       the HUD never stacks five bands of chrome over the camera feed. -->
+  <div class="webar-overlay" id="webarOverlay" data-ar-state="priming">
     <video id="webarVideo" class="webar-video" playsinline muted></video>
-    <div class="webar-hud-top">
-      <div class="hud-pill" style="background: rgba(6, 7, 10, 0.85);">
-        <span class="status-dot"></span> AR Camera Active
+    <div class="webar-scrim" aria-hidden="true"></div>
+
+    <header class="ar-topbar">
+      <div class="ar-status">
+        <span class="ar-status-dot" aria-hidden="true"></span>
+        <span id="arHudTourTitle">Junglo Resort &amp; Spa</span>
       </div>
-      <button class="btn-close-ar" id="btnCloseAR" aria-label="Close AR view">
-        <i class="fas fa-times"></i>
+      <button class="ar-icon-btn" id="btnCloseAR" aria-label="Close AR view">
+        <i class="fas fa-times" aria-hidden="true"></i>
       </button>
+    </header>
+
+    <!-- Calm scanning affordance. Replaced by the real reticle in the 3D scene
+         once a surface is tracked, so this only shows while we are looking. -->
+    <div class="ar-stage" aria-hidden="true">
+      <div class="ar-scan">
+        <span class="ar-scan-ring"></span>
+        <span class="ar-scan-ring"></span>
+        <span class="ar-scan-core"></span>
+      </div>
     </div>
-    
-    <div class="webar-hud-bottom">
-      <div class="canvas-instruction" style="position: static; transform: none;">
-        <i class="fas fa-hand-pointer" style="color: var(--accent-cyan);"></i>
-        <span>Tap screen to anchor portal ring to ground surface</span>
+
+    <div id="arPortalMoment" class="ar-portal-moment" aria-live="polite">
+      <span>You&rsquo;ve entered</span>
+      <strong id="arPortalMomentTitle">Junglo Resort &amp; Spa</strong>
+    </div>
+
+    <div class="ar-controls">
+      <p class="ar-guidance" id="arInstruction" aria-live="polite">Move your phone slowly to find the floor.</p>
+      <span class="ar-phase" id="arExperiencePhase">Scanning your space</span>
+
+      <div class="ar-actions">
+        <button class="ar-action" id="btnARPlacePortal" data-ar-action="place">
+          <i class="fas fa-street-view" aria-hidden="true"></i> Place the portal
+        </button>
+        <button class="ar-action" id="btnARStepInside" data-ar-action="enter">
+          <i class="fas fa-walking" aria-hidden="true"></i> <span data-ar-enter-label>Step inside</span>
+        </button>
+        <button class="ar-action" id="btnARStartCamera" data-ar-action="retry" hidden>
+          <i class="fas fa-camera" aria-hidden="true"></i> Try the camera again
+        </button>
+
+        <div class="ar-chips">
+          <button class="ar-chip" id="btnARReposition">
+            <i class="fas fa-arrows-alt" aria-hidden="true"></i> Move
+          </button>
+          <button class="ar-chip" id="btnARScenes" aria-haspopup="dialog">
+            <i class="fas fa-images" aria-hidden="true"></i> Scenes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera permission priming. The browser prompt is far easier to accept
+         when the reason arrives first, and this button doubles as the user
+         gesture iOS requires before getUserMedia will resolve. -->
+    <div class="ar-sheet" id="arPrimeSheet" role="dialog" aria-modal="true" aria-labelledby="arPrimeTitle">
+      <div class="ar-sheet-card">
+        <span class="ar-sheet-icon"><i class="fas fa-camera" aria-hidden="true"></i></span>
+        <h2 id="arPrimeTitle">Stand a doorway in your room</h2>
+        <p>We use your camera to find the floor in front of you, then place a full 360&deg;
+          portal on it that you can walk up to and step through.</p>
+        <p class="ar-sheet-note"><i class="fas fa-lock" aria-hidden="true"></i>
+          The camera view stays on your device. Nothing is recorded or uploaded.</p>
+        <button class="ar-action" id="btnARPrimeStart">
+          <i class="fas fa-camera" aria-hidden="true"></i> Enable camera
+        </button>
+        <button class="ar-sheet-dismiss" id="btnARPrimeCancel">Not now</button>
+      </div>
+    </div>
+
+    <div class="ar-sheet ar-sheet--scenes" id="arSceneSheet" role="dialog" aria-modal="true" aria-labelledby="arSceneTitle">
+      <div class="ar-sheet-card">
+        <span class="ar-sheet-grabber" aria-hidden="true"></span>
+        <h2 id="arSceneTitle">Scenes</h2>
+        <p>Switch what you see through the portal.</p>
+        <div id="arScenePillsContainer" class="ar-scene-list"></div>
+        <button class="ar-sheet-dismiss" id="btnARSceneClose">Done</button>
       </div>
     </div>
   </div>

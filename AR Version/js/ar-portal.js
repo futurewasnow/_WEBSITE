@@ -225,6 +225,21 @@
     }
   };
 
+  // 8th Wall is optional and only usable with a licensed app key. Set it in
+  // index.html (window.YOUSEE360_AR_CONFIG). With no key we never load the
+  // engine, so the launcher goes straight to WebXR or the camera fallback.
+  const AR_CONFIG = window.YOUSEE360_AR_CONFIG || {};
+  const EIGHTH_WALL_KEY = (AR_CONFIG.eighthWallAppKey || '').trim();
+  const EIGHTH_WALL_START_TIMEOUT_MS = 8000;
+
+  if (EIGHTH_WALL_KEY && !window.XR8) {
+    const engine = document.createElement('script');
+    engine.src = 'https://apps.8thwall.com/xrweb?appKey=' + encodeURIComponent(EIGHTH_WALL_KEY);
+    engine.async = true;
+    engine.crossOrigin = 'anonymous';
+    document.head.appendChild(engine);
+  }
+
   let activeTourKey = 'junglo';
   let activeSceneIndex = 0;
 
@@ -247,6 +262,13 @@
   // Raycasting
   let raycaster, mouseVector;
   let arVideoStream = null;
+  let nativeARSession = null;
+  let nativeARReferenceSpace = null;
+  let nativeARHitTestSource = null;
+  let isNativeARActive = false;
+  let isEighthWallActive = false;
+  let eighthWallHasRun = false;
+  let portalMomentTimer = null;
 
   // DOM Elements
   let canvasContainer, arCanvas;
@@ -415,6 +437,27 @@
     archMesh.position.z = -0.06;
     portalGroup.add(archMesh);
 
+    // A lightweight constellation makes the doorway feel alive without adding a
+    // heavy model or texture download to the mobile AR launch.
+    const auraPositions = [];
+    for (let i = 0; i < 72; i++) {
+      const angle = (i / 72) * Math.PI * 2;
+      const radius = 1.05 + Math.random() * 0.18;
+      auraPositions.push(Math.cos(angle) * radius, 1.75 + Math.sin(angle) * radius, (Math.random() - 0.5) * 0.18);
+    }
+    const auraGeo = new THREE.BufferGeometry();
+    auraGeo.setAttribute('position', new THREE.Float32BufferAttribute(auraPositions, 3));
+    const aura = new THREE.Points(auraGeo, new THREE.PointsMaterial({
+      color: 0x7df9ff, size: 0.045, transparent: true, opacity: 0.85,
+      blending: THREE.AdditiveBlending, depthWrite: false
+    }));
+    aura.userData.baseY = 1.75;
+    portalGroup.add(aura);
+
+    const portalLight = new THREE.PointLight(0x00f2fe, 2.2, 5, 2);
+    portalLight.position.set(0, 1.7, 0.45);
+    portalGroup.add(portalLight);
+
     // 3. Floor Pin Base Ring & Title Badge
     const pinRingGeo = new THREE.RingGeometry(0.9, 1.1, 32);
     const pinRingMat = new THREE.MeshBasicMaterial({
@@ -466,6 +509,8 @@
       group: portalGroup,
       hotspotGroup: hotspotGroup,
       archMesh: archMesh,
+      aura: aura,
+      portalLight: portalLight,
       position: position.clone()
     };
 
@@ -529,6 +574,7 @@
 
     if (activePortalObj && activePortalObj.hotspotGroup) {
       buildInteractive3DHotspots(activePortalObj.hotspotGroup, sceneData.hotspots);
+      positionSkyboxForActivePortal();
     }
 
     updateScenePillsUI(tour, sceneIdx);
@@ -536,23 +582,52 @@
     if (activeTourTitleEl) activeTourTitleEl.textContent = `${tour.name} — ${sceneData.title}`;
     if (activeTourCategoryEl) activeTourCategoryEl.textContent = tour.category;
     if (activeTourDescEl) activeTourDescEl.textContent = tour.desc;
+    const momentTitle = document.getElementById('arPortalMomentTitle');
+    if (isInsidePortal && momentTitle) momentTitle.textContent = `${tour.name} — ${sceneData.title}`;
+  }
+
+  // The panorama belongs to the selected doorway, rather than the simulator origin.
+  function positionSkyboxForActivePortal() {
+    if (!skyboxMesh || !activePortalObj) return;
+    skyboxMesh.position.copy(activePortalObj.group.position);
+    skyboxMesh.position.y += 1.4;
+    skyboxMesh.position.z -= 0.35;
+  }
+
+  function movePortal(portal, position, quaternion) {
+    if (!portal) return;
+    portal.position.copy(position);
+    portal.group.position.copy(position);
+    if (quaternion) portal.group.quaternion.copy(quaternion);
+    positionSkyboxForActivePortal();
   }
 
   function updateScenePillsUI(tour, currentIdx) {
-    let container = document.getElementById('scenePillsContainer');
-    if (!container) return;
+    const containers = [
+      document.getElementById('scenePillsContainer'),
+      document.getElementById('arScenePillsContainer')
+    ];
 
-    container.innerHTML = '';
-    tour.scenes.forEach((sc, idx) => {
-      const pill = document.createElement('button');
-      pill.className = `tour-pill ${idx === currentIdx ? 'active' : ''}`;
-      pill.style.padding = '5px 12px';
-      pill.style.fontSize = '0.78rem';
-      pill.innerHTML = `<i class="fas fa-eye"></i> ${sc.title}`;
-      pill.addEventListener('click', () => {
-        loadTourSceneData(tour.id, idx);
+    containers.forEach(container => {
+      if (!container) return;
+      container.innerHTML = '';
+      tour.scenes.forEach((sc, idx) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = `tour-pill ${idx === currentIdx ? 'active' : ''}`;
+        pill.setAttribute('aria-pressed', idx === currentIdx ? 'true' : 'false');
+        pill.innerHTML = `<i class="fas fa-eye" aria-hidden="true"></i> ${sc.title}`;
+        pill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          loadTourSceneData(tour.id, idx);
+          // Choosing a scene from the sheet is a completed decision.
+          if (container.id === 'arScenePillsContainer') {
+            haptic(10);
+            closeSheet('arSceneSheet');
+          }
+        });
+        container.appendChild(pill);
       });
-      container.appendChild(pill);
     });
   }
 
@@ -749,6 +824,7 @@
         
         const newPortal = spawnFloorPortal(activeTourKey, floorPoint);
         activePortalObj = newPortal;
+        positionSkyboxForActivePortal();
         
         const navPill = document.querySelector('.webar-hud-bottom .canvas-instruction');
         if (navPill) {
@@ -793,17 +869,16 @@
     currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
 
     if (activePortalObj) {
-      const portalZ = activePortalObj.position.z;
-      const distZ = camera.position.z - portalZ;
-      if (distZ <= 0.2 && !isInsidePortal) {
+      const portalDistance = camera.position.distanceTo(activePortalObj.group.position);
+      if (portalDistance <= 0.85 && !isInsidePortal) {
         setPortalInsideState(true);
-      } else if (distZ > 0.6 && isInsidePortal) {
+      } else if (portalDistance > 1.2 && isInsidePortal) {
         setPortalInsideState(false);
       }
     }
 
     if (!isInsidePortal) {
-      placedPortals.forEach(p => {
+      if (!isCameraARActive) placedPortals.forEach(p => {
         p.group.rotation.y = currentRotation.y * 0.3;
       });
       if (!isDragging) {
@@ -820,12 +895,29 @@
       reticleMesh.scale.set(scale, scale, 1);
     }
 
-    renderer.render(scene, camera);
+    animatePortalEffects();
+
+    // An immersive WebXR session owns the render loop and camera pose.
+    if (!isNativeARActive && !isEighthWallActive) renderer.render(scene, camera);
+  }
+
+  function animatePortalEffects() {
+    const time = Date.now() * 0.001;
+    placedPortals.forEach(portal => {
+      if (portal.aura) {
+        portal.aura.rotation.z = time * 0.35;
+        portal.aura.position.y = Math.sin(time * 1.8) * 0.05;
+      }
+      if (portal.portalLight) portal.portalLight.intensity = 1.9 + Math.sin(time * 2.4) * 0.5;
+    });
   }
 
   function setPortalInsideState(inside) {
     isInsidePortal = inside;
     const btn = document.getElementById('btnStepInside');
+    const arBtn = document.getElementById('btnARStepInside');
+    const moment = document.getElementById('arPortalMoment');
+    const momentTitle = document.getElementById('arPortalMomentTitle');
 
     if (skyboxMesh) {
       skyboxMesh.material.stencilFunc = inside ? THREE.AlwaysStencilFunc : THREE.EqualStencilFunc;
@@ -848,10 +940,89 @@
         ? '<i class="fas fa-arrow-left"></i> Step Outside Portal'
         : '<i class="fas fa-walking"></i> Walk Into Portal';
     }
+    // Swap only the label, not the button's markup -- the icon and the
+    // element the state machine writes into both have to survive.
+    const arBtnLabel = arBtn && arBtn.querySelector('[data-ar-enter-label]');
+    if (arBtnLabel) arBtnLabel.textContent = inside ? 'Step back out' : 'Step inside';
+
+    if (moment) {
+      const show = inside && isCameraARActive;
+      moment.classList.toggle('active', show);
+      if (show && momentTitle && TOUR_DATA[activeTourKey]) {
+        momentTitle.textContent = TOUR_DATA[activeTourKey].name;
+      }
+      // It is a moment, not a label. Let the scene have the screen back.
+      clearTimeout(portalMomentTimer);
+      if (show) {
+        portalMomentTimer = setTimeout(() => moment.classList.remove('active'), 2600);
+      }
+    }
+  }
+
+  /* ============================================================
+     AR EXPERIENCE STATE
+     One source of truth for what the overlay is doing. The CSS reads
+     data-ar-state and decides what belongs on screen, so no handler
+     ever has to remember to hide four other things.
+     ============================================================ */
+  const AR_COPY = {
+    priming:  { phase: '',                    guide: '' },
+    starting: { phase: 'Starting camera',     guide: 'One moment…' },
+    scanning: { phase: 'Finding your floor',  guide: 'Move your phone slowly across the floor in front of you.' },
+    ready:    { phase: 'Floor found',         guide: 'Aim at the spot you want, then place the portal.' },
+    placed:   { phase: 'Portal anchored',     guide: 'Walk up to the doorway, or step through from here.' },
+    inside:   { phase: 'Inside the portal',   guide: '' },
+    blocked:  { phase: '',                    guide: 'AR needs camera access to find your floor.' }
+  };
+
+  let arState = 'priming';
+
+  function overlayEl() { return document.getElementById('webarOverlay'); }
+
+  // Short, distinct taps. Android honours these; iOS Safari ignores the
+  // Vibration API entirely, which is a no-op rather than an error.
+  function haptic(pattern) {
+    if (!navigator.vibrate) return;
+    try { navigator.vibrate(pattern); } catch (e) { /* blocked by the UA */ }
+  }
+
+  function setARState(next, message) {
+    const overlay = overlayEl();
+    if (!overlay) return;
+    arState = next;
+    overlay.dataset.arState = next;
+
+    const copy = AR_COPY[next] || { phase: '', guide: '' };
+    updateARPhase(copy.phase);
+    updateARHUD(message || copy.guide);
+
+    // The enter/exit affordance is the same button wearing two labels.
+    const enterLabel = document.querySelector('[data-ar-enter-label]');
+    if (enterLabel) {
+      enterLabel.textContent = isInsidePortal ? 'Step back out' : 'Step inside';
+    }
+  }
+
+  function openSheet(id) {
+    const sheet = document.getElementById(id);
+    if (sheet) sheet.classList.add('is-open');
+  }
+
+  function closeSheet(id) {
+    const sheet = document.getElementById(id);
+    if (sheet) sheet.classList.remove('is-open');
+  }
+
+  // A tracked surface should move the experience forward on its own rather
+  // than waiting for the visitor to notice the reticle has appeared.
+  function notifySurfaceFound() {
+    if (arState !== 'scanning' && arState !== 'starting') return;
+    haptic(12);
+    setARState('ready');
   }
 
   // Launch Universal AR Camera for Any Selected Tour
-  async function launchARCameraForTour(tourKey) {
+  function launchARCameraForTour(tourKey) {
     if (tourKey && TOUR_DATA[tourKey]) {
       activeTourKey = tourKey;
     }
@@ -859,6 +1030,52 @@
     const arOverlay = document.getElementById('webarOverlay');
     const arVideo = document.getElementById('webarVideo');
 
+    // Do not leave the launch button looking unresponsive while a camera or AR
+    // engine starts. The overlay immediately communicates that work is underway.
+    if (arOverlay) arOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Ask before the browser does. A cold permission prompt with no stated
+    // reason is the single biggest drop-off in a WebAR funnel, and the sheet
+    // button doubles as the user gesture iOS requires for getUserMedia.
+    setARState('priming');
+    updateARHUD('');
+    const title = document.getElementById('arHudTourTitle');
+    if (title && TOUR_DATA[activeTourKey]) title.textContent = TOUR_DATA[activeTourKey].name;
+    openSheet('arPrimeSheet');
+  }
+
+  // Runs from the priming sheet's button, so we are still inside the tap.
+  function beginARSession() {
+    closeSheet('arPrimeSheet');
+    setARState('starting');
+    haptic(8);
+
+    const canTryWebXR = !!(window.isSecureContext && navigator.xr && renderer);
+    const canTryEighthWall = !!(EIGHTH_WALL_KEY && window.XR8);
+
+    // iOS Safari has no WebXR and no 8th Wall key, so it lands here. Reaching
+    // getUserMedia in the same task as the tap is what keeps Safari from
+    // silently refusing the camera, so do not await anything on this path.
+    if (!canTryWebXR && !canTryEighthWall) {
+      startCameraPreview();
+      return;
+    }
+
+    runTrackedARCascade(canTryWebXR, canTryEighthWall);
+  }
+
+  // Try the best-tracked mode this device can actually deliver, and fall through
+  // the moment one genuinely fails rather than assuming it started.
+  async function runTrackedARCascade(canTryWebXR, canTryEighthWall) {
+    if (canTryWebXR && await startNativeARSession()) return;
+    if (canTryEighthWall && await startEighthWallARSession()) return;
+    await startCameraPreview();
+  }
+
+  async function startCameraPreview() {
+    const arOverlay = document.getElementById('webarOverlay');
+    const arVideo = document.getElementById('webarVideo');
     try {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         arVideoStream = await navigator.mediaDevices.getUserMedia({
@@ -892,29 +1109,254 @@
           if (!existing) {
             existing = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2.0));
           } else {
-            existing.position.set(0, 0, -2.0);
+            movePortal(existing, new THREE.Vector3(0, 0, -2.0));
           }
           activePortalObj = existing;
+          positionSkyboxForActivePortal();
 
           arOverlay.classList.add('active');
+          haptic(14);
+          // The video-only path has no SLAM, so the portal is already standing
+          // in front of the viewer -- there is no floor to hunt for.
+          setARState('placed');
         }
       } else {
-        alert('WebAR camera access is not supported on this browser device. Launching 3D Portal Simulator!');
+        showARCameraRecovery('This browser cannot open a camera. Try Safari on iPhone or Chrome on Android, over HTTPS.');
       }
     } catch (err) {
       console.warn('Camera permission denied or HTTP connection:', err);
-      // Fallback: Launch 3D Simulator with portal positioned right in front
-      loadTourSceneData(activeTourKey, 0);
-      let existing = placedPortals.find(p => p.tourKey === activeTourKey);
-      if (!existing) {
-        existing = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2.0));
-      }
-      activePortalObj = existing;
-      
-      // Scroll smoothly to simulator card
-      const simCard = document.getElementById('canvasCard');
-      if (simCard) simCard.scrollIntoView({ behavior: 'smooth' });
+      showARCameraRecovery('Camera access was blocked. Allow it for this site in your browser settings, then try again.');
     }
+  }
+
+  function showARCameraRecovery(message) {
+    const overlay = document.getElementById('webarOverlay');
+    const startButton = document.getElementById('btnARStartCamera');
+    if (overlay) overlay.classList.add('active');
+    if (startButton) startButton.hidden = false;
+    closeSheet('arPrimeSheet');
+    haptic([10, 60, 10]);
+    setARState('blocked', message ||
+      'AR needs camera access to find your floor. Allow it for this site, then try again.');
+  }
+
+  async function startEighthWallARSession() {
+    if (!window.THREE || !arCanvas) return false;
+    // Falling back immediately keeps the first click responsive if the optional
+    // engine download has not completed yet. A normal page load has XR8 ready.
+    if (!window.XR8) return false;
+
+    const overlay = document.getElementById('webarOverlay');
+    try {
+      if (eighthWallHasRun) {
+        if (overlay) overlay.classList.add('active');
+        isCameraARActive = true;
+        isEighthWallActive = true;
+        window.XR8.resume();
+        setARState('scanning');
+        return true;
+      }
+
+      // XR8 reports failure through its own error channel rather than by
+      // throwing, so resolve only once onStart actually fires. Anything else --
+      // an exception, a bad app key, or silence -- has to fall through to the
+      // next tier instead of leaving the launch button looking dead.
+      const started = await new Promise(resolve => {
+        let settled = false;
+        const finish = (ok) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve(ok);
+        };
+        const timer = setTimeout(() => {
+          console.warn('8th Wall did not start within %dms; falling back.',
+                       EIGHTH_WALL_START_TIMEOUT_MS);
+          finish(false);
+        }, EIGHTH_WALL_START_TIMEOUT_MS);
+
+        window.XR8.addCameraPipelineModules([
+          window.XR8.GlTextureRenderer.pipelineModule(),
+          window.XR8.Threejs.pipelineModule(),
+          window.XR8.XrController.pipelineModule(),
+          {
+            name: 'yousee360-portal-scene',
+            onStart: () => {
+              const xrScene = window.XR8.Threejs.xrScene();
+              const oldScene = scene;
+              scene = xrScene.scene;
+              camera = xrScene.camera;
+              renderer = xrScene.renderer;
+              oldScene.children.slice().forEach(child => scene.add(child));
+              isEighthWallActive = true;
+              isCameraARActive = true;
+              if (reticleMesh) reticleMesh.visible = true;
+
+              const existing = placedPortals.find(p => p.tourKey === activeTourKey) ||
+                spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2));
+              activePortalObj = existing;
+              loadTourSceneData(activeTourKey, 0);
+              positionSkyboxForActivePortal();
+              setARState('scanning');
+              finish(true);
+            },
+            onUpdate: () => updateEighthWallReticle(),
+            onException: (error) => {
+              console.warn('8th Wall AR could not start.', error);
+              finish(false);
+            },
+          },
+        ]);
+
+        if (overlay) {
+          overlay.appendChild(arCanvas);
+          overlay.classList.add('active');
+        }
+        arCanvas.classList.add('ar-camera-mode');
+        try {
+          window.XR8.run({canvas: arCanvas});
+          eighthWallHasRun = true;
+        } catch (error) {
+          console.warn('8th Wall AR could not start.', error);
+          finish(false);
+        }
+      });
+
+      if (!started) releaseEighthWallCanvas();
+      return started;
+    } catch (error) {
+      console.warn('8th Wall AR could not start.', error);
+      releaseEighthWallCanvas();
+      return false;
+    }
+  }
+
+  // Hand the canvas back so a fallback tier can reuse it after 8th Wall bows out.
+  function releaseEighthWallCanvas() {
+    isEighthWallActive = false;
+    if (window.XR8 && eighthWallHasRun) {
+      try { window.XR8.pause(); } catch (error) { /* engine never started */ }
+    }
+    if (arCanvas) arCanvas.classList.remove('ar-camera-mode');
+    if (canvasContainer && arCanvas) canvasContainer.appendChild(arCanvas);
+  }
+
+  // 8th Wall supplies a SLAM-tracked camera. Its world origin is the floor at
+  // session start, so this projects the centre reticle onto that tracked floor.
+  function updateEighthWallReticle() {
+    if (!isEighthWallActive || !camera || !reticleMesh) return;
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+    const origin = camera.position;
+    const distance = direction.y < -0.08 ? Math.max(0.6, Math.min(5, -origin.y / direction.y)) : 2;
+    reticleMesh.position.copy(origin).addScaledVector(direction, distance);
+    reticleMesh.position.y = 0.01;
+    reticleMesh.quaternion.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
+    reticleMesh.visible = true;
+    notifySurfaceFound();
+  }
+
+  // Use the browser's real world-tracking API when it is available (Android Chrome
+  // and other WebXR-capable browsers). The video-only path below remains a manual
+  // placement fallback for browsers that do not expose WebXR, such as many iPhones.
+  async function startNativeARSession() {
+    if (!window.isSecureContext || !navigator.xr || !renderer) return false;
+
+    try {
+      const supported = await navigator.xr.isSessionSupported('immersive-ar');
+      if (!supported) return false;
+
+      const overlay = document.getElementById('webarOverlay');
+      nativeARSession = await navigator.xr.requestSession('immersive-ar', {
+        requiredFeatures: ['hit-test'],
+        optionalFeatures: ['dom-overlay', 'local-floor'],
+        domOverlay: overlay ? { root: overlay } : undefined
+      });
+
+      renderer.xr.enabled = true;
+      await renderer.xr.setSession(nativeARSession);
+      nativeARReferenceSpace = await nativeARSession.requestReferenceSpace('local-floor');
+      const viewerSpace = await nativeARSession.requestReferenceSpace('viewer');
+      nativeARHitTestSource = await nativeARSession.requestHitTestSource({ space: viewerSpace });
+      isNativeARActive = true;
+      isCameraARActive = true;
+
+      if (overlay && arCanvas) {
+        overlay.appendChild(arCanvas);
+        arCanvas.classList.add('ar-camera-mode');
+        overlay.classList.add('active');
+      }
+      if (reticleMesh) reticleMesh.visible = false;
+
+      const existing = placedPortals.find(p => p.tourKey === activeTourKey) ||
+        spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2));
+      activePortalObj = existing;
+      loadTourSceneData(activeTourKey, 0);
+      setARState('scanning');
+      renderer.setAnimationLoop(renderNativeARFrame);
+
+      nativeARSession.addEventListener('end', stopNativeARSession);
+      return true;
+    } catch (error) {
+      console.warn('Native WebXR AR could not start; using manual camera placement.', error);
+      stopNativeARSession();
+      return false;
+    }
+  }
+
+  function renderNativeARFrame(_time, frame) {
+    if (nativeARHitTestSource && nativeARReferenceSpace) {
+      const hit = frame.getHitTestResults(nativeARHitTestSource)[0];
+      if (hit) {
+        const pose = hit.getPose(nativeARReferenceSpace);
+        if (pose && reticleMesh) {
+          reticleMesh.visible = true;
+          reticleMesh.matrix.fromArray(pose.transform.matrix);
+          reticleMesh.matrix.decompose(reticleMesh.position, reticleMesh.quaternion, reticleMesh.scale);
+          notifySurfaceFound();
+        }
+      }
+    }
+    renderer.render(scene, camera);
+  }
+
+  function placePortalAtReticle() {
+    if (!activePortalObj) activePortalObj = spawnFloorPortal(activeTourKey, new THREE.Vector3(0, 0, -2));
+    if ((isNativeARActive || isEighthWallActive) && reticleMesh && reticleMesh.visible) {
+      movePortal(activePortalObj, reticleMesh.position, reticleMesh.quaternion);
+      haptic(18);
+      setARState('placed');
+      return;
+    }
+    movePortal(activePortalObj, new THREE.Vector3(0, 0, -2));
+    haptic(18);
+    setARState('placed');
+  }
+
+  function updateARHUD(message) {
+    const instruction = document.getElementById('arInstruction');
+    const title = document.getElementById('arHudTourTitle');
+    if (instruction) {
+      instruction.textContent = message || '';
+      instruction.hidden = !message;
+    }
+    if (title && TOUR_DATA[activeTourKey]) title.textContent = TOUR_DATA[activeTourKey].name;
+  }
+
+  function updateARPhase(phase) {
+    const phaseEl = document.getElementById('arExperiencePhase');
+    if (!phaseEl) return;
+    phaseEl.textContent = phase || '';
+    phaseEl.hidden = !phase;
+  }
+
+  function stopNativeARSession() {
+    if (renderer) renderer.setAnimationLoop(null);
+    nativeARHitTestSource = null;
+    nativeARReferenceSpace = null;
+    nativeARSession = null;
+    isNativeARActive = false;
+    if (reticleMesh) reticleMesh.visible = true;
   }
 
   function setupTourSwitchers() {
@@ -992,15 +1434,80 @@
 
   // WebAR Camera Mode Setup & Portfolio Card Launchers
   function setupWebARMode() {
-    const btnLaunchAR = document.getElementById('btnLaunchAR');
     const arOverlay = document.getElementById('webarOverlay');
     const btnCloseAR = document.getElementById('btnCloseAR');
 
-    if (btnLaunchAR) {
-      btnLaunchAR.addEventListener('click', () => {
+    document.querySelectorAll('.btn-launch-ar').forEach(btn => {
+      btn.addEventListener('click', () => {
         launchARCameraForTour(activeTourKey);
       });
-    }
+    });
+
+    const btnPlacePortal = document.getElementById('btnARPlacePortal');
+    if (btnPlacePortal) btnPlacePortal.addEventListener('click', (event) => {
+      event.stopPropagation();
+      placePortalAtReticle();
+    });
+
+    const btnARStepInside = document.getElementById('btnARStepInside');
+    if (btnARStepInside) btnARStepInside.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (!activePortalObj) placePortalAtReticle();
+      setPortalInsideState(!isInsidePortal);
+      haptic(isInsidePortal ? [12, 40, 20] : 12);
+      setARState(isInsidePortal ? 'inside' : 'placed');
+    });
+
+    const btnARReposition = document.getElementById('btnARReposition');
+    if (btnARReposition) btnARReposition.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setPortalInsideState(false);
+      haptic(8);
+      setARState('scanning', 'Aim at a clear patch of floor, then place it again.');
+    });
+
+    const btnARStartCamera = document.getElementById('btnARStartCamera');
+    if (btnARStartCamera) btnARStartCamera.addEventListener('click', (event) => {
+      event.stopPropagation();
+      btnARStartCamera.hidden = true;
+      setARState('starting');
+      startCameraPreview();
+    });
+
+    // Permission priming sheet
+    const btnPrimeStart = document.getElementById('btnARPrimeStart');
+    if (btnPrimeStart) btnPrimeStart.addEventListener('click', (event) => {
+      event.stopPropagation();
+      beginARSession();
+    });
+    const btnPrimeCancel = document.getElementById('btnARPrimeCancel');
+    if (btnPrimeCancel) btnPrimeCancel.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeSheet('arPrimeSheet');
+      closeARExperience();
+    });
+
+    // Scene sheet — deliberately opened rather than a permanent strip of pills
+    const btnScenes = document.getElementById('btnARScenes');
+    if (btnScenes) btnScenes.addEventListener('click', (event) => {
+      event.stopPropagation();
+      openSheet('arSceneSheet');
+    });
+    const btnSceneClose = document.getElementById('btnARSceneClose');
+    if (btnSceneClose) btnSceneClose.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closeSheet('arSceneSheet');
+    });
+    // Tapping the dimmed backdrop closes either sheet.
+    ['arSceneSheet', 'arPrimeSheet'].forEach(id => {
+      const sheet = document.getElementById(id);
+      if (!sheet) return;
+      sheet.addEventListener('click', (event) => {
+        if (event.target !== sheet) return;
+        if (id === 'arPrimeSheet') { closeSheet(id); closeARExperience(); }
+        else closeSheet(id);
+      });
+    });
 
     // Attach to all portfolio card "Launch AR Portal" buttons
     document.querySelectorAll('.btn-launch-ar-tour').forEach(btn => {
@@ -1010,31 +1517,62 @@
       });
     });
 
-    if (btnCloseAR) {
-      btnCloseAR.addEventListener('click', () => {
-        if (arVideoStream) {
-          arVideoStream.getTracks().forEach(track => track.stop());
-          arVideoStream = null;
-        }
+    if (btnCloseAR) btnCloseAR.addEventListener('click', closeARExperience);
 
-        if (canvasContainer && arCanvas) {
-          canvasContainer.appendChild(arCanvas);
-          arCanvas.classList.remove('ar-camera-mode');
-          isCameraARActive = false;
+    // Escape is the expected way out of a fullscreen layer on any device
+    // that has a keyboard attached.
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const overlay = document.getElementById('webarOverlay');
+      if (!overlay || !overlay.classList.contains('active')) return;
+      const scenes = document.getElementById('arSceneSheet');
+      if (scenes && scenes.classList.contains('is-open')) closeSheet('arSceneSheet');
+      else closeARExperience();
+    });
+  }
 
-          if (renderer) {
-            renderer.setClearColor(0x000000, 1);
-            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-          }
-          if (camera) {
-            camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
-            camera.updateProjectionMatrix();
-          }
-        }
+  // Tear the session down and hand the canvas back to the on-page simulator.
+  function closeARExperience() {
+    const arOverlay = document.getElementById('webarOverlay');
 
-        if (arOverlay) arOverlay.classList.remove('active');
-      });
+    if (isEighthWallActive && window.XR8) {
+      try { window.XR8.pause(); } catch (e) { /* never started */ }
+      isEighthWallActive = false;
     }
+    if (nativeARSession) {
+      try { nativeARSession.end(); } catch (e) { /* already ended */ }
+    }
+    if (arVideoStream) {
+      arVideoStream.getTracks().forEach(track => track.stop());
+      arVideoStream = null;
+    }
+    const arVideo = document.getElementById('webarVideo');
+    if (arVideo) arVideo.srcObject = null;
+
+    if (canvasContainer && arCanvas) {
+      canvasContainer.appendChild(arCanvas);
+      arCanvas.classList.remove('ar-camera-mode');
+      isCameraARActive = false;
+      isInsidePortal = false;
+
+      if (renderer) {
+        renderer.xr.enabled = false;
+        renderer.setClearColor(0x000000, 0);
+        renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+      }
+      if (camera) {
+        camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
+        camera.updateProjectionMatrix();
+      }
+    }
+
+    closeSheet('arSceneSheet');
+    closeSheet('arPrimeSheet');
+    const startButton = document.getElementById('btnARStartCamera');
+    if (startButton) startButton.hidden = true;
+    if (arOverlay) arOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    setARState('priming');
   }
 
   function setupModals() {

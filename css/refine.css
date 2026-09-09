@@ -757,3 +757,184 @@ body.aurora-on .ys-page-header .btn-primary,
 @media (min-width: 768px) {
   .ys-page-header { padding: 132px 24px 36px !important; }
 }
+
+/* ============================================================
+   MOBILE UI PASS
+   Reported from an iPhone: hero buttons wrapping to three ragged
+   lines, headings losing their accent words, sections that read as
+   empty, and a 360 viewport too short to feel immersive.
+   refine.css is the last source in the extras bundle, so these land
+   on top of theme.css and aurora.css without touching either.
+   ============================================================ */
+
+/* --- Accent words disappearing inside headings ---------------------
+   .highlight paints its text with a clipped gradient AND a
+   filter: drop-shadow() on the same element. iOS Safari drops the
+   background-clip:text paint when a filter is present on that element,
+   so -webkit-text-fill-color:transparent is all that survives and the
+   word renders invisible -- "Step inside our 360° portfolio" arrives
+   as "Step inside our". Touch devices get a solid brand fill with a
+   text-shadow glow instead; desktop keeps the animated gradient. */
+@media (pointer: coarse), (max-width: 767px) {
+  body.aurora-on .highlight,
+  .highlight {
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: var(--aurora-green, #00ff88) !important;
+    filter: none !important;
+    animation: none !important;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.35) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  /* --- Section rhythm ---------------------------------------------
+     Every .section carries 100px of vertical padding. On a phone that
+     is most of a screen height of nothing, which reads as a section
+     that failed to load rather than as breathing room. */
+  .section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  .portfolio-hero {
+    padding: 88px 20px 36px !important;
+  }
+  .section-title-group {
+    margin-bottom: 28px !important;
+  }
+
+  /* --- Heading scale ------------------------------------------------
+     40px headings with a 42px line-height on a 390px screen leave two
+     or three words per line and no room to breathe. */
+  .apple-heading,
+  .sexy-heading,
+  .portfolio-hero h1 {
+    font-size: clamp(1.75rem, 7.4vw, 2.15rem) !important;
+    line-height: 1.15 !important;
+    text-wrap: balance;
+  }
+  .hero-heading {
+    font-size: clamp(2rem, 8.6vw, 2.6rem) !important;
+    line-height: 1.1 !important;
+    text-wrap: balance;
+  }
+  h1, h2, h3 {
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+  .section-subheading,
+  .hero-description,
+  .hero-subheading {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    text-wrap: pretty;
+  }
+
+  /* --- Hero / tour call-to-action buttons --------------------------
+     The two buttons shipped with different padding (13px 22px against
+     16px 32px) side by side in a nowrap row, so each label broke over
+     three lines at different widths and the pair sat off-centre.
+     One column, one shared box, one line of text each. */
+  .hero-buttons,
+  .tour-cta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  .hero-buttons > .btn-primary,
+  .hero-buttons > .btn-hollow,
+  .tour-cta > .btn-primary,
+  .tour-cta > .btn-hollow {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    min-height: 54px !important;
+    padding: 0 22px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.06em !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+
+  /* --- Interior page heroes ----------------------------------------
+     Case study and inner-page heroes stretch to a full 100vh for what
+     is often ~350px of text, so a phone shows most of a screen of
+     nothing and the page reads as though a section failed to load.
+     Size them to their content; only the live-360 heroes keep real
+     viewport presence, because there the background is the content.
+     The homepage #Hero has no .bg-dark and is deliberately untouched. */
+  .hero-section.bg-dark:not(.ys-hero-live) {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 92px 20px 44px !important;
+  }
+  .hero-section.ys-hero-live,
+  .industry-hero.ys-hero-live {
+    height: auto !important;
+    min-height: min(78svh, 600px) !important;
+  }
+
+  /* --- Live 360 viewport -------------------------------------------
+     A 16:9 letterbox is ~220px tall on a phone, too shallow to feel
+     like standing inside the room. Portrait suits a held phone. */
+  .ys-live-tour {
+    aspect-ratio: 3 / 4 !important;
+    min-height: 440px !important;
+  }
+  .featured-tour-container,
+  .featured-tour-facade {
+    min-height: 420px !important;
+  }
+}
+
+/* --- Hero 360 reel caption -----------------------------------------
+   Names the real client location currently on screen as the hero
+   cross-fades between panoramas. Sits opposite the "Drag to explore"
+   badge so the two never collide. */
+.ys-hero-360-caption {
+  position: absolute;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  z-index: 3;
+  max-width: min(62vw, 340px);
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 136, 0.28);
+  background: rgba(6, 7, 10, 0.58);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-align: right;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.ys-hero-360-caption.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (max-width: 767px) {
+  .ys-hero-360-caption {
+    font-size: 0.72rem;
+    padding: 6px 11px;
+    max-width: 70vw;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ys-hero-360-caption { transition: none; }
+}

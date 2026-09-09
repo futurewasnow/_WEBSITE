@@ -95,16 +95,16 @@
 .logo.f-logo {
     position: relative !important;
     flex-shrink: 0;
-    width: 130px !important;
-    min-width: 130px !important;
-    max-width: 130px !important;
-    height: 45px !important;
-    min-height: 45px !important;
-    max-height: 45px !important;
+    width: 172px !important;
+    min-width: 172px !important;
+    max-width: 172px !important;
+    height: 37px !important;
+    min-height: 37px !important;
+    max-height: 37px !important;
     margin: 0 !important;
     padding: 0 !important;
 
-    background-image: url('../images/350-x-375-You-see-360-logo-white-for-black-bg-1.png') !important;
+    background-image: url('../images/logo-yousee360-lockup.svg') !important;
     background-size: contain !important;
     background-position: left center !important;
     background-repeat: no-repeat !important;
@@ -582,8 +582,11 @@
     }
 
     .logo.f-logo {
-        width: 140px !important;
-        height: 48px !important;
+        width: 196px !important;
+        min-width: 196px !important;
+        max-width: 196px !important;
+        height: 42px !important;
+        max-height: 42px !important;
     }
 
     #mobile-nav-overlay {
@@ -605,10 +608,11 @@
     }
 
     .logo.f-logo {
-        width: 160px !important;
-        max-width: 160px !important;
-        height: 55px !important;
-        max-height: 55px !important;
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+        height: 47px !important;
+        max-height: 47px !important;
     }
 
     /* Show desktop nav */
@@ -658,9 +662,11 @@
     }
 
     .logo.f-logo {
-        width: 110px !important;
-        min-width: 110px !important;
-        height: 40px !important;
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+        height: 32px !important;
+        max-height: 32px !important;
     }
 
     .hamburger-button {

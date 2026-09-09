@@ -25,3 +25,6 @@ Screenshot_*.png
 _DEPLOY/
 yousee360-deploy.zip
 _REUPLOAD/
+
+# Round deploy package
+yousee360-round5.zip

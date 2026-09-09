@@ -179,10 +179,72 @@
     update();
   }
 
-  /* ------- 6b. Pannellum 360 viewers (lazy load on scroll into view) ------- */
+  /* ------- 6b. Pannellum 360 heroes (lazy load, auto-advancing playlist) -------
+     The hero used to hold a single panorama on every service and industry page.
+     It now runs as a Pannellum multi-scene tour so visitors see several real
+     client locations, cross-fading every few seconds, while keeping the drag
+     interaction that makes the hero worth having.
+
+     A page can override the reel with data-panorama-set='[{"src":"...","label":"..."}]'.
+     Otherwise the page's own data-panorama opens the reel and HERO_REEL follows. */
+  const HERO_REEL = [
+    { src: 'images/hero-360-arenal-4k.jpg',   label: 'Arenal Volcano · La Fortuna' },
+    { src: 'images/tours/casadelrio_360.jpg', label: 'Casa del Rio · La Fortuna' },
+    { src: 'images/tours/junglo_360.jpg',     label: 'Junglo Resort & Spa · La Fortuna' },
+    { src: 'images/tours/elgenio_360.jpg',    label: 'El Genio · Costa Rica' },
+    { src: 'images/tours/arboeden_360.jpg',   label: 'Arboeden Eco Retreat · Costa Rica' }
+  ];
+  const HERO_SCENE_MS = 7000;     // dwell time per panorama
+  const HERO_FADE_MS = 1200;      // cross-fade between panoramas
+  const HERO_RESUME_MS = 14000;   // idle time before auto-advance resumes
+
+  function heroReelFor(el) {
+    const own = el.dataset.panorama || '';
+    // Pages sit at different depths ("images/..." vs "../images/...").
+    // Reuse the prefix the page already wrote rather than guessing.
+    const base = own.indexOf('images/') > -1 ? own.slice(0, own.indexOf('images/')) : '';
+
+    let reel;
+    try {
+      reel = el.dataset.panoramaSet ? JSON.parse(el.dataset.panoramaSet) : null;
+    } catch (e) {
+      console.warn('Invalid data-panorama-set; using the default reel.', e);
+      reel = null;
+    }
+    if (!reel || !reel.length) {
+      reel = HERO_REEL.map(s => ({ src: base + s.src, label: s.label }));
+      // Open on whatever the page already chose, without showing it twice.
+      if (own) {
+        const dupe = reel.findIndex(s => s.src === own);
+        const label = dupe > -1 ? reel[dupe].label : (el.dataset.panoramaLabel || '');
+        if (dupe > -1) reel.splice(dupe, 1);
+        reel.unshift({ src: own, label: label });
+      }
+    }
+    return reel;
+  }
+
+  function mountHeroCaption(el, text) {
+    const host = el.parentElement || el;
+    let cap = host.querySelector('.ys-hero-360-caption');
+    if (!cap) {
+      cap = document.createElement('span');
+      cap.className = 'ys-hero-360-caption';
+      cap.setAttribute('aria-live', 'off');
+      host.appendChild(cap);
+    }
+    if (cap.textContent !== text) {
+      cap.classList.remove('is-in');
+      // let the fade-out land before swapping the words
+      setTimeout(() => { cap.textContent = text; cap.classList.add('is-in'); }, 220);
+    }
+    return cap;
+  }
+
   function initPannellum() {
     const targets = document.querySelectorAll('[data-pannellum]');
     if (!targets.length) return;
+
     const start = (el, tries) => {
       tries = tries || 0;
       if (el.dataset.loaded === '1') return;
@@ -193,27 +255,99 @@
         return setTimeout(() => start(el, tries + 1), 400);
       }
       el.dataset.loaded = '1';   // only mark loaded once we actually init
-      try {
-        window.pannellum.viewer(el, {
+
+      const reel = heroReelFor(el);
+      const autoRotate = parseFloat(el.dataset.autorotate || '-2');
+      const haov = parseFloat(el.dataset.haov || '360');
+      const vaov = parseFloat(el.dataset.vaov || '180');
+
+      const scenes = {};
+      reel.forEach((shot, n) => {
+        scenes['ys' + n] = {
           type: 'equirectangular',
-          panorama: el.dataset.panorama,
-          autoLoad: true,
-          autoRotate: parseFloat(el.dataset.autorotate || '-2'),
-          showControls: false,
-          showZoomCtrl: false,
-          showFullscreenCtrl: false,
-          compass: false,
-          hfov: 100,
+          panorama: shot.src,
+          haov: haov,
+          vaov: vaov,
           pitch: 0,
-          // Full equirectangular sphere — 360° horizontal, 180° vertical.
-          // No pitch limits: the viewer can look all the way up and down.
-          haov: parseFloat(el.dataset.haov || '360'),
-          vaov: parseFloat(el.dataset.vaov || '180'),
-          mouseZoom: true,
-          friction: 0.18
+          hfov: 100
+        };
+      });
+
+      let viewer;
+      try {
+        viewer = window.pannellum.viewer(el, {
+          default: {
+            firstScene: 'ys0',
+            autoLoad: true,
+            sceneFadeDuration: HERO_FADE_MS,
+            autoRotate: autoRotate,
+            showControls: false,
+            showZoomCtrl: false,
+            showFullscreenCtrl: false,
+            compass: false,
+            hfov: 100,
+            pitch: 0,
+            mouseZoom: true,
+            friction: 0.18
+          },
+          scenes: scenes
         });
-      } catch (e) { console.warn('Pannellum init failed', e); }
+      } catch (e) {
+        console.warn('Pannellum init failed', e);
+        return;
+      }
+
+      if (reel.length < 2) {
+        if (reel[0] && reel[0].label) mountHeroCaption(el, reel[0].label);
+        return;
+      }
+
+      let index = 0;
+      let timer = null;
+      let idle = null;
+      if (reel[0].label) mountHeroCaption(el, reel[0].label);
+
+      const advance = () => {
+        index = (index + 1) % reel.length;
+        try {
+          viewer.loadScene('ys' + index);
+          if (reel[index].label) mountHeroCaption(el, reel[index].label);
+        } catch (e) { /* viewer torn down */ }
+      };
+      const play = () => {
+        if (timer || reducedMotion) return;
+        timer = setInterval(advance, HERO_SCENE_MS);
+      };
+      const pause = () => {
+        if (timer) { clearInterval(timer); timer = null; }
+      };
+      // Someone dragging the panorama is the one person who does not want it
+      // swapped out from under them. Hold, then resume once they stop.
+      const hold = () => {
+        pause();
+        clearTimeout(idle);
+        idle = setTimeout(play, HERO_RESUME_MS);
+      };
+
+      // Exposed so the reel can be inspected and stepped from the console.
+      el._ysHeroReel = {
+        viewer: viewer,
+        reel: reel,
+        next: advance,
+        isPlaying: () => !!timer,
+        play: play,
+        pause: pause
+      };
+
+      el.addEventListener('pointerdown', hold);
+      el.addEventListener('wheel', hold, { passive: true });
+      el.addEventListener('touchstart', hold, { passive: true });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) pause(); else play();
+      });
+      play();
     };
+
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) { start(e.target); io.unobserve(e.target); }

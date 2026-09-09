@@ -1,83 +1,136 @@
 ================================================================
-!! ROUND 4 - hero fix. Upload css/ + all .html
+!! ROUND 5 - new logo + favicons, two new service pages,
+   mobile UI pass, rebuilt AR experience.
+   Upload css/ + images/ + js/ + all .html + sitemap + manifest
 ================================================================
 
-Round 3 is fully verified live - all 262 files matched, sw.js is
-no-cache, every page on v=20260829a. Nothing from that round is
-outstanding.
-
-This round is the hero fix only.
-
-WHAT WAS WRONG
-  The hero is a fixed-height flex box that centres its content, and
-  the nav is fixed at 80px. Nothing reserved that space, so when the
-  content was taller than the box it overflowed EQUALLY top and
-  bottom and slid under the nav. Measured on the live site:
-      1440x900   eyebrow 13px behind the nav
-      1280x720   eyebrow 86px behind the nav, trust strip past the fold
-  The long subheading was what made the content tall - 5 wrapped
-  lines in a 544px column. Spanish homepage had it too, at -61px.
-
 WHAT CHANGED
-  index.html      subheading shortened (129 -> 106 chars)
-  es/index.html   same cut in Spanish
-  design-system.css  #Hero reserves the nav height and grows instead
-                     of centre-overflowing
-  mobile.css         same, with the 64px mobile bar
-  a11y-fixes.css     wider measure (40rem) + text-wrap: balance;
-                     same clearance for the Spanish hero, which has
-                     no id="Hero" so the rule above misses it
 
-AFTER (measured, staging):
-    1440x900  gap +53px   3 lines
-    1280x720  gap +24px   3 lines
-    1366x640  gap +24px   3 lines
-    768x1024  gap +214px  3 lines
-    375x812   gap +147px  6 lines (narrow column, expected)
-  No horizontal scroll at any size. Video still covers the section.
+  BRAND
+    New horizontal nav lockup replaces the old 350x375 stacked mark,
+    which was square and rendered its wordmark ~5px tall in a 45px
+    nav bar. Built from Logos/PNG/SVG/Asset 92.svg by _build_brand.py.
+    Full favicon/app-icon set generated from the same master.
+    favicon.ico / favicon.png / favicon.webp / webclip.png were
+    replaced IN PLACE, so every page picks the new icons up without
+    a markup change.
+
+  MOBILE UI (reported from an iPhone)
+    - hero buttons had mismatched padding (13px 22px vs 16px 32px)
+      in a nowrap row, so each label broke over three lines at a
+      different width. Now one column, one shared 320x54 box.
+    - .highlight paints gradient text via background-clip:text AND
+      filter: drop-shadow() on the same element. iOS Safari drops the
+      clipped paint when a filter is present, so accent words in
+      headings rendered invisible. Touch devices now get a solid
+      brand fill with a text-shadow glow; desktop keeps the gradient.
+    - .section had 100px vertical padding on phones (most of a screen
+      of nothing, which read as a missing section). Now 56px.
+    - interior heroes stretched to 100vh for ~355px of content.
+      Now content-sized; live-360 heroes keep viewport presence.
+    - live tour viewport was a 16:9 letterbox ~220px tall on a phone.
+      Now 3/4 portrait, min 440px.
+    - Arboeden case study showed a static JPEG where the tour should
+      be. Now embeds the real tour via the new js/live-tour.js.
+
+  HERO 360 REEL
+    Every service and industry page showed the same single panorama.
+    js/polish.js now runs the hero as a Pannellum multi-scene tour,
+    cross-fading five high-res client panoramas every 7s with a
+    caption naming the location. Pauses while dragged, respects
+    prefers-reduced-motion. Per-page override: data-panorama-set.
+
+  AR EXPERIENCE (AR Version/)
+    Root cause of the dead AR button: the page loaded 8th Wall's
+    engine from a generic npm CDN with no app key, so XR8.run()
+    failed on every device with "No valid session manager to handle
+    this session" - and startEighthWallARSession() returned true
+    immediately after calling run(), so the caller's fallback never
+    fired. The overlay opened, stuck on "STARTING AR CAMERA", and
+    never requested a camera.
+      - engine now only loads when a key is set in
+        window.YOUSEE360_AR_CONFIG.eighthWallAppKey (index.html)
+      - 8th Wall start is confirmed via onStart / onException / an
+        8s timeout, and hands the canvas back on failure
+      - the launcher is a real cascade: WebXR immersive-ar (which was
+        implemented but never called) -> 8th Wall if keyed ->
+        getUserMedia camera preview -> recovery UI
+      - HUD rebuilt around a data-ar-state machine: one primary
+        action at a time, camera permission priming sheet before the
+        browser prompt, scene picker moved into a bottom sheet,
+        safe-area insets, haptics, Escape to close.
+      - AR page assets now carry ?v= like the rest of the site; they
+        previously had none, so returning visitors kept stale JS/CSS.
+
+  NEW PAGES
+    services/ai-consulting.html
+    services/website-design.html
+    Both linked from the Services dropdown and footer on all 64
+    English pages, listed on services/index.html (cards + ItemList
+    schema), and added to sitemap.xml. Spanish versions do NOT exist
+    yet, so their hreflang is en + x-default only.
+
+  ALSO
+    - pricing.html gained a "Beyond the tour" section for the two
+      new lines.
+    - es/industrias/fotografia-propiedades.html linked to
+      es/ubicaciones/tamarindo.html, which does not exist. Now plain
+      text, matching the other Spanish-less locations in that list.
+    - asset token bumped 20260904a -> 20260908a on all 98 pages, so
+      the js/ and css/ changes actually reach returning visitors.
+    - _rebuild_bundles.py now retries writes and deletes old bundles
+      only AFTER every page is re-pointed. It previously deleted
+      first, and a transient Windows file lock left 42 pages with no
+      stylesheet mid-run.
 
 WHAT TO UPLOAD
-  - css/          (all bundle hashes changed again)
-  - every .html   (they point at the new bundle names)
 
-  js/ images/ videos/ fonts/ sw.js .htaccess are unchanged this
-  round and are already correct on the server.
+  - css/            (all bundle hashes changed)
+  - images/         (new logo + full icon set; several replaced
+                     in place - force overwrite)
+  - js/             (polish.js, live-tour.js NEW)
+  - AR Version/     (index.html, css/ar-style.css, js/ar-portal.js)
+  - every .html     (they point at the new bundles and the new token)
+  - sitemap.xml
+  - manifest.webmanifest
 
-  Upload css/ BEFORE the html, and force overwrite.
+  Upload css/ and images/ BEFORE the html, and force overwrite.
 
-DELETE FROM SERVER afterwards - the previous round's bundles:
-   css/bundle-01f8d456.css
-   css/bundle-03a4bf6c.css
-   css/bundle-05d761ba.css
-   css/bundle-28c91563.css
-   css/bundle-3afd1daa.css
-   css/bundle-46074bfd.css
-   css/bundle-91222717.css
-   css/bundle-ab0c7f32.css
-   css/bundle-c0061430.css
-   css/bundle-e38c594e.css
-   css/bundle-0430542f.css
-   css/bundle-06fbe758.css
-   css/bundle-329808a5.css
-   css/bundle-7663f59d.css
-   css/bundle-7ed26d28.css
-   css/bundle-882ac48d.css
-   css/bundle-8c021ded.css
-   css/bundle-d6ef3134.css
-   css/bundle-dc5d5536.css
-   css/bundle-ebad663b.css
+  videos/ fonts/ sw.js .htaccess are unchanged this round.
 
-  Safest rule: after uploading, any css/bundle-*.css on the server
-  whose name is not in _REUPLOAD/css/ is dead and can go. Current set:
-   css/bundle-411dc37b.css
-   css/bundle-42b26ace.css
-   css/bundle-4805aaac.css
-   css/bundle-69e272d7.css
-   css/bundle-764aa967.css
-   css/bundle-79c4206b.css
-   css/bundle-994b430c.css
-   css/bundle-9b43cded.css
-   css/bundle-a3252dc3.css
-   css/bundle-f95ee671.css
+VERIFIED BEFORE HANDOFF
+  101 live pages - 0 broken internal links (6,600+ refs resolved),
+  0 pages pointing at a missing bundle, 0 invalid JSON-LD blocks,
+  sitemap.xml and manifest.webmanifest parse clean, all JS passes
+  node --check.
+
+  NOT verifiable here: the AR camera itself. The preview sandbox
+  blocks getUserMedia, so the cascade was confirmed as far as the
+  real camera request and the recovery path. Test on a real phone
+  over HTTPS after upload.
+
+DELETE FROM SERVER afterwards - this round's dead bundles:
+   css/bundle-076541ae.css
+   css/bundle-0bb4e9b1.css
+   css/bundle-70f61128.css
+   css/bundle-7c108fb2.css
+   css/bundle-7d6d24ec.css
+   css/bundle-9bbe4819.css
+   css/bundle-a49add29.css
+   css/bundle-b8432412.css
+   css/bundle-bdc6f986.css
+   css/bundle-be5eb035.css
+
+  Current live set:
+   css/bundle-006ba234.css
+   css/bundle-0ec060dd.css
+   css/bundle-49f995dd.css
+   css/bundle-4dff64b3.css
+   css/bundle-511b7fcb.css
+   css/bundle-656dfba5.css
+   css/bundle-816d7221.css
+   css/bundle-b6dcf7f9.css
+   css/bundle-bf7749e7.css
+   css/bundle-e5cf181f.css
 
 ================================================================

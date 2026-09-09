@@ -235,6 +235,21 @@ body {
   transform: scale(0.97);
 }
 
+.btn-glow-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-full);
+  background: rgba(6, 7, 10, 0.72);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
 /* Hero Section with Interactive 3D Canvas */
 .ar-hero {
   padding-top: 130px;
@@ -355,85 +370,448 @@ body {
 }
 
 /* Fullscreen WebAR Camera Overlay */
+/* ============================================================
+   WEBAR CAMERA EXPERIENCE
+   Every element below is gated on [data-ar-state] on .webar-overlay.
+   The camera feed is the interface; chrome earns its place or it is
+   not on screen. One primary action is visible at any moment.
+   ============================================================ */
 .webar-overlay {
+  --ar-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ar-pad: max(18px, env(safe-area-inset-left));
+  --ar-accent: var(--accent-emerald);
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  inset: 0;
   z-index: 9999;
   background: #000;
   display: none;
-  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-family);
 }
-
-.webar-overlay.active {
-  display: flex;
-}
+.webar-overlay.active { display: block; }
 
 .webar-video {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 1;
 }
 
-/* WebAR Camera Overlay Canvas Layer */
+/* A soft vertical scrim keeps white text legible over a bright room
+   without dimming the middle of the frame, where the portal stands. */
+.webar-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 22%),
+    linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 34%);
+}
+
 .webar-overlay #arCanvas.ar-camera-mode {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 5;
   pointer-events: auto;
 }
 
-.webar-hud-top {
+/* ---------- Top bar ---------- */
+.ar-topbar {
   position: absolute;
-  top: max(16px, env(safe-area-inset-top));
-  left: 16px;
-  right: 16px;
+  top: max(14px, env(safe-area-inset-top));
+  left: var(--ar-pad);
+  right: var(--ar-pad);
   z-index: 20;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   pointer-events: none;
 }
-
-.btn-close-ar {
-  pointer-events: auto;
-  background: rgba(6, 7, 10, 0.75);
-  border: 1px solid var(--border-glow);
+.ar-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 68%;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(8, 10, 14, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
   color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ar-status-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ar-accent);
+  box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.55);
+  animation: ar-breathe 2.4s var(--ar-ease) infinite;
+}
+@keyframes ar-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.5); }
+  60%      { box-shadow: 0 0 0 7px rgba(0, 245, 160, 0); }
+}
+.ar-icon-btn {
+  pointer-events: auto;
+  flex: 0 0 auto;
   width: 44px;
   height: 44px;
+  border: 0;
   border-radius: 50%;
-  display: flex;
+  background: rgba(8, 10, 14, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.2s var(--ar-ease), background 0.2s var(--ar-ease);
+}
+.ar-icon-btn:active { transform: scale(0.92); background: rgba(8, 10, 14, 0.8); }
+
+/* ---------- Scanning affordance ---------- */
+.ar-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: none;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  touch-action: manipulation;
+  pointer-events: none;
+}
+.ar-scan { position: relative; width: 132px; height: 132px; }
+.ar-scan-ring,
+.ar-scan-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.ar-scan-ring {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  animation: ar-sonar 3s var(--ar-ease) infinite;
+}
+.ar-scan-ring:nth-child(2) { animation-delay: 1.5s; }
+.ar-scan-core {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.7);
+}
+@keyframes ar-sonar {
+  0%   { opacity: 0;    transform: translate(-50%, -50%) scale(0.35); }
+  35%  { opacity: 0.85; }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(1); }
 }
 
-.webar-hud-bottom {
+/* ---------- Portal entry moment ---------- */
+.ar-portal-moment {
   position: absolute;
-  bottom: max(24px, env(safe-area-inset-bottom));
-  left: 16px;
-  right: 16px;
+  top: 46%;
+  left: 50%;
+  z-index: 21;
+  display: grid;
+  gap: 4px;
+  padding: 16px 24px;
+  border-radius: 18px;
+  background: rgba(8, 10, 14, 0.5);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  color: #fff;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -46%) scale(0.96);
+  transition: opacity 0.5s var(--ar-ease), transform 0.5s var(--ar-ease);
+}
+.ar-portal-moment.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.ar-portal-moment span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.ar-portal-moment strong { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; }
+
+/* ---------- Bottom controls ---------- */
+.ar-controls {
+  position: absolute;
+  left: var(--ar-pad);
+  right: var(--ar-pad);
+  bottom: max(20px, env(safe-area-inset-bottom));
   z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   pointer-events: none;
+  text-align: center;
+}
+.ar-guidance {
+  max-width: 30ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+  text-wrap: balance;
+}
+.ar-phase {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.ar-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* One full-width primary action. Which one is visible is decided by state. */
+.ar-action {
+  pointer-events: auto;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  max-width: 340px;
+  min-height: 54px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: #fff;
+  color: #06070a;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: 0 12px 34px -10px rgba(0, 0, 0, 0.7);
+  transition: transform 0.18s var(--ar-ease), opacity 0.18s var(--ar-ease);
+}
+.ar-action:active { transform: scale(0.97); }
+.ar-action i { font-size: 0.92em; }
+
+.ar-chips {
+  display: none;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ar-chip {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: rgba(8, 10, 14, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.18s var(--ar-ease), background 0.18s var(--ar-ease);
+}
+.ar-chip:active { transform: scale(0.95); background: rgba(8, 10, 14, 0.8); }
+
+/* ---------- Sheets ---------- */
+.ar-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.ar-sheet.is-open { display: flex; animation: ar-fade 0.28s var(--ar-ease) both; }
+@keyframes ar-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.ar-sheet-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 26px 24px 20px;
+  border-radius: 26px;
+  background: rgba(18, 21, 27, 0.86);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  animation: ar-rise 0.36s var(--ar-ease) both;
+}
+@keyframes ar-rise {
+  from { transform: translateY(28px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.ar-sheet-card .ar-action { display: inline-flex; margin-top: 18px; }
+.ar-sheet-grabber {
+  display: block;
+  width: 38px;
+  height: 4px;
+  margin: -8px auto 14px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.22);
+}
+.ar-sheet-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 16px;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.25rem;
+}
+.ar-sheet-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.ar-sheet-card p {
+  margin: 0 auto;
+  max-width: 34ch;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.ar-sheet-note {
+  margin-top: 12px !important;
+  font-size: 0.78rem !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+.ar-sheet-dismiss {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 14px;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.ar-sheet-dismiss:active { color: #fff; }
+
+.ar-scene-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px;
+  max-height: 46vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.ar-scene-list .tour-pill {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 18px;
+  justify-content: flex-start;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid transparent;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.ar-scene-list .tour-pill.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ============================================================
+   STATE MACHINE
+   Each state declares exactly what belongs on screen.
+   ============================================================ */
+.webar-overlay .ar-topbar,
+.webar-overlay .ar-controls { opacity: 1; transition: opacity 0.3s var(--ar-ease); }
+
+/* priming — only the sheet; nothing else competes with the ask */
+.webar-overlay[data-ar-state="priming"] .ar-topbar,
+.webar-overlay[data-ar-state="priming"] .ar-controls { opacity: 0; pointer-events: none; }
+
+/* starting / scanning — guidance plus the sonar, no actions yet */
+.webar-overlay[data-ar-state="scanning"] .ar-stage,
+.webar-overlay[data-ar-state="starting"] .ar-stage { display: flex; }
+
+/* ready — a surface is tracked, so offer the one thing worth doing */
+.webar-overlay[data-ar-state="ready"] #btnARPlacePortal { display: inline-flex; }
+
+/* placed — enter it, or nudge it, or change the view */
+.webar-overlay[data-ar-state="placed"] #btnARStepInside,
+.webar-overlay[data-ar-state="inside"] #btnARStepInside { display: inline-flex; }
+.webar-overlay[data-ar-state="placed"] .ar-chips,
+.webar-overlay[data-ar-state="inside"] .ar-chips { display: flex; }
+.webar-overlay[data-ar-state="inside"] #btnARReposition { display: none; }
+
+/* inside — drop the guidance line, the scene speaks for itself */
+.webar-overlay[data-ar-state="inside"] .ar-guidance,
+.webar-overlay[data-ar-state="inside"] .ar-phase { display: none; }
+
+/* blocked — recovery only */
+.webar-overlay[data-ar-state="blocked"] #btnARStartCamera { display: inline-flex; }
+.webar-overlay[data-ar-state="blocked"] .ar-phase { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-scan-ring, .ar-status-dot { animation: none; }
+  .ar-scan-ring:first-child { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); }
+  .ar-sheet.is-open, .ar-sheet-card { animation: none; }
+  .ar-action, .ar-chip, .ar-icon-btn { transition: none; }
+}
+
+/* Short phones: reclaim vertical space rather than letting the HUD crowd
+   the middle of the frame, which is where the portal actually is. */
+@media (max-height: 700px) {
+  .ar-guidance { font-size: 0.88rem; }
+  .ar-action { min-height: 50px; }
+  .ar-controls { gap: 9px; }
+  .ar-sheet-card { padding: 20px 20px 14px; }
+  .ar-sheet-icon { width: 46px; height: 46px; margin-bottom: 12px; }
 }
 
 /* Portal Tour Selector Carousel */
