@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "D:\\YouSee360\\360 Photos\\Arenal Oasis\\drone above center.jpg",
+  "sourceSha256": "378b07180035fb312e322ee02f95691f10fe396e7c47e09e1adeb119100f0e7b",
+  "sourceSize": [
+    14999,
+    7500
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Arenal Oasis, drone 360 above the dome with Arenal volcano",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 3749,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\7b721ce274e58207-color-v1.jpg",
+  "sourceSha256": "e63324653b250352df74b7ce4b6b8ec2f21c8026d079e4230bc464bb33b29614",
+  "sourceSize": [
+    12000,
+    6000
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, Isla Tortuga rock formations from the drone (capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 3000,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

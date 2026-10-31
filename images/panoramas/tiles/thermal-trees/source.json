@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\f53fc9900c80d47d-color-v1.jpg",
+  "sourceSha256": "c3a65d738bdfeb5a1de839c6f10027527dc8282a27324767701118d90dacc54e",
+  "sourceSize": [
+    11904,
+    5952
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, thermal pools under trees (ground 360, venue unverified, capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 2976,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

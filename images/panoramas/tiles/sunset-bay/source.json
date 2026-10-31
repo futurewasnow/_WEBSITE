@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\652a20d648b015ae-color-v1.jpg",
+  "sourceSha256": "dd629b28305e6c64b4385d40d9006e0f398915bdb6ccef1f244a96744bb311c6",
+  "sourceSize": [
+    12000,
+    6000
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, sunset over the bay from the drone (capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 3000,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "D:\\YouSee360\\El Genio\\Drone 360\\[Group 0]-PANO0001_PANO0025-25 images sunset.jpg",
+  "sourceSha256": "7ed4145d6eafc722cd79866d7a32ef4996961dbc8614e5c479ea03d28815dd65",
+  "sourceSize": [
+    14999,
+    7500
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "El Genio shoot, drone 360 at sunset over the lake",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 3749,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

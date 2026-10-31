@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\794562c053716a4b-color-v1.jpg",
+  "sourceSha256": "b457664e7c02c57ed281efb249fd8f99bbdd2456e05186cdfe5489cd34d11f8b",
+  "sourceSize": [
+    11904,
+    5952
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, waterfall canyon from the drone (capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 2976,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

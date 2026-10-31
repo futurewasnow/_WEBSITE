@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\1931f8fca3bafbd0-color-v1.jpg",
+  "sourceSha256": "1e818408e57359321a3b3eaae2e71fb4c95b5ddbd217cd8c2019bb732cff2627",
+  "sourceSize": [
+    12000,
+    6000
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, Playa El Jobo cove from the drone (third-party resort in frame, capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 3000,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}

@@ -1,0 +1,18 @@
+{
+  "projection": "cubemap",
+  "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\088a819b9c42dda8-color-v1.jpg",
+  "sourceSha256": "50f48df4254d2464531ffaacc19812680ff9924560e9a1363e9b7f4736ccbf01",
+  "sourceSize": [
+    11904,
+    5952
+  ],
+  "sourceProjection": "equirectangular",
+  "sourceLabel": "Costa Rica trip, hanging bridge in the rainforest (ground 360, capture example)",
+  "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+  "cubeResolution": 2976,
+  "tileResolution": 512,
+  "maxLevel": 4,
+  "extension": "webp",
+  "topLevel": "WebP q82",
+  "lowerLevels": "WebP q78"
+}
