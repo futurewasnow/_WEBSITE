@@ -1,0 +1,409 @@
+{
+  "junglo": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/Junglo/",
+    "sourceScene": "panorama_2CDAACD8_3F5F_4E81_41C2_B430327BCFDE",
+    "sourceTile": "media/panorama_2CDAACD8_3F5F_4E81_41C2_B430327BCFDE_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4096,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp"
+  },
+  "arboeden": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/arboreden/",
+    "sourceScene": "panorama_7E5EB31D_56E7_FEF5_4198_4F563C313EE6",
+    "sourceTile": "media/panorama_7E5EB31D_56E7_FEF5_4198_4F563C313EE6_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6656,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp",
+    "bakedOverlays": "Lot boundaries, lot numbers, sizes and SOLD marks captured from the published tour (Main View) and composited onto the original faces."
+  },
+  "elgenio": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/Elgenio/",
+    "sourceScene": "panorama_4192F2DD_451D_0027_41CC_EE6F45AF5B6F",
+    "sourceTile": "media/panorama_4192F2DD_451D_0027_41CC_EE6F45AF5B6F_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4608,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "casa": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/casadelrio/",
+    "sourceScene": "panorama_1E7BD26C_46FB_EC64_41B4_F527FF23A1E7",
+    "sourceTile": "media/panorama_1E7BD26C_46FB_EC64_41B4_F527FF23A1E7_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4608,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "pool": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/casadelrio/",
+    "sourceScene": "panorama_2C850F7E_3B24_F464_41C9_CCFF0FF66BE1",
+    "sourceTile": "media/panorama_2C850F7E_3B24_F464_41C9_CCFF0FF66BE1_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4608,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "aerial": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/casadelrio/",
+    "sourceScene": "panorama_164E16D3_36A4_9389_41B6_D51704F3046D",
+    "sourceTile": "media/panorama_164E16D3_36A4_9389_41B6_D51704F3046D_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6144,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "kenko": {
+    "projection": "cubemap",
+    "sourceTour": "https://yousee360.com/Kenko/Tour/",
+    "sourceScene": "panorama_CD261831_EA3A_B1EC_41E2_D06FAE63D4EA",
+    "sourceTile": "media/panorama_CD261831_EA3A_B1EC_41E2_D06FAE63D4EA_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6144,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "dragonfly": {
+    "projection": "cubemap",
+    "sourceTour": "https://tours.yousee360.com/dragonfly/",
+    "sourceScene": "panorama_2353D87F_6071_A013_41C8_B181FA635BC6",
+    "sourceTile": "media/panorama_2353D87F_6071_A013_41C8_B181FA635BC6_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4608,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "planetarium": {
+    "projection": "cubemap",
+    "sourceArchive": "D:\\Virtual Tours\\[CITIES]\\Planetarium\\planetariumdata",
+    "sourceScene": "pano21",
+    "sourceTile": "inside_21/{face}/3/{row}_{column}.jpg",
+    "sourceFaceOrder": "frblud",
+    "sourceAuthor": "Imagine360",
+    "cubeResolution": 4846,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "jpg"
+  },
+  "oasis": {
+    "projection": "cubemap",
+    "sourceTour": "https://arenaloasis.yousee360.com/",
+    "sourceScene": "panorama_D290B6A4_F100_A407_41E6_9DD338D21C3F",
+    "sourceTile": "media/panorama_D290B6A4_F100_A407_41E6_9DD338D21C3F_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6656,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp"
+  },
+  "elsalto-drone": {
+    "projection": "cubemap",
+    "sourceTour": "https://elsalto.yousee360.com/",
+    "sourceExport": "D:\\Virtual Tours\\El-Salto-Tour",
+    "sourceScene": "panorama_4F8730A4_7B18_57FC_41D0_331FABD32A04",
+    "sourceLabel": "Main Aerial View",
+    "sourceTile": "media/panorama_4F8730A4_7B18_57FC_41D0_331FABD32A04_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6656,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp",
+    "topLevel": "original bytes",
+    "lowerLevels": "WebP q78"
+  },
+  "elsalto-drone2": {
+    "projection": "cubemap",
+    "sourceTour": "https://elsalto.yousee360.com/",
+    "sourceExport": "D:\\Virtual Tours\\El-Salto-Tour",
+    "sourceScene": "panorama_4CFA1F03_7B18_AAB5_41B0_F62044A388F8",
+    "sourceLabel": "Aerial View El Salto",
+    "sourceTile": "media/panorama_4CFA1F03_7B18_AAB5_41B0_F62044A388F8_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 6656,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp",
+    "topLevel": "original bytes",
+    "lowerLevels": "WebP q78"
+  },
+  "elsalto-dslr": {
+    "projection": "cubemap",
+    "sourceTour": "https://elsalto.yousee360.com/",
+    "sourceExport": "D:\\Virtual Tours\\El-Salto-Tour",
+    "sourceScene": "panorama_B94E3CE5_AEDE_A6C4_41C2_F1E648A6175B",
+    "sourceLabel": "DSLR Camera",
+    "sourceTile": "media/panorama_B94E3CE5_AEDE_A6C4_41C2_F1E648A6175B_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 5120,
+    "tileResolution": 512,
+    "maxLevel": 5,
+    "extension": "webp",
+    "topLevel": "re-encoded WebP q80",
+    "lowerLevels": "WebP q78"
+  },
+  "elsalto-camera": {
+    "projection": "cubemap",
+    "sourceTour": "https://elsalto.yousee360.com/",
+    "sourceExport": "D:\\Virtual Tours\\El-Salto-Tour",
+    "sourceScene": "panorama_3097CFB8_7B1B_E9D4_41DA_F6AE35DF2ECD",
+    "sourceLabel": "360\u00b0 Camera Photo Jump",
+    "sourceTile": "media/panorama_3097CFB8_7B1B_E9D4_41DA_F6AE35DF2ECD_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4096,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "original bytes",
+    "lowerLevels": "WebP q78"
+  },
+  "elsalto-bridge": {
+    "projection": "cubemap",
+    "sourceTour": "https://elsalto.yousee360.com/",
+    "sourceExport": "D:\\Virtual Tours\\El-Salto-Tour",
+    "sourceScene": "panorama_3043A71C_7B1B_BAD3_41CD_4C5AEB22C214",
+    "sourceLabel": "360\u00b0 Photo Bridge",
+    "sourceTile": "media/panorama_3043A71C_7B1B_BAD3_41CD_4C5AEB22C214_0/{face}/0/{row}_{column}.webp",
+    "cubeResolution": 4096,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "original bytes",
+    "lowerLevels": "WebP q78"
+  },
+  "genio-sunset": {
+    "projection": "cubemap",
+    "sourceFile": "D:\\YouSee360\\El Genio\\Drone 360\\[Group 0]-PANO0001_PANO0025-25 images sunset.jpg",
+    "sourceSha256": "7ed4145d6eafc722cd79866d7a32ef4996961dbc8614e5c479ea03d28815dd65",
+    "sourceSize": [
+      14999,
+      7500
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "El Genio shoot, drone 360 at sunset over the lake",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3749,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "genio-lake": {
+    "projection": "cubemap",
+    "sourceFile": "D:\\YouSee360\\El Genio\\Drone 360\\[Group 0]-PANO0001_PANO0025-25 images edited.jpg",
+    "sourceSha256": "70cb67e2cc39f533bded3f3899350a0ada49ab2d57f979cf0373439915e748b7",
+    "sourceSize": [
+      14999,
+      7500
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "El Genio shoot, drone 360 by day over the lake",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3749,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "oasis-aerial": {
+    "projection": "cubemap",
+    "sourceFile": "D:\\YouSee360\\360 Photos\\Arenal Oasis\\drone above center.jpg",
+    "sourceSha256": "378b07180035fb312e322ee02f95691f10fe396e7c47e09e1adeb119100f0e7b",
+    "sourceSize": [
+      14999,
+      7500
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Arenal Oasis, drone 360 above the dome with Arenal volcano",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3749,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "cove-dusk": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\9a5fc93c063d0427-color-v1.jpg",
+    "sourceSha256": "520ed503f9171bf670036dcda92af62b4a46e4c66b1231c5c9c26ce96ea98c6f",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, resort cove at dusk from the drone (third-party resort, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "thermal-pools": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\0fa2ade5035d2d22-color-v1.jpg",
+    "sourceSha256": "18aded3581ab09af3aca1e852fe48203aeeb98d71469bd13a9da97201a0b4c09",
+    "sourceSize": [
+      11904,
+      5952
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, thermal pools (ground 360, venue unverified, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 2976,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "thermal-trees": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\f53fc9900c80d47d-color-v1.jpg",
+    "sourceSha256": "c3a65d738bdfeb5a1de839c6f10027527dc8282a27324767701118d90dacc54e",
+    "sourceSize": [
+      11904,
+      5952
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, thermal pools under trees (ground 360, venue unverified, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 2976,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "waterfall-canyon": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\794562c053716a4b-color-v1.jpg",
+    "sourceSha256": "b457664e7c02c57ed281efb249fd8f99bbdd2456e05186cdfe5489cd34d11f8b",
+    "sourceSize": [
+      11904,
+      5952
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, waterfall canyon from the drone (capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 2976,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "hanging-bridge": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\088a819b9c42dda8-color-v1.jpg",
+    "sourceSha256": "50f48df4254d2464531ffaacc19812680ff9924560e9a1363e9b7f4736ccbf01",
+    "sourceSize": [
+      11904,
+      5952
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, hanging bridge in the rainforest (ground 360, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 2976,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "tortuga-rocks": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\7b721ce274e58207-color-v1.jpg",
+    "sourceSha256": "e63324653b250352df74b7ce4b6b8ec2f21c8026d079e4230bc464bb33b29614",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, Isla Tortuga rock formations from the drone (capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "twin-coves": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\e63eb25af9809ed6-color-v1.jpg",
+    "sourceSha256": "e3eeef5d3d6d7174735c3a80b687c0fb296aa4cd791be1bbedacd2df0cf1ea23",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, twin coves from the drone (capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "jobo-cove": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\1931f8fca3bafbd0-color-v1.jpg",
+    "sourceSha256": "1e818408e57359321a3b3eaae2e71fb4c95b5ddbd217cd8c2019bb732cff2627",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, Playa El Jobo cove from the drone (third-party resort in frame, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "sunset-bay": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\652a20d648b015ae-color-v1.jpg",
+    "sourceSha256": "dd629b28305e6c64b4385d40d9006e0f398915bdb6ccef1f244a96744bb311c6",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, sunset over the bay from the drone (capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  },
+  "lodge-overlook": {
+    "projection": "cubemap",
+    "sourceFile": "G:\\Kruger Family Trip\\_tour\\masters\\be94e820b0767489-color-v1.jpg",
+    "sourceSha256": "9de2b3c8a902cf624068aa1c75a98c9a5ab58b92569e617be9f0b2ae35a1efe0",
+    "sourceSize": [
+      12000,
+      6000
+    ],
+    "sourceProjection": "equirectangular",
+    "sourceLabel": "Costa Rica trip, mountain lodge overlook from the drone (third-party lodge, capture example)",
+    "derivation": "six cube faces at width/4 by OpenCV Lanczos4 remap (_build_showcase_tiles.py), no upscaling",
+    "cubeResolution": 3000,
+    "tileResolution": 512,
+    "maxLevel": 4,
+    "extension": "webp",
+    "topLevel": "WebP q82",
+    "lowerLevels": "WebP q78"
+  }
+}
